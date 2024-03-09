@@ -6,6 +6,7 @@
 class Shape {
   public:
   virtual void draw() = 0;
+  virtual double getDistance() =0;
 };
 
 class Point:public Shape {
@@ -15,6 +16,7 @@ class Point:public Shape {
      circle.move(x_pos, y_pos);
    }
    Point() {}
+   double getDistance() final;
    void draw() final;    
    double  x_coord_;
    double  y_coord_;

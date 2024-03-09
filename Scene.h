@@ -12,9 +12,9 @@ class Scene {
       objects.push_back(new BasePoint(100,40));
     }
     void drawScene();
-    Shape* selectObject(double x_pos, double y_pos);
-    void movePoint();
-    
+
+    Shape* selectObject();
+      
 
 
     std::vector<Shape*> objects;
