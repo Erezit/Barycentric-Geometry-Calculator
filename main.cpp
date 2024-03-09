@@ -1,30 +1,33 @@
 #include <iostream>
-#include "shape.h"
 #include <SFML/Graphics.hpp>
+#include "Scene.h"
 
 int main()
 {
-    std::vector<Shape*> objects;
-    objects.push_back(new BasePoint(10,30));
-    objects.push_back(new BasePoint(150,120));
-    objects.push_back(new BasePoint(100,40));
+    
+    Scene main_scene;
+    
 
     while (global::window.isOpen())
         
     {
-        sf::Event event;
-        while (global::window.pollEvent(event))
+        while (global::window.pollEvent(main_scene.event))
         {
-            if (event.type == sf::Event::Closed)
+            if (main_scene.event.type == sf::Event::Closed)
                 global::window.close();
+            if(main_scene.event.type == sf::Event::MouseButtonPressed) {
+                 sf::Vector2i position = sf::Mouse::getPosition(global::window);
+                 std::cout << position.x << " " << position.y << std::endl;
+                 main_scene.movePoint();
+            }
         }
 
 
-        for(int i = 0; i < objects.size(); ++i) {
-            objects[i]->draw();
-        }
+
+        main_scene.drawScene();
         global::window.display();
         global::window.clear();
+        
     }
 
     return 0;

@@ -4,9 +4,9 @@
  
  set(CMAKE_CXX_STANDARD 17) 
  
- set(SOURSE main.cpp shape.cpp Factory.cpp)
+ set(SOURSE main.cpp shape.cpp Factory.cpp Scene.cpp)
 
- set(HEADER shape.h Factory.h)
+ set(HEADER shape.h Factory.h Scene.h creationTags.h)
 
  find_package(SFML 2.5 COMPONENTS system window graphics network ) 
  

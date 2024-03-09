@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-enum class TypeNewObject {FindPointWithRatio};
+
 
 class Shape {
   public:
