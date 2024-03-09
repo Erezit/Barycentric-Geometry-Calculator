@@ -4,8 +4,10 @@
 
 int main()
 {
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    std::vector<Shape*> objects;
+    objects.push_back(new BasePoint(10,30));
+    objects.push_back(new BasePoint(150,120));
+    objects.push_back(new BasePoint(100,40));
 
     while (global::window.isOpen())
         
@@ -17,9 +19,12 @@ int main()
                 global::window.close();
         }
 
-        global::window.clear();
-        global::window.draw(shape);
+
+        for(int i = 0; i < objects.size(); ++i) {
+            objects[i]->draw();
+        }
         global::window.display();
+        global::window.clear();
     }
 
     return 0;
