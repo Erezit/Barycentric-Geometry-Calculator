@@ -21,7 +21,7 @@ void Scene::movePoint() {
       if(moveble_object != nullptr) {
         std::cout << "Start move" << std::endl;
         Point* moveble_point = dynamic_cast<Point*>(moveble_object);
-        while(Scene::event.type == sf::Event::MouseButtonPressed) {
+        while(Scene::event.type != sf::Event::MouseButtonReleased) {
           while(global::window.pollEvent(Scene::event)) {
           sf::Vector2i current_pos = sf::Mouse::getPosition(global::window);
           moveble_point->circle.move(current_pos.x - moveble_point->x_coord_,current_pos.y - moveble_point->y_coord_);
