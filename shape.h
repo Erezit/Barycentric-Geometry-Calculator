@@ -1,15 +1,17 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-
-
-class Shape {
-  public:
+class Object {
+public:
   virtual void draw() = 0;
-  virtual double getDistance() =0;
 };
 
-class Point:public Shape {
+class Shape : public Object {
+  public:
+  virtual double getDistance() = 0;
+};
+
+class Point: public Shape {
    public:
    Point(double x_pos, double y_pos):x_coord_(x_pos),y_coord_(y_pos) {
      circle.setRadius(5.f);
@@ -30,7 +32,7 @@ class BasePoint:public Point {
 
 class Line;
 
-class Circal;
+class Circle;
 
 class PointByTwoPoints:public Point {
     public:

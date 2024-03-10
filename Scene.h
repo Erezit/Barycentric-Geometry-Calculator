@@ -2,6 +2,7 @@
 
 
 #include "shape.h"
+#include "Button.h"
 #include <SFML/Graphics.hpp>
 
 class Scene {
@@ -10,6 +11,7 @@ class Scene {
       objects.push_back(new BasePoint(10,30));
       objects.push_back(new BasePoint(150,120));
       objects.push_back(new BasePoint(100,40));
+      objects.push_back(new Button(30, 30));
     }
     void drawScene();
 
@@ -17,7 +19,7 @@ class Scene {
       
 
 
-    std::vector<Shape*> objects;
+    std::vector<Object*> objects;
     sf::Event event;
 
 };

@@ -1,0 +1,3 @@
+/home/Previous/technologies_of_programming/TP_project_folder/baricentric-geometry-project/cmake-build-debug/CMakeFiles/MyProject.dir
+/home/Previous/technologies_of_programming/TP_project_folder/baricentric-geometry-project/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/Previous/technologies_of_programming/TP_project_folder/baricentric-geometry-project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
