@@ -1,6 +1,7 @@
 #pragma once
+
+#include "shape.h"
 #include <SFML/Graphics.hpp>
-#include "Scene.h"
 
 class Button : public Object {
 private:
@@ -9,7 +10,7 @@ public:
   Button();
   Button(int x, int y) {
     rectangle.setSize(sf::Vector2f(20, 20));
-    rectangle.setOrigin(x, y);
+    rectangle.setPosition(x, y);
   }
   void draw() final;
 };
