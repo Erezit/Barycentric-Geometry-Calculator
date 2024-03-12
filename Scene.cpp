@@ -22,5 +22,8 @@ Shape* Scene::selectObject() {
         min_distance = shape_form->getDistance();
       }
     }
+    if(cur_select_object->getDistance() > 30) {
+        return nullptr;
+    }
     return cur_select_object;
 }
