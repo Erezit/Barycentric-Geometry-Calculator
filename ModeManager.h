@@ -8,11 +8,7 @@ class ModeManager{
 
     ModeManager() {}
 
-    void CurrentMode(Scene& scene) {
-      current_mode(scene);
-    }
 
-    std::function<void(Scene&)> current_mode = NoMode::active;
 };
 
 
