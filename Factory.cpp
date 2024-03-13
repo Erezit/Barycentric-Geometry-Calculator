@@ -1,5 +1,5 @@
-#include "Factory.h"
-
-Shape* Factory::createNewObject() {
-    return newObject;
-}
+//#include "Factory.h"
+//
+//Shape* Factory::createNewObject() {
+//    return newObject;
+//}

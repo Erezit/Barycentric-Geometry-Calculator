@@ -16,8 +16,11 @@ int main()
                 global::window.close();
             }
             if(main_scene.event.type ==  sf::Event::MouseButtonReleased) {
-                sf::Vector2f button_click = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
-                button_manager.ChangeMode(button_manager.ChooseButton(button_click));
+                sf::Vector2f mouse_click = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
+                if (button_manager.ChooseButton(mouse_click)) {
+                  button_manager.ChangeMode(button_manager.ChooseButton(mouse_click));
+                  main_scene.selected_shapes.clear();
+                }
             }
         }
         button_manager.draw();

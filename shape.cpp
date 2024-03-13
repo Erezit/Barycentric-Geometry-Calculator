@@ -4,11 +4,27 @@
 #include <cmath>
 
 namespace global {
-sf::RenderWindow window(sf::VideoMode(500, 500),
+sf::RenderWindow window(sf::VideoMode(800, 800),
                         "Barycentric Geometry Calculator");
 }
 
-void Point::draw() { global::window.draw(circle); }
+void BasePoint::draw() { global::window.draw(circle); }
+
+void MiddlePoint::make_actual() {
+  x_coord_ = (a_point_->x_coord_ + b_point_->x_coord_) / 2;
+  y_coord_ = (a_point_->y_coord_ + b_point_->y_coord_) / 2;
+  circle.setPosition(x_coord_, y_coord_);
+}
+
+void MiddlePoint::draw() {
+
+  make_actual();
+  global::window.draw(circle);
+}
+
+void Line::draw() {
+
+}
 
 double Point::getDistance() {
   sf::Vector2 cur_mouse_pos =
