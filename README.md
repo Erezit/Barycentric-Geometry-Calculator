@@ -1,11 +1,19 @@
 Welcome to Barycentric Geometry Project!
 
-There you would be able to draw geometry constructions and find informatrion about barycentric coordinates of different objects. 
+Main information you can see in file "Barycentric\_Geometry\_Solver-1" in Architecture folder.
 
-Project hasn't been finished yet, but now there are:
--simple user's interface;
--possibility to select points and move them, create lines and midpoints from existing objects.
+If you want to start project, firstly, you have to install SFML library. You can do it using
+(Ubuntu exmaple):  
 
-If you want to start project, you can make it form your console or run it from any IDE.
+$ sudo apt-get install libsfml-dev
+
+Then you should write following commands:
+
+$ mkcd build
+$ cmake ..
+$ make
+$ ./MyProject 
+
+ or you can just  run it from any IDE.
 
 Project was done by Postnov Ivan and Lopatin Egor, 2023-2027 MIPT students, Б05-327 group. 
