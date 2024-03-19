@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -13,12 +14,8 @@ public:
 
 class Point : public Shape {
 public:
-  Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
-    circle.setRadius(5.f);
-    circle.move(x_pos, y_pos);
-  }
-
-  Point() {}
+  Point() = default;
+  Point(double x_pos, double y_pos);
 
   double getDistance() final;
 
@@ -44,10 +41,7 @@ public:
   void draw() final;
   void make_actual();
 
-  MiddlePoint(Point* a_point, Point* b_point) : a_point_(a_point), b_point_(b_point) {
-    circle.setRadius(5.f);
-    // circle.move(x_pos, y_pos);
-  }
+  MiddlePoint(Point* a_point, Point* b_point);
 };
 
 class Line : public Shape {
@@ -57,7 +51,7 @@ private:
 public:
   void draw() final;
 
-  Line(Point* a_point, Point* b_point) : a_point_(a_point), b_point_(b_point) {}
+  Line(Point* a_point, Point* b_point);
 };
 
 class Circle;

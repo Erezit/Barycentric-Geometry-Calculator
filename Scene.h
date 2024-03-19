@@ -5,14 +5,8 @@
 
 class Scene {
     public:
-    Scene() {
-      objects.push_back(new BasePoint(10,30));
-      objects.push_back(new BasePoint(150,120));
-      objects.push_back(new BasePoint(100,40));
-     
-    }
+    Scene();
     void drawScene();
-
     Shape* selectObject();
     std::vector<Shape*> selected_shapes;
     void TryGetObject();

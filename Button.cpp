@@ -2,6 +2,12 @@
 
 #include <SFML/Graphics.hpp>
 
+Button::Button(int x, int y, std::function<void(Scene&)> func) {
+  rectangle.setSize(sf::Vector2f(20, 20));
+  rectangle.setPosition(x, y);
+  corresponding_function = func;
+}
+
 void Button::draw() { global::window.draw(rectangle); }
 
 bool Button::Contain(sf::Vector2f button_click) {

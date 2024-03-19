@@ -4,14 +4,14 @@
 #include "Scene.h"
 
 struct MoveBasePoint {
-  MoveBasePoint() {}
+  MoveBasePoint() = default;
   static void active(Scene& cur_scene);
   static bool is_moving;
   static Shape* last_object;
 };
 
 struct CreateMiddlePoint {
-  CreateMiddlePoint() {}
+  CreateMiddlePoint() = default;
   static void active(Scene& cur_scene);
 
 };

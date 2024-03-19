@@ -8,7 +8,17 @@ sf::RenderWindow window(sf::VideoMode(800, 800),
                         "Barycentric Geometry Calculator");
 }
 
+Point::Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
+  circle.setRadius(5.f);
+  circle.move(x_pos, y_pos);
+}
+
 void BasePoint::draw() { global::window.draw(circle); }
+
+MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
+    : a_point_(a_point), b_point_(b_point) {
+  circle.setRadius(5.f);
+}
 
 void MiddlePoint::make_actual() {
   x_coord_ = (a_point_->x_coord_ + b_point_->x_coord_) / 2;
@@ -17,14 +27,14 @@ void MiddlePoint::make_actual() {
 }
 
 void MiddlePoint::draw() {
-
   make_actual();
   global::window.draw(circle);
 }
 
-void Line::draw() {
+Line::Line(Point* a_point, Point* b_point)
+    : a_point_(a_point), b_point_(b_point) {}
 
-}
+void Line::draw() {}
 
 double Point::getDistance() {
   sf::Vector2 cur_mouse_pos =

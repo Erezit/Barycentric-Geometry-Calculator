@@ -1,8 +1,12 @@
-
-
 #include "Scene.h"
 #include <iostream>
 
+Scene::Scene() {
+  objects.push_back(new BasePoint(10,30));
+  objects.push_back(new BasePoint(150,120));
+  objects.push_back(new BasePoint(100,40));
+
+}
 void Scene::drawScene() {
   for(int i = 0; i < objects.size(); ++i) {
     objects[i]->draw();
