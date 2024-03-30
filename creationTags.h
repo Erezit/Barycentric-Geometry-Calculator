@@ -1,2 +1,0 @@
-struct FindPointWithRatio {};
-struct SelectObject {};
