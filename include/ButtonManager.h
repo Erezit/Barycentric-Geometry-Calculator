@@ -12,7 +12,7 @@ public:
 
 private:
   std::vector<Button*> all_buttons;
-  sf::Texture tmp;
+  std::vector<sf::Texture> all_textures;
 };
 
 class ModeManager {

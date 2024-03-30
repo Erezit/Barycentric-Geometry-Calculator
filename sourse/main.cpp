@@ -3,12 +3,13 @@
 #include "toolsMode.h"
 #include "ButtonManager.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-
+    std::cout << argc << " " << argv[1];
     Scene main_scene;
     ButtonManager button_manager;
     ModeManager mode_manager;
+    global::window.setFramerateLimit(60);
     while (global::window.isOpen())
     {
         while (global::window.pollEvent(main_scene.event))

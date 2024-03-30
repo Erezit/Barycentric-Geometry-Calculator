@@ -11,7 +11,7 @@ void MoveBasePoint::active(Scene& cur_scene) {
     is_moving = false;
     last_object = nullptr;
   }
-  if (cur_event.type == sf::Event::MouseButtonPressed || is_moving) {
+  if (cur_event.type == sf::Event::MouseButtonPressed && cur_event.type != sf::Event::MouseButtonReleased) {
     is_moving = true;
   }
 
@@ -70,7 +70,12 @@ void CreateLine::active(Scene& current_scene) {
   }
 }
 
-
+void FindLineIntersection::active(Scene& current_scene) {
+  current_scene.TryGetObject();
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
+    std::cout << "Wow, I've got two pretty line to create point!" << std::endl; 
+  }
+}
 
 
 

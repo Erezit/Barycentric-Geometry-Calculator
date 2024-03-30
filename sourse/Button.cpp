@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 Button::Button(int x, int y, std::function<void(Scene&)> func, sf::Texture& sTest) {
-  rectangle.setSize(sf::Vector2f(60, 80));
+  rectangle.setSize(sf::Vector2f(80, 80));
   rectangle.setPosition(x, y);
   corresponding_function = func;
   rectangle.setTexture(&sTest);

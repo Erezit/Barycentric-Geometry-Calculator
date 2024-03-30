@@ -24,3 +24,8 @@ struct CreateLine {
    CreateLine() = default;
    static void active(Scene& cur_scene);
 };
+
+struct FindLineIntersection {
+  FindLineIntersection() = default;
+  static void active(Scene& cur_scene);
+};
