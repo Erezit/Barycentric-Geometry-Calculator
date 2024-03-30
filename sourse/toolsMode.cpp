@@ -16,7 +16,7 @@ void MoveBasePoint::active(Scene& cur_scene) {
   }
 
   if (is_moving) {
-    Shape* movable_object = cur_scene.selectObject();
+    Shape* movable_object = cur_scene.selectObject<Point>();
     if (movable_object != nullptr && last_object == nullptr) {
       last_object = movable_object;
     }
@@ -46,7 +46,7 @@ Shape* MoveBasePoint::last_object = nullptr;
 
 void CreateMiddlePoint::active(Scene& current_scene) {
   // std::cout << current_scene.selected_shapes.size() << std::endl;
-  current_scene.TryGetObject();
+  current_scene.TryGetObject<Point>();
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
     std::cout << "Wow, I've got two pretty points to create midpoint!" << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
@@ -59,7 +59,7 @@ void CreateMiddlePoint::active(Scene& current_scene) {
 }
 
 void CreateLine::active(Scene& current_scene) {
-  current_scene.TryGetObject();
+  current_scene.TryGetObject<Point>();
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
     std::cout << "Wow, I've got two pretty points to create line!" << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
@@ -71,7 +71,7 @@ void CreateLine::active(Scene& current_scene) {
 }
 
 void FindLineIntersection::active(Scene& current_scene) {
-  current_scene.TryGetObject();
+  current_scene.TryGetObject<Line>();
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
     std::cout << "Wow, I've got two pretty line to create point!" << std::endl; 
   }
