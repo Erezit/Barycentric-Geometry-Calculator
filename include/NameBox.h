@@ -5,6 +5,7 @@ class NameBox {
       NameBox() = default;
       void setName(char sbl);
       void setPosition(double, double);
+      void setDelta(sf::Vector2f);
       sf::Text getName();
     private:
       sf::Text name;

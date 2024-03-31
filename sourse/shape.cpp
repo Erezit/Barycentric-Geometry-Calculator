@@ -14,11 +14,15 @@ namespace global {
 Point::Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
   circle.setRadius(5.f);
   circle.move(x_pos, y_pos);
+  name.setName(global::next_name);
+  global::next_name = global::next_name + 1;
 }
 
 void BasePoint::draw() { 
     circle.setPosition(x_coord_, y_coord_);
     global::window.draw(circle);
+    name.setPosition(x_coord_, y_coord_);
+    global::window.draw(name.getName());
 }
 
 MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
@@ -100,11 +104,14 @@ std::vector<double> Line::getСoefficients() {
 PointByTwoLines::PointByTwoLines(Line* a_line, Line* b_line) : a_line_(a_line), b_line_(b_line) {
   circle.setRadius(5.f);
   make_actual();
+  name.setName(global::next_name);
+  global::next_name = global::next_name + 1;
 }
 
 void PointByTwoLines::draw() {
   make_actual();
   global::window.draw(circle);
+  global::window.draw(name.getName());
 }
 
 void PointByTwoLines::make_actual() {
@@ -115,6 +122,6 @@ void PointByTwoLines::make_actual() {
   double det_b = coefficients_a[0] * coefficients_b[2] - coefficients_a[2] * coefficients_b[0];
   x_coord_ = -det_a / det;
   y_coord_ = -det_b / det;
-  // std::cout << x_coord_ << " " << y_coord_ << std::endl;
   circle.setPosition(x_coord_, y_coord_);
+  name.setPosition(x_coord_, y_coord_);
 }

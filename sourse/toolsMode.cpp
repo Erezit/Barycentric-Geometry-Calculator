@@ -97,3 +97,39 @@ void RollBack::active(Scene& current_scene) {
     flag = false;
   }
 }
+
+bool MoveName::is_moving = false;
+Shape* MoveName::last_object = nullptr;
+
+void MoveName::active(Scene& current_scene) {
+  sf::Event& cur_event = current_scene.event;
+  if (cur_event.type == sf::Event::MouseButtonReleased) {
+    is_moving = false;
+    last_object = nullptr;
+  }
+  if (cur_event.type == sf::Event::MouseButtonPressed && cur_event.type != sf::Event::MouseButtonReleased) {
+    is_moving = true;
+  }
+  if(is_moving) {
+    Shape* movable_object = current_scene.selectObject<Point>();
+    if (movable_object != nullptr && last_object == nullptr) {
+      last_object = movable_object;
+    }
+
+    if (last_object != nullptr) {
+      movable_object = last_object;
+    }
+
+    if (Point* movable_point = dynamic_cast<Point*>(movable_object)) {
+      sf::Vector2f point_position = sf::Vector2f(movable_point->x_coord_, movable_point->y_coord_); 
+      sf::Vector2f mouse_position = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
+      sf::Vector2f new_delta = mouse_position - point_position;
+      double size = sqrt(new_delta.x * new_delta.x + new_delta.y * new_delta.y);
+      new_delta.x = new_delta.x / size * 15;
+      new_delta.y = new_delta.y / size * 15;
+      movable_point->name.setDelta(new_delta);
+    }
+  }
+}
+
+
