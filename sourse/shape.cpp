@@ -4,9 +4,12 @@
 #include <cmath>
 
 namespace global {
-sf::RenderWindow window(sf::VideoMode(800, 800),
-                        "Barycentric Geometry Calculator");
+  sf::RenderWindow window(sf::VideoMode(800, 800),
+                          "Barycentric Geometry Calculator");
+  char next_name = 'A';
 }
+
+
 
 Point::Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
   circle.setRadius(5.f);
@@ -21,12 +24,15 @@ void BasePoint::draw() {
 MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
     : a_point_(a_point), b_point_(b_point) {
   circle.setRadius(5.f);
+  name.setName(global::next_name);
+  global::next_name = global::next_name + 1;
 }
 
 void MiddlePoint::make_actual() {
   x_coord_ = (a_point_->x_coord_ + b_point_->x_coord_) / 2;
   y_coord_ = (a_point_->y_coord_ + b_point_->y_coord_) / 2;
   circle.setPosition(x_coord_, y_coord_);
+  name.setPosition(x_coord_, y_coord_);
 }
 
 void Line::make_actual() {
@@ -37,6 +43,7 @@ void Line::make_actual() {
 void MiddlePoint::draw() {
   make_actual();
   global::window.draw(circle);
+  global::window.draw(name.getName());
 }
 
 Line::Line(Point* a_point, Point* b_point)

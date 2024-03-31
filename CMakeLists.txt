@@ -12,7 +12,8 @@
             ${CMAKE_SOURCE_DIR}/sourse/Factory.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/Scene.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/ButtonManager.cpp 
-            ${CMAKE_SOURCE_DIR}/sourse/toolsMode.cpp)
+            ${CMAKE_SOURCE_DIR}/sourse/toolsMode.cpp
+            ${CMAKE_SOURCE_DIR}/sourse/NameBox.cpp)
 
  set(HEADER ${CMAKE_SOURCE_DIR}/include/shape.h
             ${CMAKE_SOURCE_DIR}/include/Factory.h
@@ -21,7 +22,8 @@
             ${CMAKE_SOURCE_DIR}/include/creationTags.h 
             ${CMAKE_SOURCE_DIR}/include/ModeManager.h
             ${CMAKE_SOURCE_DIR}/include/ButtonManager.h
-            ${CMAKE_SOURCE_DIR}/include/toolsMode.h)
+            ${CMAKE_SOURCE_DIR}/include/toolsMode.h
+            ${CMAKE_SOURCE_DIR}/include/NameBox.h)
  
  find_package(SFML 2.5 COMPONENTS system window graphics network ) 
  #find_library(PARI_LIBRARY pari)

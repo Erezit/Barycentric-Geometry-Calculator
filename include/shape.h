@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <pari/pari.h>
+#include "NameBox.h"
 
 class Object {
 public:
@@ -26,6 +27,7 @@ public:
   double x_coord_;
   double y_coord_;
   sf::CircleShape circle;
+  NameBox name;
 };
 
 class BasePoint : public Point {
@@ -75,5 +77,6 @@ public:
 
 namespace global {
   extern sf::RenderWindow window;
+  extern char next_name;
 }
 
