@@ -87,10 +87,10 @@ bool RollBack::flag = true;
 
 void RollBack::active(Scene& current_scene) {
   sf::Event& cur_event = current_scene.event;
-  if (cur_event.type == sf::Event::MouseButtonReleased) {
+  if (cur_event.type == sf::Event::MouseButtonPressed && !flag) {
     flag = true;
   }
-  if (cur_event.type == sf::Event::MouseButtonPressed && cur_event.type != sf::Event::MouseButtonReleased && flag) {
+  if (cur_event.type == sf::Event::MouseButtonReleased && flag) {
     if(current_scene.objects.size() > 6) {
       current_scene.objects.pop_back();
     }
