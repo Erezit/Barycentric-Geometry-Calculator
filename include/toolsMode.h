@@ -13,7 +13,6 @@ struct MoveBasePoint {
 struct CreateMiddlePoint {
   CreateMiddlePoint() = default;
   static void active(Scene& cur_scene);
-
 };
 
 struct NoMode {
@@ -28,4 +27,10 @@ struct CreateLine {
 struct FindLineIntersection {
   FindLineIntersection() = default;
   static void active(Scene& cur_scene);
+};
+
+struct RollBack {
+  RollBack() = default;
+  static void active(Scene& cur_scene);
+  static bool flag;
 };

@@ -5,6 +5,7 @@ float max(float num1, float num2) {
     }
   return num2;
 }
+
 void MoveBasePoint::active(Scene& cur_scene) {
   sf::Event& cur_event = cur_scene.event;
   if (cur_event.type == sf::Event::MouseButtonReleased) {
@@ -82,3 +83,17 @@ void FindLineIntersection::active(Scene& current_scene) {
   }
 }
 
+bool RollBack::flag = true;
+
+void RollBack::active(Scene& current_scene) {
+  sf::Event& cur_event = current_scene.event;
+  if (cur_event.type == sf::Event::MouseButtonReleased) {
+    flag = true;
+  }
+  if (cur_event.type == sf::Event::MouseButtonPressed && cur_event.type != sf::Event::MouseButtonReleased && flag) {
+    if(current_scene.objects.size() > 6) {
+      current_scene.objects.pop_back();
+    }
+    flag = false;
+  }
+}
