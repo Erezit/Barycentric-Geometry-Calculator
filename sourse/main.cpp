@@ -3,9 +3,8 @@
 #include "toolsMode.h"
 #include "ButtonManager.h"
 
-int main(int argc, char* argv[])
+int main()
 {
-    std::cout << argc << " " << argv[1];
     Scene main_scene;
     ButtonManager button_manager;
     ModeManager mode_manager;

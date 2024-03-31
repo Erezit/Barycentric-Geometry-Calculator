@@ -9,11 +9,12 @@ class Scene {
     void drawScene();
     
     std::vector<Shape*> selected_shapes;
+    
     template <typename T = Shape>
     Shape* selectObject() {
-    Shape* cur_select_object = nullptr;
-    double min_distance = 1000000;
-    for(int i = 0; i < Scene::objects.size(); ++i) {
+      Shape* cur_select_object = nullptr;
+      double min_distance = 1000000;
+      for(int i = 0; i < Scene::objects.size(); ++i) {
       Shape* shape_form = dynamic_cast<T*>(Scene::objects[i]);
       if (shape_form == nullptr) {
         continue;

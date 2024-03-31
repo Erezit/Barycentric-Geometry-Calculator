@@ -72,8 +72,13 @@ void CreateLine::active(Scene& current_scene) {
 
 void FindLineIntersection::active(Scene& current_scene) {
   current_scene.TryGetObject<Line>();
-  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
-    std::cout << "Wow, I've got two pretty line to create point!" << std::endl; 
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(0, 2)) {
+    std::cout << "Wow, I've got two pretty line to create point!" << std::endl;
+    Line* first_line = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
+    Line* second_line = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
+    PointByTwoLines* point = new PointByTwoLines(first_line, second_line);
+    current_scene.objects.push_back(point);
+    current_scene.selected_shapes.clear();
   }
 }
 

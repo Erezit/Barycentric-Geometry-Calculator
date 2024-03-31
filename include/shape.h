@@ -56,23 +56,21 @@ public:
   double getDistance() final;
   void draw() final;
   Line(Point* a_point, Point* b_point);
+  std::vector<double> getСoefficients();
 };
+
 
 class Circle;
 
-//class PointByTwoPoints : public Point {
-//public:
-//  PointByTwoPoints(Point* pnt1, Point* pnt2, double ratio) : parent_shape_first(pnt1), parent_shape_second(pnt2) {
-//    circle.setRadius(5.f);
-//    circle.move((pnt1->x_coord_ + pnt2->x_coord_) / 2, (pnt1->y_coord_ + pnt2->y_coord_) / ratio);
-//  }
-//
-//  Shape* parent_shape_first;
-//  Shape* parent_shape_second;
-//};
 
 class PointByTwoLines : public Point {
-
+private:
+  Line* a_line_ = nullptr;
+  Line* b_line_ = nullptr;
+public:
+  PointByTwoLines(Line* a_line, Line* b_line);
+  void draw() final;
+  void make_actual();
 };
 
 namespace global {

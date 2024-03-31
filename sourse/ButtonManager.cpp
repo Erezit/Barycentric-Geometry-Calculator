@@ -10,6 +10,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(20, 120, NoMode::active, all_textures[0]));
   all_buttons.push_back(new Button(20, 220, CreateMiddlePoint::active, all_textures[2]));
   all_buttons.push_back(new Button(20, 320, CreateLine::active, all_textures[3]));
+  all_buttons.push_back(new Button(20, 420, FindLineIntersection::active, all_textures[0]));
 }
 
 void ButtonManager::draw() {
