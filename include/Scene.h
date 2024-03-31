@@ -7,9 +7,9 @@ class Scene {
     public:
     Scene();
     void drawScene();
-    
+     
     std::vector<Shape*> selected_shapes;
-    
+    sf::RectangleShape panel;
     template <typename T = Shape>
     Shape* selectObject() {
       Shape* cur_select_object = nullptr;

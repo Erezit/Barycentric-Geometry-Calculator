@@ -24,9 +24,9 @@ int main()
                 }
             }
         }
-        button_manager.draw();
         mode_manager.CurrentMode(main_scene);
         main_scene.drawScene();
+        button_manager.draw();
         global::window.display();
         global::window.clear();
         

@@ -28,7 +28,7 @@ void MoveBasePoint::active(Scene& cur_scene) {
     if (Point* movable_point = dynamic_cast<BasePoint*>(movable_object)) {
       movable_point->circle.setPosition(global::window.mapPixelToCoords(
           sf::Mouse::getPosition(global::window)));
-      movable_point->x_coord_ = max(80,
+      movable_point->x_coord_ = max(110,
           global::window
               .mapPixelToCoords(sf::Mouse::getPosition(global::window))
               .x);
@@ -81,11 +81,4 @@ void FindLineIntersection::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();
   }
 }
-
-
-
-
-
-
-
 

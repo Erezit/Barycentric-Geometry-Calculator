@@ -2,17 +2,22 @@
 #include <iostream>
 
 Scene::Scene() {
-  objects.push_back(new BasePoint(80,150));
-  objects.push_back(new BasePoint(300,170));
-  objects.push_back(new BasePoint(150,90));
+  panel.setFillColor(sf::Color{ 55, 55, 55, 255});
+  panel.setPosition(0, 0);
+  panel.setSize(sf::Vector2f(100, 800));
+  objects.push_back(new BasePoint(130,150));
+  objects.push_back(new BasePoint(350,170));
+  objects.push_back(new BasePoint(200,90));
   objects.push_back(new Line(dynamic_cast<Point*>(objects[0]),dynamic_cast<Point*>(objects[1])));
   objects.push_back(new Line(dynamic_cast<Point*>(objects[1]),dynamic_cast<Point*>(objects[2])));
   objects.push_back(new Line(dynamic_cast<Point*>(objects[2]),dynamic_cast<Point*>(objects[0])));
 }
 void Scene::drawScene() {
+ 
   for(int i = 0; i < objects.size(); ++i) {
     objects[i]->draw();
   }
+  global::window.draw(panel);
 }
 
 
