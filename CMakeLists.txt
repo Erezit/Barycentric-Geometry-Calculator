@@ -2,7 +2,8 @@
  
  project(MyProject)
  
- set(CMAKE_CXX_STANDARD 17) 
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_COMPILER clang++)
  
  include_directories(${CMAKE_SOURCE_DIR}/include)
 
@@ -13,8 +14,9 @@
             ${CMAKE_SOURCE_DIR}/sourse/Scene.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/ButtonManager.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/toolsMode.cpp
-            ${CMAKE_SOURCE_DIR}/sourse/NameBox.cpp)
-
+            ${CMAKE_SOURCE_DIR}/sourse/NameBox.cpp
+            ${CMAKE_SOURCE_DIR}/sourse/BarycentricCoordinate.cpp)
+ 
  set(HEADER ${CMAKE_SOURCE_DIR}/include/shape.h
             ${CMAKE_SOURCE_DIR}/include/Factory.h
             ${CMAKE_SOURCE_DIR}/include/Button.h
@@ -23,12 +25,15 @@
             ${CMAKE_SOURCE_DIR}/include/ModeManager.h
             ${CMAKE_SOURCE_DIR}/include/ButtonManager.h
             ${CMAKE_SOURCE_DIR}/include/toolsMode.h
-            ${CMAKE_SOURCE_DIR}/include/NameBox.h)
+            ${CMAKE_SOURCE_DIR}/include/NameBox.h
+            ${CMAKE_SOURCE_DIR}/include/BarycentricCoordinates.h)
  
+ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+        
  find_package(SFML 2.5 COMPONENTS system window graphics network ) 
- #find_library(PARI_LIBRARY pari)
+ find_library(GINAC_LIBRARIES ginac)
 
  add_executable(MyProject ${SOURSE} ${HEADER} "${CMAKE_SOURCE_DIR}")
  
  target_link_libraries(MyProject sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
- #target_link_libraries(MyProject ${PARI_LIBRARY})
+ target_link_libraries(MyProject ${GINAC_LIBRARIES})

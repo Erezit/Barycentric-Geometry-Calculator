@@ -49,7 +49,7 @@ class Scene {
 
     bool Checker(int point_number = 0, int line_number = 0, int circle_number = 0);
 
-    std::vector<Object*> objects;
+    std::vector<Shape*> objects;
     sf::Event event;
 
 };

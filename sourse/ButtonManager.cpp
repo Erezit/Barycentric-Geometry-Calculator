@@ -13,6 +13,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(10, 420, FindLineIntersection::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 520, RollBack::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 620, MoveName::active, all_textures[0]));
+  all_buttons.push_back(new Button(10, 720, ShowBarycentricCoordinate::active, all_textures[0]));
 }
 
 void ButtonManager::draw() {

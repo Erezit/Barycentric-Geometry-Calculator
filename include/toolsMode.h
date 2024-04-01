@@ -41,3 +41,8 @@ struct MoveName {
   static bool is_moving;
   static Shape* last_object;
 };
+
+struct ShowBarycentricCoordinate {
+  ShowBarycentricCoordinate() = default;
+  static void active(Scene& cur_scene);
+};

@@ -9,7 +9,13 @@ namespace global {
   char next_name = 'A';
 }
 
+void Shape::setCoordinates(GiNaC::ex poly1, GiNaC::ex poly2, GiNaC::ex poly3) {
+  barycentric_coordinates.setCoordinates(poly1, poly2, poly3);
+}
 
+BarycentricCoordinates Shape::getCoordinates() {
+  return barycentric_coordinates;
+}
 
 Point::Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
   circle.setRadius(5.f);
@@ -17,6 +23,7 @@ Point::Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
   name.setName(global::next_name);
   global::next_name = global::next_name + 1;
 }
+
 
 void BasePoint::draw() { 
     circle.setPosition(x_coord_, y_coord_);
@@ -30,6 +37,13 @@ MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
   circle.setRadius(5.f);
   name.setName(global::next_name);
   global::next_name = global::next_name + 1;
+  BarycentricCoordinates barycentric_coordinates_a = a_point_ -> getCoordinates();
+  BarycentricCoordinates barycentric_coordinates_b = b_point_ -> getCoordinates();
+  GiNaC::ex sum_a = barycentric_coordinates_a.getACoordinate() + barycentric_coordinates_a.getBCoordinate() + barycentric_coordinates_a.getCCoordinate();
+  GiNaC::ex sum_b = barycentric_coordinates_b.getACoordinate() + barycentric_coordinates_b.getBCoordinate() + barycentric_coordinates_b.getCCoordinate();
+  barycentric_coordinates.setCoordinates((barycentric_coordinates_a.getACoordinate() / sum_a + barycentric_coordinates_b.getACoordinate() / sum_b).normal(),
+          (barycentric_coordinates_a.getBCoordinate() / sum_a + barycentric_coordinates_b.getBCoordinate() / sum_b).normal(),
+          (barycentric_coordinates_a.getCCoordinate() / sum_a + barycentric_coordinates_b.getCCoordinate() / sum_b).normal());
 }
 
 void MiddlePoint::make_actual() {
@@ -87,7 +101,6 @@ double Line::getDistance() {
   double A = a_to_global.y - b_to_global.y;
   double B = b_to_global.x - a_to_global.x;
   double C = a_to_global.x * b_to_global.y - a_to_global.y * b_to_global.x;
-  // std::cout <<"DIST: " <<  std::abs((A * cur_mouse_pos.x + B * cur_mouse_pos.y + C) / sqrt(A * A + B * B)) << std::endl;
   return std::abs((A * cur_mouse_pos.x + B * cur_mouse_pos.y + C) / sqrt(A * A + B * B));
 }
 

@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include <pari/pari.h>
 #include "NameBox.h"
+#include "BarycentricCoordinates.h"
 
 class Object {
 public:
@@ -12,7 +12,9 @@ public:
 class Shape : public Object {
 public:
   virtual double getDistance() = 0;
-
+  BarycentricCoordinates barycentric_coordinates;
+  void setCoordinates(GiNaC::ex poly1, GiNaC::ex poly2, GiNaC::ex poly3);
+  BarycentricCoordinates getCoordinates();
 };
 
 class Point : public Shape {
@@ -23,7 +25,7 @@ public:
   double getDistance() final;
   sf::Vector2f getPosition();
   void draw() override = 0;
-
+  
   double x_coord_;
   double y_coord_;
   sf::CircleShape circle;

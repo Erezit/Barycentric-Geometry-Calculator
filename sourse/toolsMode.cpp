@@ -1,4 +1,5 @@
 #include "toolsMode.h"
+#include <cmath>
 float max(float num1, float num2) {
     if(num1 > num2){
       return num1;
@@ -132,4 +133,10 @@ void MoveName::active(Scene& current_scene) {
   }
 }
 
-
+void ShowBarycentricCoordinate::active(Scene& current_scene) {
+  current_scene.TryGetObject<Point>();
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1)) {
+      std::cout << current_scene.selected_shapes[0] -> getCoordinates().getACoordinate() << " " << current_scene.selected_shapes[0] -> getCoordinates().getBCoordinate() << " " << current_scene.selected_shapes[0] -> getCoordinates().getCCoordinate() << std::endl;
+      current_scene.selected_shapes.clear();
+  }
+}

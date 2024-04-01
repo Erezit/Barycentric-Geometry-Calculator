@@ -8,6 +8,9 @@ Scene::Scene() {
   objects.push_back(new BasePoint(130,150));
   objects.push_back(new BasePoint(350,170));
   objects.push_back(new BasePoint(200,90));
+  objects[0] -> setCoordinates(1,0,0);
+  objects[1] -> setCoordinates(0,1,0);
+  objects[2] -> setCoordinates(0,0,1);
   objects.push_back(new Line(dynamic_cast<Point*>(objects[0]),dynamic_cast<Point*>(objects[1])));
   objects.push_back(new Line(dynamic_cast<Point*>(objects[1]),dynamic_cast<Point*>(objects[2])));
   objects.push_back(new Line(dynamic_cast<Point*>(objects[2]),dynamic_cast<Point*>(objects[0])));
