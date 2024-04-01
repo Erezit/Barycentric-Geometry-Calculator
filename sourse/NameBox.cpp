@@ -1,7 +1,7 @@
 #include "NameBox.h"
 
   void NameBox::setName(char sbl) {
-    font.loadFromFile("/home/erezit/MIPT/TP_tests/TP_Project/LTSuperior-Medium.ttf");
+    font.loadFromFile("Textures/LTSuperior-Medium.ttf");
     name.setFont(font);
     name.setColor(sf::Color::Red);
     name.setString(sbl);

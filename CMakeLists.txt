@@ -4,6 +4,8 @@
  
  set(CMAKE_CXX_STANDARD 17)
  set(CMAKE_CXX_COMPILER clang++)
+
+ find_package(Python COMPONENTS Interpreter REQUIRED)
  
  include_directories(${CMAKE_SOURCE_DIR}/include)
 
@@ -28,12 +30,23 @@
             ${CMAKE_SOURCE_DIR}/include/NameBox.h
             ${CMAKE_SOURCE_DIR}/include/BarycentricCoordinates.h)
  
+ include_directories(${CMAKE_SOURCE_DIR})
+
  set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
-        
- find_package(SFML 2.5 COMPONENTS system window graphics network ) 
+ set(CMAKE_CXX_FLAGS -O3)
+ 
+
+ add_custom_target(Copy
+     COMMAND Python::Interpreter ${CMAKE_SOURCE_DIR}/copy.py ${CMAKE_SOURCE_DIR}/Textures ${CMAKE_BINARY_DIR}
+                  )
+
+ find_package(SFML 2.5 COMPONENTS system window graphics network) 
  find_library(GINAC_LIBRARIES ginac)
 
  add_executable(MyProject ${SOURSE} ${HEADER} "${CMAKE_SOURCE_DIR}")
  
  target_link_libraries(MyProject sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
  target_link_libraries(MyProject ${GINAC_LIBRARIES})
+
+ add_dependencies(MyProject Copy)
+
