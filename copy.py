@@ -1,4 +1,4 @@
 import sys
-from distutils.dir_util import copy_tree
+import shutil
 
-copy_tree(sys.argv[1], sys.argv[2])
+shutil.copytree(sys.argv[1], sys.argv[2], dirs_exist_ok=True)

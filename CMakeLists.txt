@@ -1,7 +1,7 @@
  cmake_minimum_required(VERSION 3.12)
  
  project(MyProject)
- 
+  
  set(CMAKE_CXX_STANDARD 17)
  set(CMAKE_CXX_COMPILER clang++)
 
@@ -33,15 +33,21 @@
  include_directories(${CMAKE_SOURCE_DIR})
 
  set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
- set(CMAKE_CXX_FLAGS -O3)
+ add_compile_options(-O3)
  
-
  add_custom_target(Copy
      COMMAND Python::Interpreter ${CMAKE_SOURCE_DIR}/copy.py ${CMAKE_SOURCE_DIR}/Textures ${CMAKE_BINARY_DIR}
+     COMMENT "The folder with textures has been successfully copied "             
                   )
-
+ 
  find_package(SFML 2.5 COMPONENTS system window graphics network) 
  find_library(GINAC_LIBRARIES ginac)
+ 
+ if(NOT GINAC_LIBRARIES)
+     message(FATAL_ERROR "GiNac library not found")
+ else()
+     message(STATUS "GiNac library found")
+ endif()
 
  add_executable(MyProject ${SOURSE} ${HEADER} "${CMAKE_SOURCE_DIR}")
  

@@ -5,7 +5,7 @@
 
 namespace global {
   sf::RenderWindow window(sf::VideoMode(800, 800),
-                          "Barycentric Geometry Calculator");
+                          "Barycentric Geometry Calculator", sf::Style::Close | sf::Style::Titlebar);
   char next_name = 'A';
 }
 
