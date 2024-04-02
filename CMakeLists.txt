@@ -12,7 +12,6 @@
  set(SOURSE ${CMAKE_SOURCE_DIR}/sourse/main.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/shape.cpp
             ${CMAKE_SOURCE_DIR}/sourse/Button.cpp
-            ${CMAKE_SOURCE_DIR}/sourse/Factory.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/Scene.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/ButtonManager.cpp 
             ${CMAKE_SOURCE_DIR}/sourse/toolsMode.cpp
@@ -20,7 +19,6 @@
             ${CMAKE_SOURCE_DIR}/sourse/BarycentricCoordinate.cpp)
  
  set(HEADER ${CMAKE_SOURCE_DIR}/include/shape.h
-            ${CMAKE_SOURCE_DIR}/include/Factory.h
             ${CMAKE_SOURCE_DIR}/include/Button.h
             ${CMAKE_SOURCE_DIR}/include/Scene.h
             ${CMAKE_SOURCE_DIR}/include/creationTags.h 
