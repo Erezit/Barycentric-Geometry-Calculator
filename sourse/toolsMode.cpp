@@ -11,6 +11,10 @@ float max(float num1, float num2) {
 int counter = 0;
 void ChangeColorToActive(std::vector<Shape*> objects) {
   if(objects.size() != counter) {
+     if(objects.size() == 0) {
+       counter = 0;
+       return;
+     }
      dynamic_cast<Shape*>(objects[objects.size() - 1]) -> choosenActive();
      ++counter;
   }
@@ -221,3 +225,12 @@ void DrawIncenter::active(Scene& current_scene) {
    }
 }
 
+bool drawOrthocenter::single = false;
+
+void drawOrthocenter::active(Scene& current_scene) {
+   sf::Event& cur_event = current_scene.event;
+   if (cur_event.type == sf::Event::MouseButtonReleased && !single) {
+   single = true;
+   current_scene.objects.push_back(new Orthocenter(dynamic_cast<Point*>(current_scene.objects[0]),dynamic_cast<Point*>(current_scene.objects[1]),dynamic_cast<Point*>(current_scene.objects[2])));
+  }
+}

@@ -19,6 +19,13 @@ int main()
             if(main_scene.event.type ==  sf::Event::MouseButtonReleased) {
                 sf::Vector2f mouse_click = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
                 if (button_manager.ChooseButton(mouse_click)) {
+                    std::cout << main_scene.selected_shapes.size()  << std::endl;
+                  for(auto shape : main_scene.selected_shapes) {
+                    std::cout << "start clear" << std::endl;
+                    shape -> choosenFinal();
+                    std::cout << "finish clear" << std::endl;
+                  }
+                  main_scene.selected_shapes.clear();
                   mode_manager.ChangeMode(button_manager.ChooseButton(mouse_click));
                   main_scene.selected_shapes.clear();
                 }

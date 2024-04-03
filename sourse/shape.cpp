@@ -203,10 +203,44 @@ void Incenter::make_actual() {
   circle.setPosition(x_coord_, y_coord_);
   name.setPosition(x_coord_, y_coord_);
 }
+
 void Incenter::draw() {
   make_actual();
   global::window.draw(circle);
   circle.setFillColor(getColor());
   global::window.draw(name.getName());
+}
+
+Orthocenter::Orthocenter(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point), b_point_(b_point), c_point_(c_point) {
+  circle.setRadius(5.f);
+  make_actual();
+  barycentric_coordinates.setCoordinates(1 / (b * b + c * c - a * a), 1 / (c * c - b * b + a * a), 1 / (b * b - c * c + a * a));
+  name.setName(global::next_name);
+  global::next_name = global::next_name + 1;
+  choosenFinal();
+}
+
+void Orthocenter::draw() {
+  make_actual();
+  global::window.draw(circle);
+  circle.setFillColor(getColor());
+  global::window.draw(name.getName());
+}
+
+void Orthocenter::make_actual() {
+  sf::Vector2f a_position = a_point_ -> getPosition();
+  sf::Vector2f b_position = b_point_ -> getPosition();
+  sf::Vector2f c_position = c_point_ -> getPosition();
+  double c_size =  sqrt((a_position - b_position).x * (a_position - b_position).x + (a_position - b_position).y * (a_position - b_position).y);
+  double b_size =  sqrt((a_position - c_position).x * (a_position - c_position).x + (a_position - c_position).y * (a_position - c_position).y);
+  double a_size =  sqrt((c_position - b_position).x * (c_position - b_position).x + (c_position - b_position).y * (c_position - b_position).y);
+  double a_weight = (a_size * a_size - b_size * b_size + c_size * c_size) * (a_size * a_size + b_size * b_size - c_size * c_size);
+  double b_weight = (a_size * a_size + b_size * b_size - c_size * c_size) * (-a_size * a_size + b_size * b_size + c_size * c_size);
+  double c_weight = (-a_size * a_size + b_size * b_size + c_size * c_size) * (a_size * a_size - b_size * b_size + c_size * c_size);
+  double sum = a_weight + b_weight  + c_weight;
+  x_coord_ = (a_position.x * a_weight + b_position.x * b_weight + c_position.x * c_weight) / sum;
+  y_coord_ = (a_position.y * a_weight + b_position.y * b_weight + c_position.y * c_weight) / sum;
+  circle.setPosition(x_coord_, y_coord_);
+  name.setPosition(x_coord_, y_coord_);
 }
 

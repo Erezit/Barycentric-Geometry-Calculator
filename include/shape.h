@@ -40,7 +40,6 @@ public:
 class BasePoint : public Point {
 public:
   void draw() final;
-
   BasePoint(double x_pos, double y_pos);
 };
 
@@ -92,6 +91,15 @@ class Incenter : public Point {
   void make_actual();
 };
 
+class Orthocenter : public Point {
+  public:
+  void draw() final;
+  Orthocenter(Point* a_point, Point* b_point,Point* c_point);
+  Point* a_point_ = nullptr;
+  Point* b_point_ = nullptr;
+  Point* c_point_ = nullptr;
+  void make_actual();
+};
 
 namespace global {
   extern sf::RenderWindow window;

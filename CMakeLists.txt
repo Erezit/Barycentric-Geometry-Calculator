@@ -22,7 +22,7 @@
  include_directories(${CMAKE_SOURCE_DIR})
 
  set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
- add_compile_options(-O3)
+ add_compile_options(-O2)
  
  add_custom_target(Copy
      COMMAND Python::Interpreter ${CMAKE_SOURCE_DIR}/copy.py ${CMAKE_SOURCE_DIR}/Textures ${CMAKE_BINARY_DIR}

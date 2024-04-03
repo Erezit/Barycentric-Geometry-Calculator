@@ -21,6 +21,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(1310, 20, ProveIntersect::active, all_textures[6]));
   all_buttons.push_back(new Button(1310, 120, ProveCollinearity::active, all_textures[7]));
   all_buttons.push_back(new Button(1310, 220, DrawIncenter::active, all_textures[0]));
+  all_buttons.push_back(new Button(1310, 321, drawOrthocenter::active, all_textures[0]));
 }
 
 void ButtonManager::draw() {

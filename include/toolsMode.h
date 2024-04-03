@@ -63,3 +63,9 @@ struct DrawIncenter {
   static void active(Scene& cur_scene);
   static bool single;
 };
+
+struct drawOrthocenter {
+  drawOrthocenter() = default;
+  static void active(Scene& cur_scene);
+  static bool single;
+};
