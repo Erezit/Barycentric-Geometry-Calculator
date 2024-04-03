@@ -50,6 +50,7 @@ struct ShowBarycentricCoordinate {
 struct ProveIntersect {
   ProveIntersect() = default;
   static void active(Scene& cur_scene);
+  //static int counter;
 };
 
 struct ProveCollinearity {

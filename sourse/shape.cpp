@@ -16,6 +16,18 @@ void Shape::setCoordinates(GiNaC::ex poly1, GiNaC::ex poly2, GiNaC::ex poly3) {
   barycentric_coordinates.setCoordinates(poly1, poly2, poly3);
 }
 
+void Shape::choosenActive() {
+  color = sf::Color{0, 0, 255, 255};
+}
+
+void Shape::choosenFinal() {
+  color = sf::Color{255, 255, 255, 255};
+}
+
+sf::Color Shape::getColor() {
+  return color;
+}
+
 BarycentricCoordinates Shape::getCoordinates() {
   return barycentric_coordinates;
 }
@@ -27,8 +39,12 @@ Point::Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
   global::next_name = global::next_name + 1;
 }
 
+BasePoint::BasePoint(double x_pos, double y_pos) : Point(x_pos, y_pos) {
+    choosenFinal();
+}
 
 void BasePoint::draw() { 
+    circle.setFillColor(getColor());
     circle.setPosition(x_coord_, y_coord_);
     global::window.draw(circle);
     name.setPosition(x_coord_, y_coord_);
@@ -47,6 +63,7 @@ MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
   barycentric_coordinates.setCoordinates((barycentric_coordinates_a.getACoordinate() / sum_a + barycentric_coordinates_b.getACoordinate() / sum_b).normal(),
           (barycentric_coordinates_a.getBCoordinate() / sum_a + barycentric_coordinates_b.getBCoordinate() / sum_b).normal(),
           (barycentric_coordinates_a.getCCoordinate() / sum_a + barycentric_coordinates_b.getCCoordinate() / sum_b).normal());
+  choosenFinal();
 }
 
 void MiddlePoint::make_actual() {
@@ -57,12 +74,20 @@ void MiddlePoint::make_actual() {
 }
 
 void Line::make_actual() {
-  line[0] = sf::Vertex(a_point_->getPosition() + sf::Vector2f(5,5));
-  line[1] = sf::Vertex(b_point_->getPosition() + sf::Vector2f(5,5));
+  sf::Color tmp_color = getColor();
+  line[0] = sf::Vertex(a_point_->getPosition() + sf::Vector2f(5,5), tmp_color);
+  line[1] = sf::Vertex(b_point_->getPosition() + sf::Vector2f(5,5), tmp_color);
 }
+
+void Line::draw() {
+  make_actual();
+  global::window.draw(line, 2, sf::Lines);
+}
+
 
 void MiddlePoint::draw() {
   make_actual();
+  circle.setFillColor(getColor());
   global::window.draw(circle);
   global::window.draw(name.getName());
 }
@@ -76,14 +101,8 @@ Line::Line(Point* a_point, Point* b_point)
       GiNaC::ex new_coordinate_b = barycentric_coordinates_a.getCCoordinate() * barycentric_coordinates_b.getACoordinate() - barycentric_coordinates_a.getACoordinate() * barycentric_coordinates_b.getCCoordinate();
       GiNaC::ex new_coordinate_c = barycentric_coordinates_a.getACoordinate() * barycentric_coordinates_b.getBCoordinate() - barycentric_coordinates_a.getBCoordinate() * barycentric_coordinates_b.getACoordinate();
       barycentric_coordinates.setCoordinates(new_coordinate_a.normal(), new_coordinate_b.normal(), new_coordinate_c.normal());
+      choosenFinal();
     }
-
-void Line::draw() 
-{
-  make_actual();
-  global::window.draw(line, 2, sf::Lines);
-}
-
 
 double Point::getDistance() {
   sf::Vector2 cur_mouse_pos = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
@@ -138,10 +157,12 @@ PointByTwoLines::PointByTwoLines(Line* a_line, Line* b_line) : a_line_(a_line), 
   BarycentricCoordinates barycentric_coordinates_b = b_line_ -> getCoordinates();
   std::vector<GiNaC::ex> new__coordinates = FindCoordinate<GiNaC::ex>(barycentric_coordinates_a.getACoordinate(), barycentric_coordinates_a.getBCoordinate(),barycentric_coordinates_a.getCCoordinate(),barycentric_coordinates_b.getACoordinate(), barycentric_coordinates_b.getBCoordinate(), barycentric_coordinates_b.getCCoordinate()); 
   barycentric_coordinates.setCoordinates(new__coordinates[0].normal(), new__coordinates[1].normal(), new__coordinates[2].normal());
+  choosenFinal();
 }
 
 void PointByTwoLines::draw() {
   make_actual();
+  circle.setFillColor(getColor());
   global::window.draw(circle);
   global::window.draw(name.getName());
 }
@@ -165,6 +186,8 @@ Incenter::Incenter(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_p
   barycentric_coordinates.setCoordinates(a, b, c);
   name.setName(global::next_name);
   global::next_name = global::next_name + 1;
+  choosenFinal();
+
 }
 
 void Incenter::make_actual() {
@@ -183,6 +206,7 @@ void Incenter::make_actual() {
 void Incenter::draw() {
   make_actual();
   global::window.draw(circle);
+  circle.setFillColor(getColor());
   global::window.draw(name.getName());
 }
 

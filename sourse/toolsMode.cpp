@@ -8,6 +8,23 @@ float max(float num1, float num2) {
   return num2;
 }
 
+int counter = 0;
+void ChangeColorToActive(std::vector<Shape*> objects) {
+  if(objects.size() != counter) {
+     dynamic_cast<Shape*>(objects[objects.size() - 1]) -> choosenActive();
+     ++counter;
+  }
+}
+
+void ChangeColorToFinal(std::vector<Shape*> objects) {
+  counter = 0;
+  for(auto obj : objects) {
+    obj -> choosenFinal();
+  }
+}
+
+
+
 void MoveBasePoint::active(Scene& cur_scene) {
   sf::Event& cur_event = cur_scene.event;
   if (cur_event.type == sf::Event::MouseButtonReleased) {
@@ -50,6 +67,7 @@ Shape* MoveBasePoint::last_object = nullptr;
 void CreateMiddlePoint::active(Scene& current_scene) {
   // std::cout << current_scene.selected_shapes.size() << std::endl;
   current_scene.TryGetObject<Point>();
+  ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
     std::cout << "Wow, I've got two pretty points to create midpoint!" << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
@@ -57,30 +75,35 @@ void CreateMiddlePoint::active(Scene& current_scene) {
     MiddlePoint* middlePoint = new MiddlePoint(first_point, second_point);
     current_scene.objects.push_back(middlePoint);
     std::cout << "Now there are " << current_scene.objects.size() << " points" << std::endl;
+    ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }
 }
 
 void CreateLine::active(Scene& current_scene) {
   current_scene.TryGetObject<Point>();
+  ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
     std::cout << "Wow, I've got two pretty points to create line!" << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
     Point* second_point = dynamic_cast<Point*>(current_scene.selected_shapes[1]);
     Line* line =  new Line(first_point, second_point);
     current_scene.objects.push_back(line);
+    ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }
 }
 
 void FindLineIntersection::active(Scene& current_scene) {
   current_scene.TryGetObject<Line>();
+  ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(0, 2)) {
     std::cout << "Wow, I've got two pretty line to create point!" << std::endl;
     Line* first_line = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
     Line* second_line = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
     PointByTwoLines* point = new PointByTwoLines(first_line, second_line);
     current_scene.objects.push_back(point);
+    ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }
 }
@@ -148,8 +171,10 @@ T Det(const T& A1,const T& B1,const T& C1,const T& A2,const T& B2,const T& C2, c
   return B1 * C2 * A3 - B2 * C1 * A3  + A2 * C1 * B3 - A1 * C2 * B3 + A1 * B2 * C3 - B1 * A2 * C3;
 }
 
+//int  ProveIntersect::counter = 0;
 void ProveIntersect::active(Scene& current_scene) {
   current_scene.TryGetObject<Line>();
+  ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(0, 3)) {
     BarycentricCoordinates line_a_coordinate = current_scene.selected_shapes[0] -> getCoordinates();
     BarycentricCoordinates line_b_coordinate = current_scene.selected_shapes[1] -> getCoordinates();
@@ -161,6 +186,7 @@ void ProveIntersect::active(Scene& current_scene) {
     } else {
       std::cout << "NO" << std::endl;
     }
+    ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }
 }
@@ -168,6 +194,7 @@ void ProveIntersect::active(Scene& current_scene) {
 
 void ProveCollinearity::active(Scene& current_scene) {
   current_scene.TryGetObject<Point>();
+  ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(3)) {
     BarycentricCoordinates point_a_coordinate = current_scene.selected_shapes[0] -> getCoordinates();
     BarycentricCoordinates point_b_coordinate = current_scene.selected_shapes[1] -> getCoordinates();
@@ -179,6 +206,7 @@ void ProveCollinearity::active(Scene& current_scene) {
     } else {
       std::cout << "NO" << std::endl;
     }
+    ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }
 }
@@ -187,7 +215,7 @@ bool DrawIncenter::single = false;
 
 void DrawIncenter::active(Scene& current_scene) {
    sf::Event& cur_event = current_scene.event;
-   if (cur_event.type == sf::Event::MouseButtonPressed && !single) {
+   if (cur_event.type == sf::Event::MouseButtonReleased && !single) {
      single = true;
      current_scene.objects.push_back(new Incenter(dynamic_cast<Point*>(current_scene.objects[0]),dynamic_cast<Point*>(current_scene.objects[1]),dynamic_cast<Point*>(current_scene.objects[2])));
    }

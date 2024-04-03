@@ -10,11 +10,16 @@ public:
 };
 
 class Shape : public Object {
+private:
+sf::Color color;
 public:
   virtual double getDistance() = 0;
   BarycentricCoordinates barycentric_coordinates;
   void setCoordinates(GiNaC::ex poly1, GiNaC::ex poly2, GiNaC::ex poly3);
   BarycentricCoordinates getCoordinates();
+  virtual void choosenActive();
+  virtual void choosenFinal();
+  sf::Color getColor();
 };
 
 class Point : public Shape {
@@ -36,7 +41,7 @@ class BasePoint : public Point {
 public:
   void draw() final;
 
-  BasePoint(double x_pos, double y_pos) : Point(x_pos, y_pos) {}
+  BasePoint(double x_pos, double y_pos);
 };
 
 class MiddlePoint : public Point {
