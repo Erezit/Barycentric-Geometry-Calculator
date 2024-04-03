@@ -4,10 +4,13 @@
 #include <cmath>
 
 namespace global {
-  sf::RenderWindow window(sf::VideoMode(800, 800),
+  sf::RenderWindow window(sf::VideoMode(1400, 900),
                           "Barycentric Geometry Calculator", sf::Style::Close | sf::Style::Titlebar);
   char next_name = 'A';
 }
+GiNaC::symbol a("a");
+GiNaC::symbol b("b");
+GiNaC::symbol c("c");
 
 void Shape::setCoordinates(GiNaC::ex poly1, GiNaC::ex poly2, GiNaC::ex poly3) {
   barycentric_coordinates.setCoordinates(poly1, poly2, poly3);
@@ -67,6 +70,12 @@ void MiddlePoint::draw() {
 Line::Line(Point* a_point, Point* b_point)
     : a_point_(a_point), b_point_(b_point) {
       make_actual();
+      BarycentricCoordinates barycentric_coordinates_a = a_point_ -> getCoordinates();
+      BarycentricCoordinates barycentric_coordinates_b = b_point_ -> getCoordinates();
+      GiNaC::ex new_coordinate_a = barycentric_coordinates_a.getBCoordinate() * barycentric_coordinates_b.getCCoordinate() - barycentric_coordinates_a.getCCoordinate() * barycentric_coordinates_b.getBCoordinate();
+      GiNaC::ex new_coordinate_b = barycentric_coordinates_a.getCCoordinate() * barycentric_coordinates_b.getACoordinate() - barycentric_coordinates_a.getACoordinate() * barycentric_coordinates_b.getCCoordinate();
+      GiNaC::ex new_coordinate_c = barycentric_coordinates_a.getACoordinate() * barycentric_coordinates_b.getBCoordinate() - barycentric_coordinates_a.getBCoordinate() * barycentric_coordinates_b.getACoordinate();
+      barycentric_coordinates.setCoordinates(new_coordinate_a.normal(), new_coordinate_b.normal(), new_coordinate_c.normal());
     }
 
 void Line::draw() 
@@ -114,11 +123,21 @@ std::vector<double> Line::getСoefficients() {
   return coefficients;
 }
 
+
+template <typename T>
+std::vector<T> FindCoordinate(const T& A1,const T& B1,const T& C1,const T& A2,const T& B2,const T& C2) {
+  return std::vector<T>{-B1 * C2 + B2 * C1,-A2 * C1 + A1 * C2, -A1 * B2 + B1 * A2};
+}
+
 PointByTwoLines::PointByTwoLines(Line* a_line, Line* b_line) : a_line_(a_line), b_line_(b_line) {
   circle.setRadius(5.f);
   make_actual();
   name.setName(global::next_name);
   global::next_name = global::next_name + 1;
+  BarycentricCoordinates barycentric_coordinates_a = a_line_ -> getCoordinates();
+  BarycentricCoordinates barycentric_coordinates_b = b_line_ -> getCoordinates();
+  std::vector<GiNaC::ex> new__coordinates = FindCoordinate<GiNaC::ex>(barycentric_coordinates_a.getACoordinate(), barycentric_coordinates_a.getBCoordinate(),barycentric_coordinates_a.getCCoordinate(),barycentric_coordinates_b.getACoordinate(), barycentric_coordinates_b.getBCoordinate(), barycentric_coordinates_b.getCCoordinate()); 
+  barycentric_coordinates.setCoordinates(new__coordinates[0].normal(), new__coordinates[1].normal(), new__coordinates[2].normal());
 }
 
 void PointByTwoLines::draw() {
@@ -138,3 +157,32 @@ void PointByTwoLines::make_actual() {
   circle.setPosition(x_coord_, y_coord_);
   name.setPosition(x_coord_, y_coord_);
 }
+
+
+Incenter::Incenter(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point), b_point_(b_point), c_point_(c_point) {
+  circle.setRadius(5.f);
+  make_actual();
+  barycentric_coordinates.setCoordinates(a, b, c);
+  name.setName(global::next_name);
+  global::next_name = global::next_name + 1;
+}
+
+void Incenter::make_actual() {
+  sf::Vector2f a_position = a_point_ -> getPosition();
+  sf::Vector2f b_position = b_point_ -> getPosition();
+  sf::Vector2f c_position = c_point_ -> getPosition();
+  double c_size =  sqrt((a_position - b_position).x * (a_position - b_position).x + (a_position - b_position).y * (a_position - b_position).y);
+  double b_size =  sqrt((a_position - c_position).x * (a_position - c_position).x + (a_position - c_position).y * (a_position - c_position).y);
+  double a_size =  sqrt((c_position - b_position).x * (c_position - b_position).x + (c_position - b_position).y * (c_position - b_position).y);
+  double sum = a_size + b_size  + c_size;
+  x_coord_ = (a_position.x * a_size + b_position.x * b_size + c_position.x * c_size) / sum;
+  y_coord_ = (a_position.y * a_size + b_position.y * b_size + c_position.y * c_size) / sum;
+  circle.setPosition(x_coord_, y_coord_);
+  name.setPosition(x_coord_, y_coord_);
+}
+void Incenter::draw() {
+  make_actual();
+  global::window.draw(circle);
+  global::window.draw(name.getName());
+}
+

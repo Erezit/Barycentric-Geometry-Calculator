@@ -9,7 +9,8 @@ class Scene {
     void drawScene();
      
     std::vector<Shape*> selected_shapes;
-    sf::RectangleShape panel;
+    sf::RectangleShape panel_draw;
+    sf::RectangleShape panel_prove;
     template <typename T = Shape>
     Shape* selectObject() {
       Shape* cur_select_object = nullptr;

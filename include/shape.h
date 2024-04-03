@@ -77,6 +77,17 @@ public:
   void make_actual();
 };
 
+class Incenter : public Point {
+  public:
+  void draw() final;
+  Incenter(Point* a_point, Point* b_point,Point* c_point);
+  Point* a_point_ = nullptr;
+  Point* b_point_ = nullptr;
+  Point* c_point_ = nullptr;
+  void make_actual();
+};
+
+
 namespace global {
   extern sf::RenderWindow window;
   extern char next_name;

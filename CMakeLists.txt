@@ -18,15 +18,6 @@
             ${CMAKE_SOURCE_DIR}/sourse/NameBox.cpp
             ${CMAKE_SOURCE_DIR}/sourse/BarycentricCoordinate.cpp)
  
- set(HEADER ${CMAKE_SOURCE_DIR}/include/shape.h
-            ${CMAKE_SOURCE_DIR}/include/Button.h
-            ${CMAKE_SOURCE_DIR}/include/Scene.h
-            ${CMAKE_SOURCE_DIR}/include/creationTags.h 
-            ${CMAKE_SOURCE_DIR}/include/ModeManager.h
-            ${CMAKE_SOURCE_DIR}/include/ButtonManager.h
-            ${CMAKE_SOURCE_DIR}/include/toolsMode.h
-            ${CMAKE_SOURCE_DIR}/include/NameBox.h
-            ${CMAKE_SOURCE_DIR}/include/BarycentricCoordinates.h)
  
  include_directories(${CMAKE_SOURCE_DIR})
 
@@ -47,7 +38,7 @@
      message(STATUS "GiNac library found")
  endif()
 
- add_executable(MyProject ${SOURSE} ${HEADER} "${CMAKE_SOURCE_DIR}")
+ add_executable(MyProject ${SOURSE})
  
  target_link_libraries(MyProject sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
  target_link_libraries(MyProject ${GINAC_LIBRARIES})

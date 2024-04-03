@@ -1,3 +1,4 @@
+#include <ginac/ginac.h>
 #include "toolsMode.h"
 #include <cmath>
 float max(float num1, float num2) {
@@ -140,3 +141,55 @@ void ShowBarycentricCoordinate::active(Scene& current_scene) {
       current_scene.selected_shapes.clear();
   }
 }
+
+
+template <typename T>
+T Det(const T& A1,const T& B1,const T& C1,const T& A2,const T& B2,const T& C2, const T& A3, const T& B3, const T& C3) {
+  return B1 * C2 * A3 - B2 * C1 * A3  + A2 * C1 * B3 - A1 * C2 * B3 + A1 * B2 * C3 - B1 * A2 * C3;
+}
+
+void ProveIntersect::active(Scene& current_scene) {
+  current_scene.TryGetObject<Line>();
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(0, 3)) {
+    BarycentricCoordinates line_a_coordinate = current_scene.selected_shapes[0] -> getCoordinates();
+    BarycentricCoordinates line_b_coordinate = current_scene.selected_shapes[1] -> getCoordinates();
+    BarycentricCoordinates line_c_coordinate = current_scene.selected_shapes[2] -> getCoordinates();
+    GiNaC::ex det = Det<GiNaC::ex>(line_a_coordinate.getACoordinate(), line_a_coordinate.getBCoordinate(), line_a_coordinate.getCCoordinate(), line_b_coordinate.getACoordinate(), line_b_coordinate.getBCoordinate(), line_b_coordinate.getCCoordinate(), line_c_coordinate.getACoordinate(), line_c_coordinate.getBCoordinate(), line_c_coordinate.getCCoordinate());
+    std::cout << det << std::endl;
+    if(det.normal() == 0) {
+      std::cout << "YES" << std::endl;
+    } else {
+      std::cout << "NO" << std::endl;
+    }
+    current_scene.selected_shapes.clear();
+  }
+}
+
+
+void ProveCollinearity::active(Scene& current_scene) {
+  current_scene.TryGetObject<Point>();
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(3)) {
+    BarycentricCoordinates point_a_coordinate = current_scene.selected_shapes[0] -> getCoordinates();
+    BarycentricCoordinates point_b_coordinate = current_scene.selected_shapes[1] -> getCoordinates();
+    BarycentricCoordinates point_c_coordinate = current_scene.selected_shapes[2] -> getCoordinates();
+    GiNaC::ex det = Det<GiNaC::ex>(point_a_coordinate.getACoordinate(), point_a_coordinate.getBCoordinate(), point_a_coordinate.getCCoordinate(), point_b_coordinate.getACoordinate(), point_b_coordinate.getBCoordinate(), point_b_coordinate.getCCoordinate(), point_c_coordinate.getACoordinate(), point_c_coordinate.getBCoordinate(), point_c_coordinate.getCCoordinate());
+    std::cout << det << std::endl;
+    if(det.normal() == 0) {
+      std::cout << "YES" << std::endl;
+    } else {
+      std::cout << "NO" << std::endl;
+    }
+    current_scene.selected_shapes.clear();
+  }
+}
+
+bool DrawIncenter::single = false;
+
+void DrawIncenter::active(Scene& current_scene) {
+   sf::Event& cur_event = current_scene.event;
+   if (cur_event.type == sf::Event::MouseButtonPressed && !single) {
+     single = true;
+     current_scene.objects.push_back(new Incenter(dynamic_cast<Point*>(current_scene.objects[0]),dynamic_cast<Point*>(current_scene.objects[1]),dynamic_cast<Point*>(current_scene.objects[2])));
+   }
+}
+

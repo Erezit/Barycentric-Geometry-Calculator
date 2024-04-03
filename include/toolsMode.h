@@ -46,3 +46,19 @@ struct ShowBarycentricCoordinate {
   ShowBarycentricCoordinate() = default;
   static void active(Scene& cur_scene);
 };
+
+struct ProveIntersect {
+  ProveIntersect() = default;
+  static void active(Scene& cur_scene);
+};
+
+struct ProveCollinearity {
+  ProveCollinearity() = default;
+  static void active(Scene& cur_scene);
+};
+
+struct DrawIncenter {
+  DrawIncenter() = default;
+  static void active(Scene& cur_scene);
+  static bool single;
+};

@@ -2,12 +2,14 @@
 
 
 ButtonManager::ButtonManager() {
-  all_textures.resize(6);
+  all_textures.resize(8);
   all_textures[0].loadFromFile("Textures/Move.png");
   all_textures[2].loadFromFile("Textures/Midpoint.png");
   all_textures[3].loadFromFile("Textures/Line.png");
   all_textures[4].loadFromFile("Textures/Delete.png"); 
   all_textures[5].loadFromFile("Textures/PresetOFF.png");
+  all_textures[6].loadFromFile("Textures/Concurrency.png");
+  all_textures[7].loadFromFile("Textures/Collinearity.png");
   all_buttons.push_back(new Button(10, 120, MoveBasePoint::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 20, NoMode::active, all_textures[5]));
   all_buttons.push_back(new Button(10, 220, CreateMiddlePoint::active, all_textures[2]));
@@ -16,6 +18,9 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(10, 520, RollBack::active, all_textures[4]));
   all_buttons.push_back(new Button(10, 620, MoveName::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 720, ShowBarycentricCoordinate::active, all_textures[0]));
+  all_buttons.push_back(new Button(1310, 20, ProveIntersect::active, all_textures[6]));
+  all_buttons.push_back(new Button(1310, 120, ProveCollinearity::active, all_textures[7]));
+  all_buttons.push_back(new Button(1310, 220, DrawIncenter::active, all_textures[0]));
 }
 
 void ButtonManager::draw() {
