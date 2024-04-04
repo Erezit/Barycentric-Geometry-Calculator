@@ -2,7 +2,7 @@
 
 
 ButtonManager::ButtonManager() {
-  all_textures.resize(10);
+  all_textures.resize(13);
   all_textures[0].loadFromFile("Textures/Move.png");
   all_textures[2].loadFromFile("Textures/Midpoint.png");
   all_textures[3].loadFromFile("Textures/Line.png");
@@ -12,18 +12,22 @@ ButtonManager::ButtonManager() {
   all_textures[7].loadFromFile("Textures/Collinearity.png");
   all_textures[8].loadFromFile("Textures/Orthocenter.png");
   all_textures[9].loadFromFile("Textures/Incenter.png");
-  all_buttons.push_back(new Button(10, 120, MoveBasePoint::active, all_textures[0]));
+  all_textures[10].loadFromFile("Textures/Intersection.png");
+  all_textures[11].loadFromFile("Textures/Incenter.png");
+  all_textures[12].loadFromFile("Textures/Incenter.png"); 
+  all_buttons.push_back(new Button(10, 130, MoveBasePoint::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 20, NoMode::active, all_textures[5]));
-  all_buttons.push_back(new Button(10, 220, CreateMiddlePoint::active, all_textures[2]));
-  all_buttons.push_back(new Button(10, 320, CreateLine::active, all_textures[3]));
-  all_buttons.push_back(new Button(10, 420, FindLineIntersection::active, all_textures[0]));
-  all_buttons.push_back(new Button(10, 520, RollBack::active, all_textures[4]));
-  all_buttons.push_back(new Button(10, 620, MoveName::active, all_textures[0]));
-  all_buttons.push_back(new Button(10, 720, ShowBarycentricCoordinate::active, all_textures[0]));
-  all_buttons.push_back(new Button(1310, 20, ProveIntersect::active, all_textures[6]));
-  all_buttons.push_back(new Button(1310, 120, ProveCollinearity::active, all_textures[7]));
-  all_buttons.push_back(new Button(1310, 220, DrawIncenter::active, all_textures[9]));
-  all_buttons.push_back(new Button(1310, 321, drawOrthocenter::active, all_textures[8]));
+  all_buttons.push_back(new Button(10, 240, CreateMiddlePoint::active, all_textures[2]));
+  all_buttons.push_back(new Button(10, 350, CreateLine::active, all_textures[3]));
+  all_buttons.push_back(new Button(10, 460, FindLineIntersection::active, all_textures[10]));
+  all_buttons.push_back(new Button(10, 570, RollBack::active, all_textures[4]));
+  all_buttons.push_back(new Button(10, 680, MoveName::active, all_textures[0]));
+  all_buttons.push_back(new Button(10, 790, ShowBarycentricCoordinate::active, all_textures[0]));
+  all_buttons.push_back(new Button(130, 20, DrawIncenter::active, all_textures[9]));
+  all_buttons.push_back(new Button(130, 130, drawOrthocenter::active, all_textures[8]));
+
+  all_buttons.push_back(new Button(1290, 20, ProveIntersect::active, all_textures[6]));
+  all_buttons.push_back(new Button(1290, 130, ProveCollinearity::active, all_textures[7]));
 }
 
 void ButtonManager::draw() {
