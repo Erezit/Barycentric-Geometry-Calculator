@@ -20,6 +20,7 @@ public:
   virtual void choosenActive();
   virtual void choosenFinal();
   sf::Color getColor();
+  virtual void make_actual();
 };
 
 class Point : public Shape {
@@ -30,7 +31,6 @@ public:
   double getDistance() final;
   sf::Vector2f getPosition();
   void draw() override = 0;
-  
   double x_coord_;
   double y_coord_;
   sf::CircleShape circle;
@@ -49,7 +49,7 @@ private:
   Point* b_point_ = nullptr;
 public:
   void draw() final;
-  void make_actual();
+  void make_actual() final;
 
   MiddlePoint(Point* a_point, Point* b_point);
 };
@@ -60,7 +60,7 @@ private:
   Point* b_point_ = nullptr;
   sf::Vertex line[2];
 public:
-  void make_actual();
+  void make_actual() final;
   double getDistance() final;
   void draw() final;
   Line(Point* a_point, Point* b_point);
@@ -80,7 +80,7 @@ private:
 public:
   PointByTwoLines(Line* a_line, Line* b_line);
   void draw() final;
-  void make_actual();
+  void make_actual() final;
 };
 
 class Incenter : public Point {
@@ -90,7 +90,7 @@ class Incenter : public Point {
   Point* a_point_ = nullptr;
   Point* b_point_ = nullptr;
   Point* c_point_ = nullptr;
-  void make_actual();
+  void make_actual() final;
 };
 
 class Orthocenter : public Point {
@@ -100,7 +100,7 @@ class Orthocenter : public Point {
   Point* a_point_ = nullptr;
   Point* b_point_ = nullptr;
   Point* c_point_ = nullptr;
-  void make_actual();
+  void make_actual() final;
 };
 
 namespace global {
@@ -108,3 +108,13 @@ namespace global {
   extern char next_name;
 }
 
+class IsogonalPoint : public Point {
+  Point* a_point_ = nullptr;
+  Point* b_point_ = nullptr;
+  Point* c_point_ = nullptr;
+  Point* origin_point_= nullptr;
+  public:
+  void make_actual() final;
+  void draw() final;
+  IsogonalPoint(Point* a_point, Point* b_point,Point* c_point, Point* origin_point);
+};

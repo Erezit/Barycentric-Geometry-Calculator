@@ -314,3 +314,15 @@ void FindDistance::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();
   }
 }
+
+
+void FindIsogonal ::active(Scene& current_scene) {
+  current_scene.TryGetObject<Point>();
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1)) {
+    
+    Point* isogonal_point = new IsogonalPoint(dynamic_cast<Point*>(current_scene.objects[0]), dynamic_cast<Point*>(current_scene.objects[1]), dynamic_cast<Point*>(current_scene.objects[2]), dynamic_cast<Point*>(current_scene.selected_shapes[0]));
+    current_scene.objects.push_back(isogonal_point);
+    current_scene.selected_shapes.clear();
+  }
+}
+

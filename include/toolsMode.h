@@ -79,3 +79,8 @@ struct FindDistance {
   FindDistance() = default;
   static void active(Scene& cur_scene);
 };
+
+struct FindIsogonal {
+  FindIsogonal() = default;
+  static void active(Scene& cur_scene);
+};

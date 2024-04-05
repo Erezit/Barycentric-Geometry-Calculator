@@ -22,15 +22,18 @@ void BarycentricCoordinates::simplify() {
   GiNaC::ex denum_a = a_poly.denom();
   GiNaC::ex denum_b = b_poly.denom();
   GiNaC::ex denum_c = c_poly.denom();
-  GiNaC::ex denum_gcd = gcd(denum_a , denum_b);
+  GiNaC::ex denum_gcd =  gcd(denum_a , denum_b);
   denum_gcd = gcd(denum_gcd , denum_b);
+  if(denum_gcd.normal() == 0) {
+    denum_gcd = 1;
+  }
   GiNaC::ex numer_a = a_poly.numer();
   GiNaC::ex numer_b = b_poly.numer();
   GiNaC::ex numer_c = c_poly.numer();
   GiNaC::ex numer_gcd = gcd(numer_a , numer_b);
   numer_gcd = gcd(numer_gcd , numer_b);
-  if(numer_gcd.normal() == 0) {
-    numer_gcd = 1;
-  }
+ if(numer_gcd.normal() == 0) {
+   numer_gcd = 1;
+ }
   BarycentricCoordinates::setCoordinates((a_poly * denum_gcd / numer_gcd).normal(), (b_poly * denum_gcd / numer_gcd).normal(), (c_poly * denum_gcd / numer_gcd).normal());
 }

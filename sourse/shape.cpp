@@ -7,6 +7,7 @@ namespace global {
   sf::RenderWindow window(sf::VideoMode(1400, 900),
                           "Barycentric Geometry Calculator", sf::Style::Close | sf::Style::Titlebar);
   char next_name = 'A';
+  bool isActiveMode = false;
 }
 GiNaC::symbol a("a");
 GiNaC::symbol b("b");
@@ -24,6 +25,8 @@ void Shape::choosenFinal() {
   color = sf::Color{255, 255, 255, 255};
 }
 
+void Shape::make_actual() {}
+
 sf::Color Shape::getColor() {
   return color;
 }
@@ -38,6 +41,7 @@ Point::Point(double x_pos, double y_pos) : x_coord_(x_pos), y_coord_(y_pos) {
   name.setName(global::next_name);
   global::next_name = global::next_name + 1;
 }
+
 
 BasePoint::BasePoint(double x_pos, double y_pos) : Point(x_pos, y_pos) {
     choosenFinal();
@@ -76,8 +80,8 @@ void MiddlePoint::make_actual() {
 
 void Line::make_actual() {
   sf::Color tmp_color = getColor();
-  line[0] = sf::Vertex(a_point_->getPosition() + sf::Vector2f(5,5), tmp_color);
-  line[1] = sf::Vertex(b_point_->getPosition() + sf::Vector2f(5,5), tmp_color);
+    line[0] = sf::Vertex(a_point_->getPosition() + sf::Vector2f(5,5), tmp_color);
+    line[1] = sf::Vertex(b_point_->getPosition() + sf::Vector2f(5,5), tmp_color);
 }
 
 void Line::draw() {
@@ -252,5 +256,63 @@ void Orthocenter::make_actual() {
   y_coord_ = (a_position.y * a_weight + b_position.y * b_weight + c_position.y * c_weight) / sum;
   circle.setPosition(x_coord_, y_coord_);
   name.setPosition(x_coord_, y_coord_);
+}
+
+
+IsogonalPoint::IsogonalPoint(Point* a_point, Point* b_point,Point* c_point, Point* origin_point) : a_point_(a_point), b_point_(b_point), c_point_(c_point), origin_point_(origin_point) {
+  circle.setRadius(5.f);
+  make_actual();
+  BarycentricCoordinates barycentric_coordinates_origin = origin_point -> getCoordinates();
+  barycentric_coordinates.setCoordinates(a * a / barycentric_coordinates_origin.getACoordinate(), b * b / barycentric_coordinates_origin.getBCoordinate(), c * c / barycentric_coordinates_origin.getCCoordinate());
+   barycentric_coordinates.simplify();
+  name.setName(global::next_name);
+  global::next_name = global::next_name + 1;
+  choosenFinal();
+}
+
+std::vector<double> FindreFlectionLine(std::vector<double> line1, std::vector<double> line2) {
+    double alpha = -2 *  (line1[0] * line2[0] + line1[1] * line2[1]);
+    double betta = (line1[0] * line1[0] + line1[1] * line1[1]);
+    return std::vector<double>{alpha * line1[0] + betta * line2[0], alpha * line1[1] + betta * line2[1], alpha * line1[2] + betta * line2[2]};
+}
+
+void IsogonalPoint::make_actual() {
+  sf::Vector2f a_position = a_point_ -> getPosition();
+  sf::Vector2f b_position = b_point_ -> getPosition();
+  sf::Vector2f c_position = c_point_ -> getPosition(); 
+  sf::Vector2f position = origin_point_ -> getPosition();
+
+  std::vector<double> line_ab = FindCoordinate<double>(a_position.x, a_position.y, 1, b_position.x, b_position.y,1);
+  std::vector<double> line_ac = FindCoordinate<double>(a_position.x, a_position.y, 1, c_position.x, c_position.y,1);
+  double normal_ab = sqrt(line_ab[0] * line_ab[0] + line_ab[1] * line_ab[1]);
+  double normal_ac = sqrt(line_ac[0] * line_ac[0] + line_ac[1] * line_ac[1]);
+  std::vector<double> bisector_a = std::vector{line_ab[0] / normal_ab - line_ac[0] / normal_ac, line_ab[1] / normal_ab - line_ac[1] / normal_ac, line_ab[2] / normal_ab - line_ac[2] / normal_ac};
+  std::vector<double> line_ax = FindCoordinate<double>(a_position.x, a_position.y, 1, position.x, position.y,1);
+  std::vector<double> reflection_ax = FindreFlectionLine(bisector_a, line_ax);
+
+  std::vector<double> line_ba = line_ab;
+  std::vector<double> line_bc = FindCoordinate<double>(c_position.x, c_position.y, 1, b_position.x, b_position.y,1);
+  double normal_ba = normal_ab;
+  double normal_bc =  sqrt(line_bc[0] * line_bc[0] + line_bc[1] * line_bc[1]);
+  std::vector<double> bisector_b = std::vector{line_ba[0] / normal_ba - line_bc[0] / normal_bc, line_ba[1] / normal_ba - line_bc[1] / normal_bc, line_ba[2] / normal_ba - line_bc[2] / normal_bc};
+  std::vector<double> line_bx = FindCoordinate<double>(b_position.x, b_position.y, 1, position.x, position.y,1);
+  std::vector<double> reflection_bx = FindreFlectionLine(bisector_b, line_bx);
+
+  std::vector<double> isogonal_x = FindCoordinate<double>(reflection_ax[0], reflection_ax[1], reflection_ax[2], reflection_bx[0], reflection_bx[1], reflection_bx[2]);
+  
+  x_coord_ = isogonal_x[0] / isogonal_x[2];
+  y_coord_ = isogonal_x[1] / isogonal_x[2];
+
+  circle.setPosition(x_coord_, y_coord_);
+  name.setPosition(x_coord_, y_coord_);
+}
+
+
+void IsogonalPoint::draw() {
+  make_actual();
+  global::window.draw(circle);
+  circle.setFillColor(getColor());
+  global::window.draw(name.getName());
+  
 }
 
