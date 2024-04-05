@@ -13,7 +13,7 @@ ButtonManager::ButtonManager() {
   all_textures[8].loadFromFile("Textures/Orthocenter.png");
   all_textures[9].loadFromFile("Textures/Incenter.png");
   all_textures[10].loadFromFile("Textures/Intersection.png");
-  all_textures[11].loadFromFile("Textures/Incenter.png");
+  all_textures[11].loadFromFile("Textures/ProveOrthogonality.png");
   all_textures[12].loadFromFile("Textures/Incenter.png"); 
   all_buttons.push_back(new Button(10, 130, MoveBasePoint::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 20, NoMode::active, all_textures[5]));
@@ -28,6 +28,7 @@ ButtonManager::ButtonManager() {
 
   all_buttons.push_back(new Button(1290, 20, ProveIntersect::active, all_textures[6]));
   all_buttons.push_back(new Button(1290, 130, ProveCollinearity::active, all_textures[7]));
+  all_buttons.push_back(new Button(1290, 240, ProvePendicular::active, all_textures[11]));
 }
 
 void ButtonManager::draw() {

@@ -70,7 +70,7 @@ struct drawOrthocenter {
   static bool single;
 };
 
-struct Proveerpendicular {
-  Proveerpendicular() = default;
+struct ProvePendicular {
+  ProvePendicular() = default;
   static void active(Scene& cur_scene);
 };

@@ -134,6 +134,14 @@ double Line::getDistance() {
   return std::abs((A * cur_mouse_pos.x + B * cur_mouse_pos.y + C) / sqrt(A * A + B * B));
 }
 
+Point* Line::getPointA() {
+  return a_point_;
+}
+
+Point* Line::getPointB() {
+  return b_point_;
+}
+
 std::vector<double> Line::getСoefficients() {
   sf::Vector2f a_to_global = global::window.mapPixelToCoords(sf::Vector2i(a_point_->x_coord_, a_point_->y_coord_));
   sf::Vector2f b_to_global = global::window.mapPixelToCoords(sf::Vector2i(b_point_->x_coord_, b_point_->y_coord_));

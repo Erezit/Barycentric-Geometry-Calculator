@@ -234,3 +234,59 @@ void drawOrthocenter::active(Scene& current_scene) {
    current_scene.objects.push_back(new Orthocenter(dynamic_cast<Point*>(current_scene.objects[0]),dynamic_cast<Point*>(current_scene.objects[1]),dynamic_cast<Point*>(current_scene.objects[2])));
   }
 }
+
+struct VectorDiff {
+  Point* point_a_;
+  Point* point_b_;
+  GiNaC::ex A_diff;
+  GiNaC::ex B_diff;
+  GiNaC::ex C_diff;
+  VectorDiff(Point* point_a, Point* point_b): point_a_(point_a), point_b_(point_b) {
+    BarycentricCoordinates point_a_coordinate = point_a_ -> getCoordinates();
+    BarycentricCoordinates point_b_coordinate = point_b_ -> getCoordinates();
+    GiNaC::ex sum_a = point_a_coordinate.getACoordinate() + point_a_coordinate.getBCoordinate() + point_a_coordinate.getCCoordinate();
+    GiNaC::ex sum_b = point_b_coordinate.getACoordinate() + point_b_coordinate.getBCoordinate() + point_b_coordinate.getCCoordinate();
+    A_diff = (point_a_coordinate.getACoordinate() / sum_a - point_b_coordinate.getACoordinate() / sum_b).normal();
+    B_diff = (point_a_coordinate.getBCoordinate() / sum_a - point_b_coordinate.getBCoordinate() / sum_b).normal();
+    C_diff = (point_a_coordinate.getCCoordinate() / sum_a - point_b_coordinate.getCCoordinate() / sum_b).normal();
+    BarycentricCoordinates tmp;
+    tmp.setCoordinates(A_diff, B_diff, C_diff);
+    tmp.simplify();
+    A_diff = tmp.getACoordinate();
+    B_diff = tmp.getBCoordinate();
+    C_diff = tmp.getCCoordinate();
+  }
+  GiNaC::ex A() {
+    return A_diff;
+  }
+  GiNaC::ex B() {
+    return B_diff;
+  }
+  GiNaC::ex C() {
+    return C_diff;
+  }
+};
+
+extern GiNaC::symbol a;
+extern GiNaC::symbol b;
+extern GiNaC::symbol c;
+
+void ProvePendicular::active(Scene& current_scene) {
+  current_scene.TryGetObject<Line>();
+  ChangeColorToActive(current_scene.selected_shapes);
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(0, 2)) {
+    Line* line_a = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
+    Line* line_b = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
+    VectorDiff vector_diff_line_a = VectorDiff(line_a -> getPointA(), line_a -> getPointB());
+    VectorDiff vector_diff_line_b = VectorDiff(line_b -> getPointA(), line_b -> getPointB());
+    GiNaC::ex diff = a * a * (vector_diff_line_a.B() * vector_diff_line_b.C() + vector_diff_line_a.C() * vector_diff_line_b.B()) + b * b * (vector_diff_line_a.C() * vector_diff_line_b.A() + vector_diff_line_a.A() * vector_diff_line_b.C()) + c * c * (vector_diff_line_a.B() * vector_diff_line_b.A() + vector_diff_line_a.A() * vector_diff_line_b.B());  
+    std::cout << diff << std::endl;
+    if(diff.normal() == 0) {
+      std::cout << "YES" << std::endl;
+    } else {
+      std::cout << "NO" << std::endl;
+    }
+    ChangeColorToFinal(current_scene.selected_shapes);
+    current_scene.selected_shapes.clear();
+  }
+}

@@ -65,6 +65,8 @@ public:
   void draw() final;
   Line(Point* a_point, Point* b_point);
   std::vector<double> getСoefficients();
+  Point* getPointA();
+  Point* getPointB();
 };
 
 
