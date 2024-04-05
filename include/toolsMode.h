@@ -74,3 +74,8 @@ struct ProvePendicular {
   ProvePendicular() = default;
   static void active(Scene& cur_scene);
 };
+
+struct FindDistance {
+  FindDistance() = default;
+  static void active(Scene& cur_scene);
+};

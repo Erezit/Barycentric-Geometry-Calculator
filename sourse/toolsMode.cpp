@@ -241,6 +241,16 @@ struct VectorDiff {
   GiNaC::ex A_diff;
   GiNaC::ex B_diff;
   GiNaC::ex C_diff;
+
+  void simplify() {
+    BarycentricCoordinates tmp;
+    tmp.setCoordinates(A_diff, B_diff, C_diff);
+    tmp.simplify();
+    A_diff = tmp.getACoordinate();
+    B_diff = tmp.getBCoordinate();
+    C_diff = tmp.getCCoordinate();
+  }
+
   VectorDiff(Point* point_a, Point* point_b): point_a_(point_a), point_b_(point_b) {
     BarycentricCoordinates point_a_coordinate = point_a_ -> getCoordinates();
     BarycentricCoordinates point_b_coordinate = point_b_ -> getCoordinates();
@@ -249,12 +259,6 @@ struct VectorDiff {
     A_diff = (point_a_coordinate.getACoordinate() / sum_a - point_b_coordinate.getACoordinate() / sum_b).normal();
     B_diff = (point_a_coordinate.getBCoordinate() / sum_a - point_b_coordinate.getBCoordinate() / sum_b).normal();
     C_diff = (point_a_coordinate.getCCoordinate() / sum_a - point_b_coordinate.getCCoordinate() / sum_b).normal();
-    BarycentricCoordinates tmp;
-    tmp.setCoordinates(A_diff, B_diff, C_diff);
-    tmp.simplify();
-    A_diff = tmp.getACoordinate();
-    B_diff = tmp.getBCoordinate();
-    C_diff = tmp.getCCoordinate();
   }
   GiNaC::ex A() {
     return A_diff;
@@ -279,6 +283,9 @@ void ProvePendicular::active(Scene& current_scene) {
     Line* line_b = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
     VectorDiff vector_diff_line_a = VectorDiff(line_a -> getPointA(), line_a -> getPointB());
     VectorDiff vector_diff_line_b = VectorDiff(line_b -> getPointA(), line_b -> getPointB());
+    vector_diff_line_a.simplify();
+    vector_diff_line_b.simplify();
+
     GiNaC::ex diff = a * a * (vector_diff_line_a.B() * vector_diff_line_b.C() + vector_diff_line_a.C() * vector_diff_line_b.B()) + b * b * (vector_diff_line_a.C() * vector_diff_line_b.A() + vector_diff_line_a.A() * vector_diff_line_b.C()) + c * c * (vector_diff_line_a.B() * vector_diff_line_b.A() + vector_diff_line_a.A() * vector_diff_line_b.B());  
     std::cout << diff << std::endl;
     if(diff.normal() == 0) {
@@ -287,6 +294,23 @@ void ProvePendicular::active(Scene& current_scene) {
       std::cout << "NO" << std::endl;
     }
     ChangeColorToFinal(current_scene.selected_shapes);
+    current_scene.selected_shapes.clear();
+  }
+}
+
+
+void FindDistance::active(Scene& current_scene) {
+ current_scene.TryGetObject<Point>();
+ ChangeColorToActive(current_scene.selected_shapes);
+ if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(2)) {
+    std::cout << "Wow, I've got two pretty points to create midpoint!" << std::endl;
+    Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
+    Point* second_point = dynamic_cast<Point*>(current_scene.selected_shapes[1]);
+    VectorDiff vector_diff(first_point, second_point);
+    GiNaC::ex distance =-a * a * (vector_diff.B() * vector_diff.C()) - b * b * (vector_diff.A() * vector_diff.C()) - c * c * (vector_diff.B() * vector_diff.A()); ; 
+    ChangeColorToFinal(current_scene.selected_shapes);
+    distance = distance.normal();
+    std::cout << distance << std::endl;
     current_scene.selected_shapes.clear();
   }
 }

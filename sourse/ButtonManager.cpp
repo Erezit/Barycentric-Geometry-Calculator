@@ -25,6 +25,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(10, 790, ShowBarycentricCoordinate::active, all_textures[0]));
   all_buttons.push_back(new Button(130, 20, DrawIncenter::active, all_textures[9]));
   all_buttons.push_back(new Button(130, 130, drawOrthocenter::active, all_textures[8]));
+  all_buttons.push_back(new Button(130, 240, FindDistance::active, all_textures[0]));
 
   all_buttons.push_back(new Button(1290, 20, ProveIntersect::active, all_textures[6]));
   all_buttons.push_back(new Button(1290, 130, ProveCollinearity::active, all_textures[7]));
