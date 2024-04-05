@@ -63,6 +63,7 @@ MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
   barycentric_coordinates.setCoordinates((barycentric_coordinates_a.getACoordinate() / sum_a + barycentric_coordinates_b.getACoordinate() / sum_b).normal(),
           (barycentric_coordinates_a.getBCoordinate() / sum_a + barycentric_coordinates_b.getBCoordinate() / sum_b).normal(),
           (barycentric_coordinates_a.getCCoordinate() / sum_a + barycentric_coordinates_b.getCCoordinate() / sum_b).normal());
+  barycentric_coordinates.simplify();
   choosenFinal();
 }
 
@@ -101,6 +102,7 @@ Line::Line(Point* a_point, Point* b_point)
       GiNaC::ex new_coordinate_b = barycentric_coordinates_a.getCCoordinate() * barycentric_coordinates_b.getACoordinate() - barycentric_coordinates_a.getACoordinate() * barycentric_coordinates_b.getCCoordinate();
       GiNaC::ex new_coordinate_c = barycentric_coordinates_a.getACoordinate() * barycentric_coordinates_b.getBCoordinate() - barycentric_coordinates_a.getBCoordinate() * barycentric_coordinates_b.getACoordinate();
       barycentric_coordinates.setCoordinates(new_coordinate_a.normal(), new_coordinate_b.normal(), new_coordinate_c.normal());
+      barycentric_coordinates.simplify();
       choosenFinal();
     }
 
@@ -157,6 +159,7 @@ PointByTwoLines::PointByTwoLines(Line* a_line, Line* b_line) : a_line_(a_line), 
   BarycentricCoordinates barycentric_coordinates_b = b_line_ -> getCoordinates();
   std::vector<GiNaC::ex> new__coordinates = FindCoordinate<GiNaC::ex>(barycentric_coordinates_a.getACoordinate(), barycentric_coordinates_a.getBCoordinate(),barycentric_coordinates_a.getCCoordinate(),barycentric_coordinates_b.getACoordinate(), barycentric_coordinates_b.getBCoordinate(), barycentric_coordinates_b.getCCoordinate()); 
   barycentric_coordinates.setCoordinates(new__coordinates[0].normal(), new__coordinates[1].normal(), new__coordinates[2].normal());
+  barycentric_coordinates.simplify();
   choosenFinal();
 }
 
@@ -187,7 +190,6 @@ Incenter::Incenter(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_p
   name.setName(global::next_name);
   global::next_name = global::next_name + 1;
   choosenFinal();
-
 }
 
 void Incenter::make_actual() {

@@ -8,6 +8,7 @@ class BarycentricCoordinates {
   GiNaC::ex getACoordinate();
   GiNaC::ex getBCoordinate();
   GiNaC::ex getCCoordinate();
+  void simplify();
   private:
   GiNaC::ex a_poly = 0;
   GiNaC::ex b_poly = 0;
