@@ -70,7 +70,7 @@ public:
 };
 
 
-class Circle;
+
 
 
 class PointByTwoLines : public Point {
@@ -117,4 +117,18 @@ class IsogonalPoint : public Point {
   void make_actual() final;
   void draw() final;
   IsogonalPoint(Point* a_point, Point* b_point,Point* c_point, Point* origin_point);
+};
+
+class Circle : public Shape {
+   Point* a_point_ = nullptr;
+   Point* b_point_ = nullptr;
+   Point* c_point_ = nullptr;
+   sf::CircleShape shape;
+   double center_x_;
+   double center_y_;
+   double radius_;
+   public:
+   void make_actual() final;
+   void draw() final;
+   Circle(Point* a_point, Point* b_point,Point* c_point);
 };

@@ -316,3 +316,55 @@ void IsogonalPoint::draw() {
   
 }
 
+template <typename T>
+T FindСoefficientInCircle(const T& A, const T& B, const T& C) {
+  return (a * a * B * C + b * b * A * C + c * c * A * B) / (A + B + C); 
+}
+
+template <typename T>
+T FindDet(const T& A1, const T& B1, const T& C1, const T& A2, const T& B2, const T& C2, const T& A3, const T& B3, const T& C3) {
+  return A1 * B2 * C3 + A1 * C2 * B3 + C1 * A2 * B3 - C1 * B2 * A3 - B1 * A2 * C3 - A1 * C2 * B3; 
+}
+
+Circle::Circle(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point), b_point_(b_point), c_point_(c_point) {
+  make_actual();
+  shape.setFillColor(sf::Color(0, 0, 0, 0));
+  shape.setOutlineThickness(2);
+  shape.setOutlineColor(sf::Color(255, 255, 255, 255));
+
+  BarycentricCoordinates a_coordinates = a_point_ -> getCoordinates();
+  BarycentricCoordinates b_coordinates = b_point_ -> getCoordinates();
+  BarycentricCoordinates c_coordinates = c_point_ -> getCoordinates();
+  GiNaC::ex coefficient1 = FindСoefficientInCircle<GiNaC::ex>(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(),a_coordinates.getCCoordinate());
+  GiNaC::ex coefficient2 = FindСoefficientInCircle<GiNaC::ex>(b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(),b_coordinates.getCCoordinate());
+  GiNaC::ex coefficient3 = FindСoefficientInCircle<GiNaC::ex>(c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(),c_coordinates.getCCoordinate());
+  GiNaC::ex det = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(), c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
+  GiNaC::ex det_a = FindDet(coefficient1, coefficient2, coefficient3, b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(), c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
+   GiNaC::ex det_b = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), coefficient1, coefficient2, coefficient3, c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
+   GiNaC::ex det_c = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(),coefficient1,coefficient2,coefficient3);
+   barycentric_coordinates.setCoordinates(det_a / det, det_b / det, det_c / det);
+   barycentric_coordinates.simplify();
+}
+
+void Circle::make_actual() {
+  sf::Vector2f a_position = a_point_ -> getPosition();
+  sf::Vector2f b_position = b_point_ -> getPosition();
+  sf::Vector2f c_position = c_point_ -> getPosition();
+  double c_size =  sqrt((a_position - b_position).x * (a_position - b_position).x + (a_position - b_position).y * (a_position - b_position).y    );
+  double b_size =  sqrt((a_position - c_position).x * (a_position - c_position).x + (a_position - c_position).y * (a_position - c_position).y    );
+  double a_size =  sqrt((c_position - b_position).x * (c_position - b_position).x + (c_position - b_position).y * (c_position - b_position).y    );
+  double a_weight = a_size * a_size * (-a_size * a_size + b_size * b_size + c_size * c_size);
+  double b_weight = b_size * b_size * (a_size * a_size - b_size * b_size + c_size * c_size);
+  double c_weight = c_size * c_size * (a_size * a_size + b_size * b_size - c_size * c_size);
+  double sum = a_weight + b_weight  + c_weight;
+  center_x_ = (a_position.x * a_weight + b_position.x * b_weight + c_position.x * c_weight) / sum;
+  center_y_ = (a_position.y * a_weight + b_position.y * b_weight + c_position.y * c_weight) / sum;
+  radius_ = sqrt((a_position.x - center_x_) * (a_position.x - center_x_) + (a_position.y - center_y_) * (a_position.y - center_y_));
+  shape.setPosition(center_x_ - radius_, center_y_ - radius_);
+}
+
+void Circle::draw() {
+  make_actual(); 
+  global::window.draw(shape);
+}
+    
