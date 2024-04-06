@@ -329,7 +329,7 @@ T FindDet(const T& A1, const T& B1, const T& C1, const T& A2, const T& B2, const
 Circle::Circle(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point), b_point_(b_point), c_point_(c_point) {
   make_actual();
   shape.setFillColor(sf::Color(0, 0, 0, 0));
-  shape.setOutlineThickness(2);
+  shape.setOutlineThickness(4);
   shape.setOutlineColor(sf::Color(255, 255, 255, 255));
 
   BarycentricCoordinates a_coordinates = a_point_ -> getCoordinates();
@@ -340,10 +340,16 @@ Circle::Circle(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point
   GiNaC::ex coefficient3 = FindСoefficientInCircle<GiNaC::ex>(c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(),c_coordinates.getCCoordinate());
   GiNaC::ex det = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(), c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
   GiNaC::ex det_a = FindDet(coefficient1, coefficient2, coefficient3, b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(), c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
-   GiNaC::ex det_b = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), coefficient1, coefficient2, coefficient3, c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
-   GiNaC::ex det_c = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(),coefficient1,coefficient2,coefficient3);
-   barycentric_coordinates.setCoordinates(det_a / det, det_b / det, det_c / det);
-   barycentric_coordinates.simplify();
+   
+ GiNaC::ex det_b = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), coefficient1, coefficient2, coefficient3, c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
+ 
+ GiNaC::ex det_c = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(),coefficient1,coefficient2,coefficient3);
+  
+ barycentric_coordinates.setCoordinates(det_a / det, det_b / det, det_c / det);
+ 
+ barycentric_coordinates.simplify();
+
+   std::cout << center_x_ << " " << center_y_ << std::endl;
 }
 
 void Circle::make_actual() {
@@ -361,10 +367,14 @@ void Circle::make_actual() {
   center_y_ = (a_position.y * a_weight + b_position.y * b_weight + c_position.y * c_weight) / sum;
   radius_ = sqrt((a_position.x - center_x_) * (a_position.x - center_x_) + (a_position.y - center_y_) * (a_position.y - center_y_));
   shape.setPosition(center_x_ - radius_, center_y_ - radius_);
+  shape.setRadius(radius_);
 }
 
 void Circle::draw() {
   make_actual(); 
   global::window.draw(shape);
 }
-    
+
+double Circle::getDistance() {
+  return 10000;
+}

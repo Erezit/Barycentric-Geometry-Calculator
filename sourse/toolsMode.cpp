@@ -316,7 +316,7 @@ void FindDistance::active(Scene& current_scene) {
 }
 
 
-void FindIsogonal ::active(Scene& current_scene) {
+void FindIsogonal::active(Scene& current_scene) {
   current_scene.TryGetObject<Point>();
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1)) {
     
@@ -325,4 +325,20 @@ void FindIsogonal ::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();
   }
 }
+
+void CreateCircleByPoints::active(Scene& current_scene) {
+  current_scene.TryGetObject<Point>();
+  ChangeColorToActive(current_scene.selected_shapes);
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(3)) {
+    std::cout << "Wow, I've got three pretty points to create circle!" << std::endl;
+    Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
+    Point* second_point = dynamic_cast<Point*>(current_scene.selected_shapes[1]);
+    Point* third_point = dynamic_cast<Point*>(current_scene.selected_shapes[2]);
+    Circle* circle = new Circle(first_point, second_point, third_point);
+    current_scene.objects.push_back(circle);
+    ChangeColorToFinal(current_scene.selected_shapes);
+    current_scene.selected_shapes.clear();
+  }
+}
+
 

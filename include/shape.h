@@ -130,5 +130,6 @@ class Circle : public Shape {
    public:
    void make_actual() final;
    void draw() final;
+   double getDistance() final;
    Circle(Point* a_point, Point* b_point,Point* c_point);
 };

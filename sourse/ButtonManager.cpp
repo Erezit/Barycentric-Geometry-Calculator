@@ -27,6 +27,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(130, 130, drawOrthocenter::active, all_textures[8]));
   all_buttons.push_back(new Button(130, 240, FindDistance::active, all_textures[0]));
   all_buttons.push_back(new Button(130, 350, FindIsogonal::active, all_textures[0]));
+  all_buttons.push_back(new Button(130, 460, CreateCircleByPoints::active, all_textures[0]));
 
   all_buttons.push_back(new Button(1290, 20, ProveIntersect::active, all_textures[6]));
   all_buttons.push_back(new Button(1290, 130, ProveCollinearity::active, all_textures[7]));
