@@ -323,7 +323,7 @@ T FindСoefficientInCircle(const T& A, const T& B, const T& C) {
 
 template <typename T>
 T FindDet(const T& A1, const T& B1, const T& C1, const T& A2, const T& B2, const T& C2, const T& A3, const T& B3, const T& C3) {
-  return A1 * B2 * C3 + A1 * C2 * B3 + C1 * A2 * B3 - C1 * B2 * A3 - B1 * A2 * C3 - A1 * C2 * B3; 
+  return A1 * B2 * C3 + A3 * C2 * B1 + C1 * A2 * B3 - C1 * B2 * A3 - B1 * A2 * C3 - A1 * C2 * B3; 
 }
 
 Circle::Circle(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point), b_point_(b_point), c_point_(c_point) {
@@ -339,16 +339,18 @@ Circle::Circle(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point
   GiNaC::ex coefficient2 = FindСoefficientInCircle<GiNaC::ex>(b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(),b_coordinates.getCCoordinate());
   GiNaC::ex coefficient3 = FindСoefficientInCircle<GiNaC::ex>(c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(),c_coordinates.getCCoordinate());
   GiNaC::ex det = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(), c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
-  GiNaC::ex det_a = FindDet(coefficient1, coefficient2, coefficient3, b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(), c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
-   
- GiNaC::ex det_b = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), coefficient1, coefficient2, coefficient3, c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate()); 
- 
- GiNaC::ex det_c = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(),coefficient1,coefficient2,coefficient3);
+  GiNaC::ex det_a = FindDet(coefficient1, a_coordinates.getBCoordinate(), a_coordinates.getCCoordinate(), coefficient2, b_coordinates.getBCoordinate(), b_coordinates.getCCoordinate(), coefficient3, c_coordinates.getBCoordinate(), c_coordinates.getCCoordinate());
+  GiNaC::ex det_b = FindDet(a_coordinates.getACoordinate(), coefficient1, a_coordinates.getCCoordinate(), b_coordinates.getACoordinate(), coefficient2, b_coordinates.getCCoordinate(), c_coordinates.getACoordinate(), coefficient3, c_coordinates.getCCoordinate());
+  GiNaC::ex det_c = FindDet(a_coordinates.getACoordinate(), a_coordinates.getBCoordinate(),coefficient1, b_coordinates.getACoordinate(), b_coordinates.getBCoordinate(), coefficient2, c_coordinates.getACoordinate(), c_coordinates.getBCoordinate(), coefficient3);
   
  barycentric_coordinates.setCoordinates(det_a / det, det_b / det, det_c / det);
  
  barycentric_coordinates.simplify();
-
+ a_coordinates.print();
+ b_coordinates.print();
+ c_coordinates.print();
+ std::cout << coefficient1 << " " << coefficient2 << " " << coefficient3 << std::endl;
+ std::cout << barycentric_coordinates.getACoordinate() << "  " << barycentric_coordinates.getBCoordinate() << "  " << barycentric_coordinates.getCCoordinate() << std::endl;
    std::cout << center_x_ << " " << center_y_ << std::endl;
 }
 

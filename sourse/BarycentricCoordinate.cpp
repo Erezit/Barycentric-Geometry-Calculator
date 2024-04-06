@@ -37,3 +37,7 @@ void BarycentricCoordinates::simplify() {
  }
   BarycentricCoordinates::setCoordinates((a_poly * denum_gcd / numer_gcd).normal(), (b_poly * denum_gcd / numer_gcd).normal(), (c_poly * denum_gcd / numer_gcd).normal());
 }
+
+void BarycentricCoordinates::print() {
+  std::cout << a_poly << " " << b_poly << " "  << c_poly << std::endl;
+}
