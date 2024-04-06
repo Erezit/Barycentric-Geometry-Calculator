@@ -329,9 +329,9 @@ T FindDet(const T& A1, const T& B1, const T& C1, const T& A2, const T& B2, const
 Circle::Circle(Point* a_point, Point* b_point,Point* c_point) : a_point_(a_point), b_point_(b_point), c_point_(c_point) {
   make_actual();
   shape.setFillColor(sf::Color(0, 0, 0, 0));
-  shape.setOutlineThickness(4);
+  shape.setOutlineThickness(2);
   shape.setOutlineColor(sf::Color(255, 255, 255, 255));
-
+  shape.setPointCount(100); 
   BarycentricCoordinates a_coordinates = a_point_ -> getCoordinates();
   BarycentricCoordinates b_coordinates = b_point_ -> getCoordinates();
   BarycentricCoordinates c_coordinates = c_point_ -> getCoordinates();
@@ -356,16 +356,36 @@ void Circle::make_actual() {
   sf::Vector2f a_position = a_point_ -> getPosition();
   sf::Vector2f b_position = b_point_ -> getPosition();
   sf::Vector2f c_position = c_point_ -> getPosition();
-  double c_size =  sqrt((a_position - b_position).x * (a_position - b_position).x + (a_position - b_position).y * (a_position - b_position).y    );
-  double b_size =  sqrt((a_position - c_position).x * (a_position - c_position).x + (a_position - c_position).y * (a_position - c_position).y    );
-  double a_size =  sqrt((c_position - b_position).x * (c_position - b_position).x + (c_position - b_position).y * (c_position - b_position).y    );
-  double a_weight = a_size * a_size * (-a_size * a_size + b_size * b_size + c_size * c_size);
-  double b_weight = b_size * b_size * (a_size * a_size - b_size * b_size + c_size * c_size);
-  double c_weight = c_size * c_size * (a_size * a_size + b_size * b_size - c_size * c_size);
-  double sum = a_weight + b_weight  + c_weight;
-  center_x_ = (a_position.x * a_weight + b_position.x * b_weight + c_position.x * c_weight) / sum;
-  center_y_ = (a_position.y * a_weight + b_position.y * b_weight + c_position.y * c_weight) / sum;
-  radius_ = sqrt((a_position.x - center_x_) * (a_position.x - center_x_) + (a_position.y - center_y_) * (a_position.y - center_y_));
+  a_position = a_position + sf::Vector2f(5, 5);
+  b_position = b_position + sf::Vector2f(5, 5);
+  c_position = c_position + sf::Vector2f(5, 5);
+
+  double z1 = a_position.x * a_position.x + a_position.y * a_position.y;
+  double z2 = b_position.x * b_position.x + b_position.y * b_position.y;
+  double z3 = c_position.x * c_position.x + c_position.y * c_position.y;
+  
+  double x12 = a_position.x - b_position.x;
+  double x23 = b_position.x - c_position.x;
+  double x31 = c_position.x - a_position.x;
+
+  double y12 = a_position.y - b_position.y;
+  double y23 = b_position.y - c_position.y;
+  double y31 = c_position.y - a_position.y;
+  
+  double z_x = y31 * (z1 - z2) - y12 * (z3 - z1);
+  double z_y = x12 * (z3 - z1) - x31 * (z1 - z2);
+  double z = x12 * y31 - y12 * x31;
+
+  center_x_ = z_x / 2 / z;
+  center_y_ = z_y / 2 / z;
+  
+  double radius_a = sqrt((a_position.x - center_x_) * (a_position.x - center_x_) +  (a_position.y - center_y_) * (a_position.y - center_y_));
+  
+ double radius_b = sqrt((b_position.x - center_x_) * (b_position.x - center_x_) +  (b_position.y - center_y_) * (b_position.y - center_y_)    );
+  
+  double radius_c = sqrt((c_position.x - center_x_) * (c_position.x - center_x_) +  (c_position.y - center_y_) * (c_position.y - center_y_)    );
+
+  radius_ = (radius_a + radius_b + radius_c) / 3;
   shape.setPosition(center_x_ - radius_, center_y_ - radius_);
   shape.setRadius(radius_);
 }
