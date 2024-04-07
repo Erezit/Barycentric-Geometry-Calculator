@@ -4,15 +4,23 @@
 
 Main information about it you can see in file "Barycentric\_Geometry\_Solver-1" in Architecture folder.
 
-## Using
+## Installation
 
-If you want to start project, firstly, you have to install SFML library. You can do it using
+If you want to start project, firstly, you have to install SFML and Ginac library. You can do it using
 (Ubuntu exmaple):
 ```sh
 $ sudo apt-get install libsfml-dev
+$ sudo apt-get install -y ginac-tools
+```
+After that you have to clone repository using
+
+```sh
+$ git clone https://gitlab.akhcheck.ru/ivan.postnov/baricentric-geometry-project.git
 ```
 
-Then you should write following commands:
+## Using
+
+To start project you should write following commands:
 
 ```sh
 $ mkcd build
