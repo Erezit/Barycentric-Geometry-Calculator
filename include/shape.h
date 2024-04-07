@@ -64,14 +64,10 @@ public:
   double getDistance() final;
   void draw() final;
   Line(Point* a_point, Point* b_point);
-  std::vector<double> getСoefficients();
+  std::vector<double> getCoefficients();
   Point* getPointA();
   Point* getPointB();
 };
-
-
-
-
 
 class PointByTwoLines : public Point {
 private:
@@ -131,5 +127,6 @@ class Circle : public Shape {
    void make_actual() final;
    void draw() final;
    double getDistance() final;
-   Circle(Point* a_point, Point* b_point,Point* c_point);
+   Circle(Point* a_point, Point* b_point,
+          Point* c_point);
 };

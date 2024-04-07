@@ -9,14 +9,14 @@
  
  include_directories(${CMAKE_SOURCE_DIR}/include)
 
- set(SOURSE ${CMAKE_SOURCE_DIR}/sourse/main.cpp 
-            ${CMAKE_SOURCE_DIR}/sourse/shape.cpp
-            ${CMAKE_SOURCE_DIR}/sourse/Button.cpp
-            ${CMAKE_SOURCE_DIR}/sourse/Scene.cpp 
-            ${CMAKE_SOURCE_DIR}/sourse/ButtonManager.cpp 
-            ${CMAKE_SOURCE_DIR}/sourse/toolsMode.cpp
-            ${CMAKE_SOURCE_DIR}/sourse/NameBox.cpp
-            ${CMAKE_SOURCE_DIR}/sourse/BarycentricCoordinate.cpp)
+ set(SOURCE ${CMAKE_SOURCE_DIR}/source/main.cpp
+            ${CMAKE_SOURCE_DIR}/source/shape.cpp
+            ${CMAKE_SOURCE_DIR}/source/Button.cpp
+            ${CMAKE_SOURCE_DIR}/source/Scene.cpp
+            ${CMAKE_SOURCE_DIR}/source/ButtonManager.cpp
+            ${CMAKE_SOURCE_DIR}/source/toolsMode.cpp
+            ${CMAKE_SOURCE_DIR}/source/NameBox.cpp
+            ${CMAKE_SOURCE_DIR}/source/BarycentricCoordinate.cpp)
  
  
  include_directories(${CMAKE_SOURCE_DIR})
@@ -38,7 +38,7 @@
      message(STATUS "GiNac library found")
  endif()
 
- add_executable(MyProject ${SOURSE})
+ add_executable(MyProject ${SOURCE})
  
  target_link_libraries(MyProject sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
  target_link_libraries(MyProject ${GINAC_LIBRARIES})
