@@ -33,12 +33,44 @@ or you can just run it from any IDE.
 ## Features
 Using the buttons, make a construction to study a geometric picture or prove a fact
 
-Defining buttons from left to right from top to bottom:
+
+Here are some of them:
 
 
 
 ![NoMode](./Textures/Textures/PresetOFF.png)
 NoMode - nothing happens, in order to think about the next step
+
+
+![Dist](./Textures/Textures/dist.png)
+Outputs the square of the distance between the selected points The output is a polynomial from the sides of the original triangle
+
+
+![BarycentricCoordinates](./Textures/Textures/Barycentric_coordinates.png)
+Outputs barycentric non-normalized coordinates
+
+
+![IsogonalConjugation](./Textures/Textures/IsogonalConjugation.png)
+The isogonal conjugates the point. For more information, read the [article](https://geometry.ru/articles/isogonal_prokopenko.pdf)
+
+
+**Important:** *Do not isogonal conjugates the points lying on the sides of the triangle, in this version this leads to an error*
+
+
+![Hide](./Textures/Textures/Hide.png)
+When you click on a point, its name is hidden
+
+
+![ProveOrthogonality](./Textures/Textures/ProveOrthogonality.png)
+Checks the orthogonality of the selected straight lines. Outputs the final polynomial, which should be equal to 0.
+Any geometric fact is written as the identity of the polynomials.
+For more information, read the [article](https://web.evanchen.cc/handouts/bary/bary-full.pdf)
+
+
+The rest of the buttons should be clear from their picture.
+
+
+**Have a good research**
 
 
 ## UML photo
