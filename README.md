@@ -30,6 +30,14 @@ $ ./MyProject
 ``` 
 or you can just run it from any IDE.
 
+## Features
+Using the buttons, make a construction to study a geometric picture or prove a fact
+
+Defining buttons from left to right from top to bottom:
+![UML](.//Textures/Textures/PresetOFF.png)
+
+NoMode - nothing happens, in order to think about the next step
+
 ## UML photo
 
 ![UML](./uml_photo/lastUML.svg)

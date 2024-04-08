@@ -14,6 +14,15 @@ GiNaC::symbol a("a");
 GiNaC::symbol b("b");
 GiNaC::symbol c("c");
 
+
+void Invisibility::changeHidden() {
+  isHidden = !isHidden;  
+}
+
+ bool Invisibility::getIsHidden() {
+   return isHidden;
+ }
+
 void Shape::setCoordinates(GiNaC::ex poly1, GiNaC::ex poly2, GiNaC::ex poly3) {
   barycentric_coordinates.setCoordinates(poly1, poly2, poly3);
 }
@@ -46,7 +55,9 @@ void BasePoint::draw() {
   circle.setPosition(x_coord_, y_coord_);
   global::window.draw(circle);
   name.setPosition(x_coord_, y_coord_);
-  global::window.draw(name.getName());
+  if(!getIsHidden()) {
+    global::window.draw(name.getName());
+  }
 }
 
 MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
@@ -98,7 +109,9 @@ void MiddlePoint::draw() {
   make_actual();
   circle.setFillColor(getColor());
   global::window.draw(circle);
-  global::window.draw(name.getName());
+  if(!getIsHidden()) {
+    global::window.draw(name.getName());
+  }
 }
 
 Line::Line(Point* a_point, Point* b_point)
@@ -209,7 +222,9 @@ void PointByTwoLines::draw() {
   make_actual();
   circle.setFillColor(getColor());
   global::window.draw(circle);
-  global::window.draw(name.getName());
+  if(!getIsHidden()) {  
+    global::window.draw(name.getName());
+  }
 }
 
 void PointByTwoLines::make_actual() {
@@ -265,7 +280,9 @@ void Incenter::draw() {
   make_actual();
   global::window.draw(circle);
   circle.setFillColor(getColor());
-  global::window.draw(name.getName());
+  if(!getIsHidden()) {
+    global::window.draw(name.getName());
+  }
 }
 
 Orthocenter::Orthocenter(Point* a_point, Point* b_point, Point* c_point)
@@ -284,7 +301,9 @@ void Orthocenter::draw() {
   make_actual();
   global::window.draw(circle);
   circle.setFillColor(getColor());
-  global::window.draw(name.getName());
+  if(!getIsHidden()) {
+    global::window.draw(name.getName());
+  }
 }
 
 void Orthocenter::make_actual() {
@@ -394,7 +413,9 @@ void IsogonalPoint::draw() {
   make_actual();
   global::window.draw(circle);
   circle.setFillColor(getColor());
-  global::window.draw(name.getName());
+  if(!getIsHidden()) {
+    global::window.draw(name.getName());
+  }
 }
 
 template <typename T>

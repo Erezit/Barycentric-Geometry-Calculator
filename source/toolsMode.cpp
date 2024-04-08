@@ -412,3 +412,14 @@ void CreateCircleByPoints::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();
   }
 }
+
+
+void MakeHidden::active(Scene& current_scene) {
+  current_scene.TryGetObject<Point>();
+  if (current_scene.event.type == sf::Event::MouseButtonReleased &&
+      current_scene.Checker(1)) {
+    Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
+    first_point -> changeHidden();
+    current_scene.selected_shapes.clear();  
+  }
+}

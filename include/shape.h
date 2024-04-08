@@ -9,7 +9,14 @@ public:
   virtual void draw() = 0;
 };
 
-class Shape : public Object {
+class Invisibility {
+  bool isHidden = false;
+  public:
+  bool getIsHidden();
+  void changeHidden();
+};
+
+class Shape : public Object, public Invisibility {
 private:
 sf::Color color;
 public:
