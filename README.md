@@ -41,33 +41,31 @@ Here are some of them:
 NoMode - nothing happens, in order to think about the next step
 
 
-![Dist](./Textures/Textures/dist.png)
+<img src="./Textures/Textures/dist.png" width="200" height="200">
 Outputs the square of the distance between the selected points The output is a polynomial from the sides of the original triangle
 
 
-![BarycentricCoordinates](./Textures/Textures/Barycentric_coordinates.png)
+<img src="./Textures/Textures/Barycentric_coordinates.png" width="200" height="200">
 Outputs barycentric non-normalized coordinates
 
 
-![IsogonalConjugation](./Textures/Textures/IsogonalConjugation.png)
+<img src="./Textures/Textures/IsogonalConjugation.png" width="200" height="200">
 The isogonal conjugates the point. For more information, read the [article](https://geometry.ru/articles/isogonal_prokopenko.pdf)
 
 
 **Important:** *Do not isogonal conjugates the points lying on the sides of the triangle, in this version this leads to an error*
 
 
-![Hide](./Textures/Textures/Hide.png)
+<img src="./Textures/Textures/Hide.png" width="200" height="200">
 When you click on a point, its name is hidden
 
 
-![ProveOrthogonality](./Textures/Textures/ProveOrthogonality.png)
+<img src="./Textures/Textures/ProveOrthogonality.png" width="200" height="200">
 Checks the orthogonality of the selected straight lines. Outputs the final polynomial, which should be equal to 0.
-
-
 Any geometric fact is written as the identity of the polynomials.
 
 
-For more information, read the [article](https://web.evanchen.cc/handouts/bary/bary-full.pdf)
+For more information about barycentric coordinates, read the [article](https://web.evanchen.cc/handouts/bary/bary-full.pdf)
 
 
 The rest of the buttons should be clear from their picture.
