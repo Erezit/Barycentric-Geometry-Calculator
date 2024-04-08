@@ -68,7 +68,7 @@ When you click on a point, its name is hidden<br />
 
 <img src="./Textures/Textures/ProveOrthogonality.png" align="left" width="200" height="200" style=" border: 8px solid #ffffff;">
 <p> Checks the orthogonality of the selected straight lines. Outputs the final polynomial, which should be equal to 0. 
-Any geometric fact is written as the identity of the polynomials.</p>
+Any geometric fact is written as the identity of the polynomials.</p> <br />
 
 
 
