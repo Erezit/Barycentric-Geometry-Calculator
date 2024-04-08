@@ -37,8 +37,7 @@ Using the buttons, make a construction to study a geometric picture or prove a f
 Here are some of them:
 
 
-
-![NoMode](./Textures/Textures/PresetOFF.png)
+<img src="./Textures/Textures/PresetOFF.png" width="200" height="200">
 NoMode - nothing happens, in order to think about the next step
 
 
@@ -63,7 +62,11 @@ When you click on a point, its name is hidden
 
 ![ProveOrthogonality](./Textures/Textures/ProveOrthogonality.png)
 Checks the orthogonality of the selected straight lines. Outputs the final polynomial, which should be equal to 0.
+
+
 Any geometric fact is written as the identity of the polynomials.
+
+
 For more information, read the [article](https://web.evanchen.cc/handouts/bary/bary-full.pdf)
 
 
