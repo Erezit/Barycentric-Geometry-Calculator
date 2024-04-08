@@ -65,11 +65,11 @@ The isogonal conjugates the point. For more information, read the [article](http
 When you click on a point, its name is hidden<br />
 
 
-
+<div>
 <img src="./Textures/Textures/ProveOrthogonality.png" align="left" width="200" height="200" style=" border: 8px solid #ffffff;">
 <p> Checks the orthogonality of the selected straight lines. Outputs the final polynomial, which should be equal to 0. 
 Any geometric fact is written as the identity of the polynomials.</p> <br />
-
+</div>
 
 
 For more information about barycentric coordinates, read the [article](https://web.evanchen.cc/handouts/bary/bary-full.pdf)
