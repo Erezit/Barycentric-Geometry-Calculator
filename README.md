@@ -6,11 +6,12 @@ Main information about it you can see in file "Barycentric\_Geometry\_Solver-1" 
 
 ## Installation
 
-If you want to start project, firstly, you have to install SFML and Ginac library. You can do it using
+If you want to start project, firstly, you have to install SFML, Ginac library and and the shutil module for Python. You can do it using
 (Ubuntu exmaple):
 ```sh
 $ sudo apt-get install libsfml-dev
 $ sudo apt-get install -y ginac-tools
+$ pip install pytest-shutil
 ```
 After that you have to clone repository using
 
@@ -65,8 +66,8 @@ When you click on a point, its name is hidden<br />
 
 
 
-<img src="./Textures/Textures/ProveOrthogonality.png" width="200" height="200" style="float: left;">
-<p> Checks the orthogonality of the selected straight lines. Outputs the final polynomial, which should be equal to 0.
+<img src="./Textures/Textures/ProveOrthogonality.png" align="left" width="200" height="200" style=" border: 8px solid #ffffff;">
+<p> Checks the orthogonality of the selected straight lines. Outputs the final polynomial, which should be equal to 0. 
 Any geometric fact is written as the identity of the polynomials.</p>
 
 
