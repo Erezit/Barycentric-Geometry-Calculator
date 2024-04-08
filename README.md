@@ -32,7 +32,7 @@ or you can just run it from any IDE.
 
 ## UML photo
 
-![Illustration](https://gitlab.com/ivan.postnov/barycentric-geometry-project/raw/dev/uml_photo/myproject_class.png)
+![UML](./uml_photo/lastUML.svg)
 
 ## Project team
 Project was done by Postnov Ivan and Lopatin Egor, 2023-2027 MIPT students, Б05-327 group. 
