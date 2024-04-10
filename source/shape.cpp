@@ -310,28 +310,23 @@ void Orthocenter::make_actual() {
   sf::Vector2f a_position = a_point_->getPosition();
   sf::Vector2f b_position = b_point_->getPosition();
   sf::Vector2f c_position = c_point_->getPosition();
-  double c_size =
-      sqrt((a_position - b_position).x * (a_position - b_position).x +
-           (a_position - b_position).y * (a_position - b_position).y);
-  double b_size =
-      sqrt((a_position - c_position).x * (a_position - c_position).x +
-           (a_position - c_position).y * (a_position - c_position).y);
-  double a_size =
-      sqrt((c_position - b_position).x * (c_position - b_position).x +
-           (c_position - b_position).y * (c_position - b_position).y);
-  double a_weight = (a_size * a_size - b_size * b_size + c_size * c_size) *
-                    (a_size * a_size + b_size * b_size - c_size * c_size);
-  double b_weight = (a_size * a_size + b_size * b_size - c_size * c_size) *
-                    (-a_size * a_size + b_size * b_size + c_size * c_size);
-  double c_weight = (-a_size * a_size + b_size * b_size + c_size * c_size) *
-                    (a_size * a_size - b_size * b_size + c_size * c_size);
-  double sum = a_weight + b_weight + c_weight;
-  x_coord_ = (a_position.x * a_weight + b_position.x * b_weight +
-              c_position.x * c_weight) /
-             sum;
-  y_coord_ = (a_position.y * a_weight + b_position.y * b_weight +
-              c_position.y * c_weight) /
-             sum;
+  double Dxa = 2*(b_position.x - c_position.x);
+  double Dxb = 2*(c_position.x - a_position.x);
+  double Dxc = 2*(a_position.x - b_position.x);
+  double Dya = 2*(b_position.y - c_position.y);
+  double Dyb = 2*(c_position.y - a_position.y);
+  double Dyc = 2*(a_position.y - b_position.y);
+  double Sa = a_position.x * a_position.x + a_position.y * a_position.y;
+  double Sb = b_position.x * b_position.x + b_position.y * b_position.y;
+  double Sc = c_position.x * c_position.x + c_position.y * c_position.y;
+  std::vector<double> det = FindCoordinate<double>(Dxc, Dyc, Sa - Sb, Dxa, Dya, Sb - Sc);
+
+  double x_coord_tmp = -det[0] / det[2];
+  double y_coord_tmp = -det[1] / det[2];
+
+  x_coord_ = a_position.x + b_position.x + c_position.x - 2  * x_coord_tmp;
+  y_coord_ = a_position.y + b_position.y + c_position.y - 2  * y_coord_tmp;
+
   circle.setPosition(x_coord_, y_coord_);
   name.setPosition(x_coord_, y_coord_);
 }
