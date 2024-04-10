@@ -127,6 +127,7 @@ class Circle : public Shape {
    Point* b_point_ = nullptr;
    Point* c_point_ = nullptr;
    sf::CircleShape shape;
+   public:
    double center_x_;
    double center_y_;
    double radius_;
@@ -136,4 +137,16 @@ class Circle : public Shape {
    double getDistance() final;
    Circle(Point* a_point, Point* b_point,
           Point* c_point);
+};
+
+
+class PointIntersectionByLineCircle : public Point {
+    Circle* circle_ = nullptr;
+    Line* line_ = nullptr;
+    Point* point_ = nullptr;
+    public:
+    void make_actual() final;
+    void draw() final;
+   PointIntersectionByLineCircle(Circle* circle, Line* line, Point* point);
+
 };

@@ -423,3 +423,26 @@ void MakeHidden::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();  
   }
 }
+
+void FindIntersectionByLineCircle::active(Scene& current_scene) {
+  if(current_scene.selected_shapes.size() < 2) {
+    current_scene.TryGetObject<>();
+  } else {
+    current_scene.TryGetObject<Point>();
+  }
+  ChangeColorToActive(current_scene.selected_shapes);
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1, 1, 1)) {
+    std::cout << "try to make a new Point" << std::endl;
+    Circle* circle = dynamic_cast<Circle*>(current_scene.selected_shapes[0]);
+    Line* line = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
+    Point* point = dynamic_cast<Point*>(current_scene.selected_shapes[2]);
+    if(circle && line && point) {
+      Point* new_point = new PointIntersectionByLineCircle(circle, line, point);
+      current_scene.objects.push_back(new_point);
+    } else {
+      std::cout << "Wrong order!" << std::endl;
+    }
+    ChangeColorToFinal(current_scene.selected_shapes);
+    current_scene.selected_shapes.clear();
+  }
+}

@@ -486,6 +486,7 @@ Circle::Circle(Point* a_point, Point* b_point, Point* c_point)
             << barycentric_coordinates.getBCoordinate() << "  "
             << barycentric_coordinates.getCCoordinate() << std::endl;
   std::cout << center_x_ << " " << center_y_ << std::endl;
+  choosenFinal();
 }
 
 void Circle::make_actual() {
@@ -526,7 +527,7 @@ void Circle::make_actual() {
   double radius_c =
       sqrt((c_position.x - center_x_) * (c_position.x - center_x_) +
            (c_position.y - center_y_) * (c_position.y - center_y_));
-
+  shape.setOutlineColor(getColor());
   radius_ = (radius_a + radius_b + radius_c) / 3;
   shape.setPosition(center_x_ - radius_, center_y_ - radius_);
   shape.setRadius(radius_);
@@ -537,4 +538,61 @@ void Circle::draw() {
   global::window.draw(shape);
 }
 
-double Circle::getDistance() { return 10000; }
+double Circle::getDistance() {  
+  sf::Vector2f cur_mouse_pos = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
+  sf::Vector2f center_pos = global::window.mapPixelToCoords(sf::Vector2i(center_x_, center_y_));
+  double dist = sqrt((center_pos.x - cur_mouse_pos.x) * (center_pos.x - cur_mouse_pos.x) + (center_pos.y - cur_mouse_pos.y) * (center_pos.y - cur_mouse_pos.y));
+  return fabs(dist - radius_);
+}
+
+PointIntersectionByLineCircle::PointIntersectionByLineCircle(Circle* base_circle, Line* line, Point* point) : circle_(base_circle), line_(line), point_(point) {
+  BarycentricCoordinates circle_coordinate = circle_ -> getCoordinates();
+  BarycentricCoordinates line_coordinate = line_ -> getCoordinates();
+  BarycentricCoordinates point_coordinate = point_ -> getCoordinates();
+  GiNaC::ex Da = line_coordinate.getBCoordinate() -line_coordinate.getCCoordinate();
+  GiNaC::ex Db = line_coordinate.getCCoordinate() -line_coordinate.getACoordinate();
+  GiNaC::ex Dc = line_coordinate.getACoordinate() -line_coordinate.getBCoordinate();
+  GiNaC::ex X0 = point_coordinate.getACoordinate();
+  GiNaC::ex Y0 = point_coordinate.getBCoordinate();
+  GiNaC::ex Z0 = point_coordinate.getCCoordinate();
+  GiNaC::ex det = a * a * Db * Dc + b * b * Dc * Da + c * c * Da * Db;
+  GiNaC::ex det_a = -a * a * (Db * Z0 + Dc * Y0);
+  GiNaC::ex det_b = -b * b * (Dc * X0 + Da * Z0);
+  GiNaC::ex det_c = -c * c * (Da * Y0 + Db * X0);
+  GiNaC::ex det_more = (X0 + Y0 + Z0) * (circle_coordinate.getACoordinate() * Da + circle_coordinate.getBCoordinate() * Db + circle_coordinate.getCCoordinate() * Dc);
+  GiNaC::ex delta = (det_more + det_a + det_b + det_c) / det;
+  barycentric_coordinates.setCoordinates(X0 + delta * Da, Y0 + delta * Db, Z0 + delta * Dc);
+  barycentric_coordinates.simplify();
+
+  circle.setRadius(5.f);
+  make_actual();
+  barycentric_coordinates.simplify();
+  name.setName(global::next_name);
+  global::next_name = global::next_name + 1;
+  choosenFinal();
+}
+
+void PointIntersectionByLineCircle::make_actual() {
+  sf::Vector2f a_position = line_ -> getPointA() -> getPosition() + sf::Vector2f(5, 5);
+  sf::Vector2f b_position = line_ -> getPointB() -> getPosition() + sf::Vector2f(5, 5);
+  std::vector<double> line_coordinate = FindCoordinate<double>(a_position.x, a_position.y, 1, b_position.x, b_position.y, 1);
+  sf::Vector2f position = point_ -> getPosition();
+  double sum = line_coordinate[0] * line_coordinate[0] + line_coordinate[1] * line_coordinate[1];
+  double tmp = 2 * circle_ -> center_x_* line_coordinate[1] * line_coordinate[1] - 2 * line_coordinate[0] * line_coordinate[1] * circle_ -> center_y_ - 2 * line_coordinate[0]  * line_coordinate[2];
+  x_coord_ = tmp / sum - position.x - 5; 
+  y_coord_ = (-line_coordinate[2] - line_coordinate[0] * x_coord_) / line_coordinate[1];
+  x_coord_ = x_coord_ - 5;
+  y_coord_ = y_coord_ - 5;
+  circle.setPosition(x_coord_, y_coord_);
+  name.setPosition(x_coord_, y_coord_);
+}
+
+void PointIntersectionByLineCircle::draw() {
+  make_actual();
+  circle.setFillColor(getColor());
+  global::window.draw(circle);
+  circle.setFillColor(getColor());
+  if(!getIsHidden()) {
+    global::window.draw(name.getName());
+  }
+}

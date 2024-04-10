@@ -94,3 +94,8 @@ struct MakeHidden {
   MakeHidden() = default;
   static void active(Scene& cur_scene);
 };
+
+struct FindIntersectionByLineCircle {
+  FindIntersectionByLineCircle() = default;
+  static void active(Scene& cur_scene);
+};
