@@ -280,46 +280,6 @@ void drawOrthocenter::active(Scene& current_scene) {
   }
 }
 
-struct VectorDiff {
-  Point* point_a_;
-  Point* point_b_;
-  GiNaC::ex A_diff;
-  GiNaC::ex B_diff;
-  GiNaC::ex C_diff;
-
-  void simplify() {
-    BarycentricCoordinates tmp;
-    tmp.setCoordinates(A_diff, B_diff, C_diff);
-    tmp.simplify();
-    A_diff = tmp.getACoordinate();
-    B_diff = tmp.getBCoordinate();
-    C_diff = tmp.getCCoordinate();
-  }
-
-  VectorDiff(Point* point_a, Point* point_b)
-      : point_a_(point_a), point_b_(point_b) {
-    BarycentricCoordinates point_a_coordinate = point_a_->getCoordinates();
-    BarycentricCoordinates point_b_coordinate = point_b_->getCoordinates();
-    GiNaC::ex sum_a = point_a_coordinate.getACoordinate() +
-                      point_a_coordinate.getBCoordinate() +
-                      point_a_coordinate.getCCoordinate();
-    GiNaC::ex sum_b = point_b_coordinate.getACoordinate() +
-                      point_b_coordinate.getBCoordinate() +
-                      point_b_coordinate.getCCoordinate();
-    A_diff = (point_a_coordinate.getACoordinate() / sum_a -
-              point_b_coordinate.getACoordinate() / sum_b)
-                 .normal();
-    B_diff = (point_a_coordinate.getBCoordinate() / sum_a -
-              point_b_coordinate.getBCoordinate() / sum_b)
-                 .normal();
-    C_diff = (point_a_coordinate.getCCoordinate() / sum_a -
-              point_b_coordinate.getCCoordinate() / sum_b)
-                 .normal();
-  }
-  GiNaC::ex A() { return A_diff; }
-  GiNaC::ex B() { return B_diff; }
-  GiNaC::ex C() { return C_diff; }
-};
 
 extern GiNaC::symbol a;
 extern GiNaC::symbol b;

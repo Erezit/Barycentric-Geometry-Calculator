@@ -24,7 +24,8 @@ ButtonManager::ButtonManager() {
   all_textures[19].loadFromFile("Textures/IsogonalConjugation.png");
   all_textures[20].loadFromFile("Textures/dist.png");
   all_textures[21].loadFromFile("Textures/CircleAndLine.png");
-
+  all_textures[22].loadFromFile("Textures/Perpendicular.png");
+  
   all_buttons.push_back(new Button(10, 130, MoveBasePoint::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 20, NoMode::active, all_textures[5]));
   all_buttons.push_back(new Button(10, 240, CreateMiddlePoint::active, all_textures[2]));
@@ -40,7 +41,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(130, 460, CreateCircleByPoints::active, all_textures[13]));
   all_buttons.push_back(new Button(130, 570, MakeHidden::active, all_textures[18]));
   all_buttons.push_back(new Button(130, 680, FindIntersectionByLineCircle::active, all_textures[21]));
-  all_buttons.push_back(new Button(130, 790, FindPerpendicularLine::active, all_textures[0]));
+  all_buttons.push_back(new Button(130, 790, FindPerpendicularLine::active, all_textures[22]));
 
   all_buttons.push_back(new Button(1290, 20, ProveIntersect::active, all_textures[6]));
   all_buttons.push_back(new Button(1290, 130, ProveCollinearity::active, all_textures[7]));

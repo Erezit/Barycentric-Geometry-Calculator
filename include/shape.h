@@ -16,6 +16,18 @@ class Invisibility {
   void changeHidden();
 };
 
+struct Equation {
+  double A;
+  double B;
+  double C;
+  void simplify() {
+    double sum = A + B + C;
+    A = A / sum;
+    B = B / sum;
+    C = C / sum;
+  }
+};
+
 class Shape : public Object, public Invisibility {
 private:
 sf::Color color;
@@ -32,7 +44,7 @@ public:
 
 class Point : public Shape {
 public:
-  Point() = default;
+  Point();
   Point(double x_pos, double y_pos);
 
   double getDistance() final;
@@ -72,7 +84,7 @@ public:
   void draw() override;
   Line() = default;
   Line(Point* a_point, Point* b_point);
-  virtual std::vector<double> getCoefficients(int delta);
+  virtual std::vector<double> getCoefficients();
   virtual Point* getPointA();
   virtual Point* getPointB();
   friend class PerpendicularLine;
@@ -161,10 +173,23 @@ class PerpendicularLine : public Line {
  public:
   void make_actual() final;
   PerpendicularLine(Line* line, Point* point);
-  std::vector<double> getCoefficients(int delta) override;
+  std::vector<double> getCoefficients() override;
   Point* getPointA() override;
   Point* getPointB() override;
   Point* getBasePoint();
   void draw() final;
   double getDistance() final;
+};
+
+struct VectorDiff {
+  Point* point_a_;
+  Point* point_b_;
+  GiNaC::ex A_diff;
+  GiNaC::ex B_diff;
+  GiNaC::ex C_diff;
+  void simplify();
+  VectorDiff(Point* point_a, Point* point_b);
+  GiNaC::ex A();
+  GiNaC::ex B();
+  GiNaC::ex C();
 };
