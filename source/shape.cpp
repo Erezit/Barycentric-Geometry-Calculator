@@ -176,11 +176,11 @@ Point* Line::getPointA() { return a_point_; }
 
 Point* Line::getPointB() { return b_point_; }
 
-std::vector<double> Line::getCoefficients() {
+std::vector<double> Line::getCoefficients(int delta) {
   sf::Vector2f a_to_global = global::window.mapPixelToCoords(
-      sf::Vector2i(a_point_->x_coord_, a_point_->y_coord_));
+      sf::Vector2i(a_point_->x_coord_, a_point_->y_coord_) + sf::Vector2i(delta, delta));
   sf::Vector2f b_to_global = global::window.mapPixelToCoords(
-      sf::Vector2i(b_point_->x_coord_, b_point_->y_coord_));
+      sf::Vector2i(b_point_->x_coord_, b_point_->y_coord_) + sf::Vector2i(delta, delta));
   std::vector<double> coefficients;
   coefficients.push_back(a_to_global.y - b_to_global.y);
   coefficients.push_back(b_to_global.x - a_to_global.x);
@@ -228,8 +228,8 @@ void PointByTwoLines::draw() {
 }
 
 void PointByTwoLines::make_actual() {
-  std::vector<double> coefficients_a = a_line_->getCoefficients();
-  std::vector<double> coefficients_b = b_line_->getCoefficients();
+  std::vector<double> coefficients_a = a_line_->getCoefficients(0);
+  std::vector<double> coefficients_b = b_line_->getCoefficients(0);
   double det = coefficients_a[0] * coefficients_b[1] -
                coefficients_a[1] * coefficients_b[0];
   double det_a = coefficients_a[2] * coefficients_b[1] -
@@ -471,7 +471,7 @@ Circle::Circle(Point* a_point, Point* b_point, Point* c_point)
 
   barycentric_coordinates.setCoordinates(det_a / det, det_b / det, det_c / det);
 
-  barycentric_coordinates.simplify();
+  //barycentric_coordinates.simplify();
   a_coordinates.print();
   b_coordinates.print();
   c_coordinates.print();
@@ -590,4 +590,58 @@ void PointIntersectionByLineCircle::draw() {
   if(!getIsHidden()) {
     global::window.draw(name.getName());
   }
+}
+
+
+PerpendicularLine::PerpendicularLine(Line* line, Point* point) : base_point_(point), base_line_(line) {
+  a_point_ = line -> getPointA(); 
+  b_point_ = line -> getPointB();
+  make_actual();
+  barycentric_coordinates.setCoordinates(a,b,c);
+  barycentric_coordinates.simplify();
+  choosenFinal();
+}
+
+void PerpendicularLine::make_actual() {
+
+  sf::Color tmp_color = getColor();
+  sf::Vector2f a_position = a_point_->getPosition() + sf::Vector2f(5, 5);
+  sf::Vector2f b_position = b_point_->getPosition() + sf::Vector2f(5, 5);
+  sf::Vector2f base_position = base_point_->getPosition() + sf::Vector2f(5, 5);
+  std::vector<double> line_coord = base_line_ -> getCoefficients(5);
+  std::vector<double> new_position = FindCoordinate<double>(line_coord[0], line_coord[1],-line_coord[2], -line_coord[1], line_coord[0],-line_coord[1] * base_position.x + line_coord[0] * base_position.y);
+  line[0] = sf::Vertex(base_position, tmp_color);
+  line[1] = sf::Vertex(sf::Vector2f(-new_position[0]/ new_position[2], -new_position[1] / new_position[2]), tmp_color);
+}
+
+Point* PerpendicularLine::getPointA() {
+  return a_point_;
+}
+
+Point* PerpendicularLine::getPointB() { 
+  return b_point_;
+}
+
+Point* PerpendicularLine::getBasePoint() { 
+  return base_point_;
+}
+
+
+std::vector<double> PerpendicularLine::getCoefficients(int delta) {
+  sf::Vector2f base_position = base_point_->getPosition();
+  std::vector<double> line_coord = base_line_ ->  getCoefficients(0);
+  std::vector<double> new_position = {-line_coord[1], line_coord[0], line_coord[1] * base_position.x - line_coord[0] * base_position.y};
+  return new_position;
+}
+
+void PerpendicularLine::draw() {
+   make_actual();
+   global::window.draw(line, 2, sf::Lines);
+}
+ 
+double PerpendicularLine::getDistance() {
+   sf::Vector2f cur_mouse_pos = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
+   std::vector<double> cofficients = getCoefficients(0);
+   double dist =  fabs(cofficients[0] * cur_mouse_pos.x + cofficients[1] * cur_mouse_pos.y + cofficients[2]) / sqrt(cofficients[0] * cofficients[0]+ cofficients[1] * cofficients[1]);
+   return dist;
 }

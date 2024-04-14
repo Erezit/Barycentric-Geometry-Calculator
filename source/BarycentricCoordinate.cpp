@@ -18,6 +18,10 @@ GiNaC::ex BarycentricCoordinates::getCCoordinate() {
   return c_poly;
 }
 
+GiNaC::ex BarycentricCoordinates::findSum() {
+  return a_poly + b_poly + c_poly;
+}
+
 void BarycentricCoordinates::simplify() {
   GiNaC::ex denum_a = a_poly.denom();
   GiNaC::ex denum_b = b_poly.denom();

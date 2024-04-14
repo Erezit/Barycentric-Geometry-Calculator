@@ -99,3 +99,14 @@ struct FindIntersectionByLineCircle {
   FindIntersectionByLineCircle() = default;
   static void active(Scene& cur_scene);
 };
+
+struct ProofTangencyCircles {
+  ProofTangencyCircles() = default;
+  static void active(Scene& cur_scene);
+};
+
+struct FindPerpendicularLine {
+  FindPerpendicularLine() = default;
+  static void active(Scene& cur_scene);
+};
+

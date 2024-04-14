@@ -40,10 +40,12 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(130, 460, CreateCircleByPoints::active, all_textures[13]));
   all_buttons.push_back(new Button(130, 570, MakeHidden::active, all_textures[18]));
   all_buttons.push_back(new Button(130, 680, FindIntersectionByLineCircle::active, all_textures[21]));
+  all_buttons.push_back(new Button(130, 790, FindPerpendicularLine::active, all_textures[0]));
 
   all_buttons.push_back(new Button(1290, 20, ProveIntersect::active, all_textures[6]));
   all_buttons.push_back(new Button(1290, 130, ProveCollinearity::active, all_textures[7]));
   all_buttons.push_back(new Button(1290, 240, ProvePendicular::active, all_textures[11]));
+  all_buttons.push_back(new Button(1290, 350, ProofTangencyCircles::active, all_textures[0]));
 }
 
 void ButtonManager::draw() {

@@ -67,13 +67,15 @@ private:
   Point* b_point_ = nullptr;
   sf::Vertex line[2];
 public:
-  void make_actual() final;
-  double getDistance() final;
-  void draw() final;
+  void make_actual() override;
+  double getDistance() override;
+  void draw() override;
+  Line() = default;
   Line(Point* a_point, Point* b_point);
-  std::vector<double> getCoefficients();
-  Point* getPointA();
-  Point* getPointB();
+  virtual std::vector<double> getCoefficients(int delta);
+  virtual Point* getPointA();
+  virtual Point* getPointB();
+  friend class PerpendicularLine;
 };
 
 class PointByTwoLines : public Point {
@@ -149,4 +151,20 @@ class PointIntersectionByLineCircle : public Point {
     void draw() final;
    PointIntersectionByLineCircle(Circle* circle, Line* line, Point* point);
 
+};
+
+class PerpendicularLine : public Line {
+  private:
+   Point* base_point_ = nullptr;
+   Line* base_line_ = nullptr;
+  sf::Vertex line[2];
+ public:
+  void make_actual() final;
+  PerpendicularLine(Line* line, Point* point);
+  std::vector<double> getCoefficients(int delta) override;
+  Point* getPointA() override;
+  Point* getPointB() override;
+  Point* getBasePoint();
+  void draw() final;
+  double getDistance() final;
 };

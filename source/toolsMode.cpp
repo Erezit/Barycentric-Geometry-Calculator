@@ -446,3 +446,70 @@ void FindIntersectionByLineCircle::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();
   }
 }
+
+void ProofTangencyCircles::active(Scene& current_scene) {
+    current_scene.TryGetObject<Circle>();
+    ChangeColorToActive(current_scene.selected_shapes);
+    if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(0, 0, 2)) {
+      Circle* circle1 = dynamic_cast<Circle*>(current_scene.selected_shapes[0]);
+      Circle* circle2 = dynamic_cast<Circle*>(current_scene.selected_shapes[1]);
+       
+      BarycentricCoordinates circle_coordinate1 = circle1 -> getCoordinates();
+      BarycentricCoordinates circle_coordinate2 = circle2 -> getCoordinates();
+
+      BarycentricCoordinates line_coordinate;
+      GiNaC::ex sum1 = circle_coordinate1.findSum();
+      GiNaC::ex sum2 = circle_coordinate2.findSum();
+
+      line_coordinate.setCoordinates(circle_coordinate1.getACoordinate() / sum1 - circle_coordinate2.getACoordinate() / sum2, circle_coordinate1.getBCoordinate() / sum1 - circle_coordinate2.getBCoordinate() / sum2, circle_coordinate1.getCCoordinate() / sum1 - circle_coordinate2.getCCoordinate() / sum2);
+      GiNaC::ex Da = line_coordinate.getBCoordinate() -line_coordinate.getCCoordinate();
+      GiNaC::ex Db = line_coordinate.getCCoordinate() -line_coordinate.getACoordinate();
+      GiNaC::ex Dc = line_coordinate.getACoordinate() -line_coordinate.getBCoordinate();
+      GiNaC::ex X0 = 0;
+      GiNaC::ex Y0 = line_coordinate.getCCoordinate();
+      GiNaC::ex Z0 = -line_coordinate.getBCoordinate();
+      GiNaC::ex det = a * a * Db * Dc + b * b * Dc * Da + c * c * Da * Db;
+      GiNaC::ex det_a = -a * a * (Db * Z0 + Dc * Y0);
+      GiNaC::ex det_b = -b * b * (Dc * X0 + Da * Z0);
+      GiNaC::ex det_c = -c * c * (Da * Y0 + Db * X0);
+      GiNaC::ex det_more = (X0 + Y0 + Z0) * (circle_coordinate1.getACoordinate() * Da + circle_coordinate1.getBCoordinate() * Db + circle_coordinate1.getCCoordinate() * Dc);
+      GiNaC::ex last_a = -a * a * Y0 * Z0;
+      GiNaC::ex last_b = -b * b * X0 * Z0;
+      GiNaC::ex last_c = -c * c * Y0 * X0;
+      GiNaC::ex last = (X0 + Y0 + Z0) * (circle_coordinate1.getACoordinate() * Z0 + circle_coordinate1.getBCoordinate() * Y0 + circle_coordinate1.getCCoordinate() * Z0);
+      GiNaC::ex C_pol = last_a + last_b + last_c + last;
+      GiNaC::ex B_pol = -det; 
+      GiNaC::ex A_pol = det_more + det_a + det_b + det_c;
+      GiNaC::ex D_pol = B_pol * B_pol - 4 * A_pol * C_pol;
+      std::cout << D_pol << std::endl;
+      if(D_pol.normal() == 0) {
+        std::cout << "YES" << std::endl;
+      } else {
+        std::cout << "NO" << std::endl;
+      }
+      ChangeColorToFinal(current_scene.selected_shapes);
+      current_scene.selected_shapes.clear();
+    }
+}
+
+void FindPerpendicularLine::active(Scene& current_scene) {
+  if(current_scene.selected_shapes.size() < 1) {
+    current_scene.TryGetObject<Line>();
+  } else {
+    current_scene.TryGetObject<Point>();
+  }
+  ChangeColorToActive(current_scene.selected_shapes);
+  if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1, 1, 0)) {
+    std::cout << "try to make a new Point" << std::endl;
+    Line* line = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
+    Point* point = dynamic_cast<Point*>(current_scene.selected_shapes[1]);
+    if(line && point) {
+      PerpendicularLine* new_line = new PerpendicularLine(line, point);
+      current_scene.objects.push_back(new_line);
+    } else {
+      std::cout << "Wrong order!" << std::endl;
+    }
+   ChangeColorToFinal(current_scene.selected_shapes);
+   current_scene.selected_shapes.clear();
+  }
+}
