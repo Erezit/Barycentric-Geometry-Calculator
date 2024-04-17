@@ -181,6 +181,23 @@ class PerpendicularLine : public Line {
   double getDistance() final;
 };
 
+class ParallelLine : public Line {
+  private:
+    Point* base_point_ = nullptr;
+    Line* base_line_ = nullptr;
+    sf::Vertex line[2];
+  public:
+    void make_actual() final;
+    ParallelLine(Line* line, Point* point);
+     std::vector<double> getCoefficients() override;
+     Point* getPointA() override;
+    Point* getPointB() override;
+    Point* getBasePoint();
+    void draw() final;
+    double getDistance() final;
+};
+
+
 struct VectorDiff {
   Point* point_a_;
   Point* point_b_;
@@ -189,7 +206,9 @@ struct VectorDiff {
   GiNaC::ex C_diff;
   void simplify();
   VectorDiff(Point* point_a, Point* point_b);
+  VectorDiff() = default;
   GiNaC::ex A();
   GiNaC::ex B();
   GiNaC::ex C();
+  void setCoord(GiNaC::ex A_c, GiNaC::ex B_c, GiNaC::ex C_c);
 };

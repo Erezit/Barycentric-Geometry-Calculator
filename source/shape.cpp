@@ -458,15 +458,15 @@ Circle::Circle(Point* a_point, Point* b_point, Point* c_point)
   barycentric_coordinates.setCoordinates(det_a / det, det_b / det, det_c / det);
 
   //barycentric_coordinates.simplify();
-  a_coordinates.print();
-  b_coordinates.print();
-  c_coordinates.print();
-  std::cout << coefficient1 << " " << coefficient2 << " " << coefficient3
-            << std::endl;
-  std::cout << barycentric_coordinates.getACoordinate() << "  "
-            << barycentric_coordinates.getBCoordinate() << "  "
-            << barycentric_coordinates.getCCoordinate() << std::endl;
-  std::cout << center_x_ << " " << center_y_ << std::endl;
+ // a_coordinates.print();
+ // b_coordinates.print();
+ // c_coordinates.print();
+ // std::cout << coefficient1 << " " << coefficient2 << " " << coefficient3
+   //         << std::endl;
+  //std::cout << barycentric_coordinates.getACoordinate() << "  "
+    //        << barycentric_coordinates.getBCoordinate() << "  "
+      //      << barycentric_coordinates.getCCoordinate() << std::endl;
+ // std::cout << center_x_ << " " << center_y_ << std::endl;
   choosenFinal();
 }
 
@@ -552,7 +552,7 @@ PointIntersectionByLineCircle::PointIntersectionByLineCircle(Circle* base_circle
 void PointIntersectionByLineCircle::make_actual() {
   sf::Vector2f a_position = line_ -> getPointA() -> getPosition();
   sf::Vector2f b_position = line_ -> getPointB() -> getPosition();
-  std::vector<double> line_coordinate = FindCoordinate<double>(a_position.x, a_position.y, 1, b_position.x, b_position.y, 1);
+  std::vector<double> line_coordinate = line_ -> getCoefficients();
   sf::Vector2f position = point_ -> getPosition();
   double sum = line_coordinate[0] * line_coordinate[0] + line_coordinate[1] * line_coordinate[1];
   double tmp = 2 * circle_ -> center_x_* line_coordinate[1] * line_coordinate[1] - 2 * line_coordinate[0] * line_coordinate[1] * circle_ -> center_y_ - 2 * line_coordinate[0]  * line_coordinate[2];
@@ -579,19 +579,18 @@ PerpendicularLine::PerpendicularLine(Line* line, Point* point) : base_point_(poi
   a_point_ = line -> getPointA(); 
   b_point_ = line -> getPointB();
   make_actual();
-  VectorDiff diff =  VectorDiff(a_point_, b_point_);
-  BarycentricCoordinates base_cordinates = base_point_->getCoordinates();
-  GiNaC::ex tmp_sum = base_cordinates.findSum();
-  base_cordinates.setCoordinates(base_cordinates.getACoordinate() /tmp_sum, base_cordinates.getBCoordinate() / tmp_sum, base_cordinates.getCCoordinate() / tmp_sum);
-  GiNaC::ex x0 = diff.C() * base_cordinates.getBCoordinate() + diff.B() * base_cordinates.getCCoordinate();
-  GiNaC::ex y0 = diff.A() * base_cordinates.getCCoordinate() + diff.C() * base_cordinates.getACoordinate();
-  GiNaC::ex z0 = diff.A() * base_cordinates.getBCoordinate() + diff.B() * base_cordinates.getACoordinate();
-  GiNaC::ex sum = a * a * x0 + b * b * y0 + c * c * z0;  
-  GiNaC::ex new_x = c * c * diff.B() + b * b * diff.C() - sum;
-  GiNaC::ex new_y = a * a * diff.C() + c * c * diff.A() - sum;
-  GiNaC::ex new_z = a * a * diff.B() + b * b * diff.A() - sum;
+  BarycentricCoordinates tmp_bar =  base_line_ -> getCoordinates();
+  BarycentricCoordinates tmp_bar_point =  base_point_ -> getCoordinates();
 
-  barycentric_coordinates.setCoordinates(new_x, new_y, new_z);
+  GiNaC::ex X0 = (b * b + c * c - a * a) * (tmp_bar.getCCoordinate() - tmp_bar.getBCoordinate());
+  GiNaC::ex Y0 = (-b * b + c * c + a * a) * (tmp_bar.getACoordinate() - tmp_bar.getCCoordinate());
+  GiNaC::ex Z0 = (b * b - c * c + a * a) * (tmp_bar.getBCoordinate() - tmp_bar.getACoordinate());
+  GiNaC::ex X1 = Y0 - Z0;
+  GiNaC::ex Y1 = Z0 - X0;
+  GiNaC::ex Z1 = X0 - Y0;
+  std::vector<GiNaC::ex> new_pos = FindCoordinate<GiNaC::ex>(X1, Y1, Z1, tmp_bar_point.getACoordinate(), tmp_bar_point.getBCoordinate(), tmp_bar_point.getCCoordinate());
+
+  barycentric_coordinates.setCoordinates(new_pos[0], new_pos[1], new_pos[2]);
 
   barycentric_coordinates.simplify();
   choosenFinal();
@@ -673,4 +672,25 @@ double PerpendicularLine::getDistance() {
   GiNaC::ex VectorDiff::A() { return A_diff; }
   GiNaC::ex VectorDiff::B() { return B_diff; }
   GiNaC::ex VectorDiff::C() { return C_diff; }
+  void VectorDiff::setCoord(GiNaC::ex A_c, GiNaC::ex B_c, GiNaC::ex C_c) {
+    A_diff = A_c;
+    B_diff = B_c;
+    C_diff = C_c;
+  }
+/*
+  ParallelLine::ParallelLine(Line* line, Point* point) : base_point_(point), base_line_(line) {
+    make_actual();
+    BarycentricCoordinates tmp_bar =  base_line_ -> getCoordinates();
+    BarycentricCoordinates tmp_bar_point =  base_point_ -> getCoordinates();
+    GiNaC::ex X0 = tmp_bar.getBCoordinate() - tmp_bar.getCCoordinate();
+    GiNaC::ex Y0 = tmp_bar.getCCoordinate() - tmp_bar.getACoordinate();
+    GiNaC::ex Z0 = tmp_bar.getACoordinate() - tmp_bar.getBCoordinate();
+    std::vector<GiNaC::ex> new_pos = FindCoordinate<GiNaC::ex>(X0, Y0, Z0, tmp_bar.getACoordinate(), tmp_bar.getBCoordinate(), tmp_bar.getCCoordinate());
+    barycentric_coordinates.setCoordinates(new_pos[0], new_pos[1], new_pos[2]); 
+    barycentric_coordinates.simplify();
+    choosenFinal();
+  }
 
+  void ParallelLine::make_actual() {
+  }
+  */

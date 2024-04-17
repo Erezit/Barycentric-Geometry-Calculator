@@ -75,15 +75,12 @@ void CreateMiddlePoint::active(Scene& current_scene) {
   ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased &&
       current_scene.Checker(2)) {
-    std::cout << "Wow, I've got two pretty points to create midpoint!"
-              << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
     Point* second_point =
         dynamic_cast<Point*>(current_scene.selected_shapes[1]);
+    std::cout << std::endl <<  "Generating the midpoint between points " << (first_point -> name.getName()).getString().toAnsiString() << " and " << (second_point -> name.getName()).getString().toAnsiString() <<  std::endl << std::endl;
     MiddlePoint* middlePoint = new MiddlePoint(first_point, second_point);
     current_scene.objects.push_back(middlePoint);
-    std::cout << "Now there are " << current_scene.objects.size() << " points"
-              << std::endl;
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }
@@ -94,10 +91,10 @@ void CreateLine::active(Scene& current_scene) {
   ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased &&
       current_scene.Checker(2)) {
-    std::cout << "Wow, I've got two pretty points to create line!" << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
     Point* second_point =
         dynamic_cast<Point*>(current_scene.selected_shapes[1]);
+    std::cout << std::endl <<  "Generating the line  between points " << (first_point -> name.getName()).getString().toAnsiString() << " and " << (second_point -> name.getName()).getString().toAnsiString() <<  std::endl << std::endl;
     Line* line = new Line(first_point, second_point);
     current_scene.objects.push_back(line);
     ChangeColorToFinal(current_scene.selected_shapes);
@@ -110,7 +107,7 @@ void FindLineIntersection::active(Scene& current_scene) {
   ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased &&
       current_scene.Checker(0, 2)) {
-    std::cout << "Wow, I've got two pretty line to create point!" << std::endl;
+    std::cout << std::endl << "Generating the intersection point!" << std::endl;
     Line* first_line = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
     Line* second_line = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
     PointByTwoLines* point = new PointByTwoLines(first_line, second_line);
@@ -176,14 +173,21 @@ void ShowBarycentricCoordinate::active(Scene& current_scene) {
   current_scene.TryGetObject<Point>();
   if (current_scene.event.type == sf::Event::MouseButtonReleased &&
       current_scene.Checker(1)) {
+      Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
+      std::cout << std::endl <<  "Barycentric coordinates point " << (first_point -> name.getName()).getString().toAnsiString()  <<  std::endl << std::endl;
     std::cout
-        << current_scene.selected_shapes[0]->getCoordinates().getACoordinate()
-        << " "
-        << current_scene.selected_shapes[0]->getCoordinates().getBCoordinate()
-        << " "
-        << current_scene.selected_shapes[0]->getCoordinates().getCCoordinate()
+        << "Relative to the vertex A: " <<  current_scene.selected_shapes[0]->getCoordinates().getACoordinate()
+        << std::endl
+        << "Relative to the vertex B: " << current_scene.selected_shapes[0]->getCoordinates().getBCoordinate() << std::endl
+        << "Relative to the vertex C: " <<current_scene.selected_shapes[0]->getCoordinates().getCCoordinate()
         << std::endl;
-    current_scene.selected_shapes.clear();
+    std::cout << "Or in another form: " << std::endl;
+        std::cout
+        << "Relative to the vertex A: " << "(" << factor(first_point -> getCoordinates().getACoordinate().numer()) << ")" << " / " << "(" << factor(first_point -> getCoordinates().getACoordinate().denom()) << ")"
+        << std::endl
+        << "Relative to the vertex B: " <<  "(" << factor(first_point -> getCoordinates().getBCoordinate().numer()) << ")" << " / " << "(" << factor(first_point -> getCoordinates().getBCoordinate().denom()) << ")" << std::endl
+        << "Relative to the vertex C: " <<  "(" << factor(first_point -> getCoordinates().getCCoordinate().numer()) << ")" << " / " << "(" << factor(first_point -> getCoordinates().getCCoordinate().denom()) << ")" << std::endl << std::endl;
+      current_scene.selected_shapes.clear();
   }
 }
 
@@ -194,7 +198,6 @@ T Det(const T& A1, const T& B1, const T& C1, const T& A2, const T& B2,
          A1 * B2 * C3 - B1 * A2 * C3;
 }
 
-// int  ProveIntersect::counter = 0;
 void ProveIntersect::active(Scene& current_scene) {
   current_scene.TryGetObject<Line>();
   ChangeColorToActive(current_scene.selected_shapes);
@@ -212,11 +215,15 @@ void ProveIntersect::active(Scene& current_scene) {
         line_b_coordinate.getBCoordinate(), line_b_coordinate.getCCoordinate(),
         line_c_coordinate.getACoordinate(), line_c_coordinate.getBCoordinate(),
         line_c_coordinate.getCCoordinate());
-    std::cout << det << std::endl;
-    if (det.normal() == 0) {
-      std::cout << "YES" << std::endl;
+    std::cout << std::endl;
+    if (det.numer().normal() == 0) {
+       std::cout << "The problem is solved, the selected lines are intersect in one point" << std::endl;
+       std::cout << "The final determinant:" << std::endl;
+       std::cout << det << std::endl;
     } else {
-      std::cout << "NO" << std::endl;
+       std::cout << "The problem is incorrect" << std::endl;
+       std::cout << "But the task can be true under the following conditions:" << std::endl;
+       std::cout << factor(det.normal().numer()) << " = 0" << std::endl << std::endl;
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
@@ -243,11 +250,15 @@ void ProveCollinearity::active(Scene& current_scene) {
                                    point_c_coordinate.getACoordinate(),
                                    point_c_coordinate.getBCoordinate(),
                                    point_c_coordinate.getCCoordinate());
-    std::cout << det << std::endl;
-    if (det.normal() == 0) {
-      std::cout << "YES" << std::endl;
+    std::cout << std::endl;
+    if (det.numer().normal() == 0) {
+      std::cout << "The problem is solved, the selected points are collinear" << std::endl;
+      std::cout << "The final determinant:" << std::endl;
+      std::cout << det << std::endl;
     } else {
-      std::cout << "NO" << std::endl;
+       std::cout << "The problem is incorrect" << std::endl;
+       std::cout << "But the task can be true under the following conditions:" << std::endl;
+       std::cout << factor(det.normal().numer()) << " = 0" << std::endl << std::endl;
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
@@ -292,27 +303,27 @@ void ProvePendicular::active(Scene& current_scene) {
       current_scene.Checker(0, 2)) {
     Line* line_a = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
     Line* line_b = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
-    VectorDiff vector_diff_line_a =
-        VectorDiff(line_a->getPointA(), line_a->getPointB());
-    VectorDiff vector_diff_line_b =
-        VectorDiff(line_b->getPointA(), line_b->getPointB());
-    vector_diff_line_a.simplify();
-    vector_diff_line_b.simplify();
+    VectorDiff vector_diff_line_a;
+    BarycentricCoordinates tmp_a_bar_coord = line_a -> getCoordinates();
+    VectorDiff vector_diff_line_b;
+    BarycentricCoordinates tmp_b_bar_coord = line_b -> getCoordinates();
+    GiNaC::ex A1 = tmp_a_bar_coord.getBCoordinate() - tmp_a_bar_coord.getCCoordinate();
+    GiNaC::ex B1 = tmp_a_bar_coord.getCCoordinate() - tmp_a_bar_coord.getACoordinate();
+    GiNaC::ex C1 = tmp_a_bar_coord.getACoordinate() - tmp_a_bar_coord.getBCoordinate();
+    GiNaC::ex A2 = tmp_b_bar_coord.getBCoordinate() - tmp_b_bar_coord.getCCoordinate();
+    GiNaC::ex B2 = tmp_b_bar_coord.getCCoordinate() - tmp_b_bar_coord.getACoordinate();
+    GiNaC::ex C2 = tmp_b_bar_coord.getACoordinate() - tmp_b_bar_coord.getBCoordinate();
 
-    GiNaC::ex diff = a * a *
-                         (vector_diff_line_a.B() * vector_diff_line_b.C() +
-                          vector_diff_line_a.C() * vector_diff_line_b.B()) +
-                     b * b *
-                         (vector_diff_line_a.C() * vector_diff_line_b.A() +
-                          vector_diff_line_a.A() * vector_diff_line_b.C()) +
-                     c * c *
-                         (vector_diff_line_a.B() * vector_diff_line_b.A() +
-                          vector_diff_line_a.A() * vector_diff_line_b.B());
-    std::cout << diff << std::endl;
+    GiNaC::ex diff = (c * c + b * b - a * a) * (B1 + C1) * (B2 + C2) + (c * c - b * b + a * a) * (A1 + C1) * (A2 + C2) + (-c * c + b * b + a * a) * (B1 + A1) * (B2 + A2);
+      std::cout << std::endl;
     if (diff.normal() == 0) {
-      std::cout << "YES" << std::endl;
+      std::cout << "The problem is solved, the selected lines are perpendicular" << std::endl;
+      std::cout << "The final determinant:" << std::endl;
+      std::cout << diff << std::endl << std::endl;
     } else {
-      std::cout << "NO" << std::endl;
+      std::cout << "The problem is incorrect" << std::endl;
+      std::cout << "But the task can be true under the following conditions:" << std::endl;
+      std::cout << factor(diff.normal().numer()) << " = 0" << std::endl << std::endl;
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
@@ -324,8 +335,6 @@ void FindDistance::active(Scene& current_scene) {
   ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased &&
       current_scene.Checker(2)) {
-    std::cout << "Wow, I've got two pretty points to create midpoint!"
-              << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
     Point* second_point =
         dynamic_cast<Point*>(current_scene.selected_shapes[1]);
@@ -333,10 +342,14 @@ void FindDistance::active(Scene& current_scene) {
     GiNaC::ex distance = -a * a * (vector_diff.B() * vector_diff.C()) -
                          b * b * (vector_diff.A() * vector_diff.C()) -
                          c * c * (vector_diff.B() * vector_diff.A());
-    ;
+    std::cout << std::endl;
+    std::cout << "The distance between the points " << (first_point -> name.getName()).getString().toAnsiString() << " and " << (second_point -> name.getName()).getString().toAnsiString() << " equals: " << std::endl;
     ChangeColorToFinal(current_scene.selected_shapes);
     distance = distance.normal();
     std::cout << distance << std::endl;
+    std::cout << "Or in another form" << std::endl;
+    std::cout << "(" << factor(distance.numer().normal())<<")" << " / " << "(" << factor(distance.denom().normal()) << ")" << std::endl << std::endl;
+    
     current_scene.selected_shapes.clear();
   }
 }
@@ -350,6 +363,7 @@ void FindIsogonal::active(Scene& current_scene) {
         dynamic_cast<Point*>(current_scene.objects[1]),
         dynamic_cast<Point*>(current_scene.objects[2]),
         dynamic_cast<Point*>(current_scene.selected_shapes[0]));
+    std::cout << "Generating a isogonal point by point "  << (isogonal_point -> name.getName()).getString().toAnsiString() << std::endl;
     current_scene.objects.push_back(isogonal_point);
     current_scene.selected_shapes.clear();
   }
@@ -360,12 +374,11 @@ void CreateCircleByPoints::active(Scene& current_scene) {
   ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased &&
       current_scene.Checker(3)) {
-    std::cout << "Wow, I've got three pretty points to create circle!"
-              << std::endl;
     Point* first_point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
     Point* second_point =
         dynamic_cast<Point*>(current_scene.selected_shapes[1]);
     Point* third_point = dynamic_cast<Point*>(current_scene.selected_shapes[2]);
+    std::cout << "Generating a circle by points " << (first_point -> name.getName()).getString().toAnsiString() << " " <<  (second_point -> name.getName()).getString().toAnsiString() << " " << (third_point -> name.getName()).getString().toAnsiString()  << std::endl;
     Circle* circle = new Circle(first_point, second_point, third_point);
     current_scene.objects.push_back(circle);
     ChangeColorToFinal(current_scene.selected_shapes);
@@ -392,15 +405,17 @@ void FindIntersectionByLineCircle::active(Scene& current_scene) {
   }
   ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1, 1, 1)) {
-    std::cout << "try to make a new Point" << std::endl;
+    std::cout << "Try to make a new intersection point by Line and Circle" << std::endl;
     Circle* circle = dynamic_cast<Circle*>(current_scene.selected_shapes[0]);
     Line* line = dynamic_cast<Line*>(current_scene.selected_shapes[1]);
     Point* point = dynamic_cast<Point*>(current_scene.selected_shapes[2]);
     if(circle && line && point) {
+      std::cout << "Generating the intersection point by Line and Circle" << std::endl;
       Point* new_point = new PointIntersectionByLineCircle(circle, line, point);
       current_scene.objects.push_back(new_point);
     } else {
       std::cout << "Wrong order!" << std::endl;
+      std::cout << "First you have to choose a circle, then a straight line and then a point" << std::endl;
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
@@ -442,6 +457,7 @@ void ProofTangencyCircles::active(Scene& current_scene) {
       GiNaC::ex A_pol = det_more + det_a + det_b + det_c;
       GiNaC::ex D_pol = B_pol * B_pol - 4 * A_pol * C_pol;
       std::cout << D_pol << std::endl;
+      std::cout << "In this version, the method does not work correctly" << std::endl;
       if(D_pol.normal() == 0) {
         std::cout << "YES" << std::endl;
       } else {
@@ -460,14 +476,16 @@ void FindPerpendicularLine::active(Scene& current_scene) {
   }
   ChangeColorToActive(current_scene.selected_shapes);
   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1, 1, 0)) {
-    std::cout << "try to make a new Point" << std::endl;
+    std::cout << "Try to make a new perpendicular Line" << std::endl;
     Line* line = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
     Point* point = dynamic_cast<Point*>(current_scene.selected_shapes[1]);
     if(line && point) {
+      std::cout << "Generating a perpendicular Line" << std::endl;
       PerpendicularLine* new_line = new PerpendicularLine(line, point);
       current_scene.objects.push_back(new_line);
     } else {
       std::cout << "Wrong order!" << std::endl;
+      std::cout << "First you have to choose a straight line and then a point" << std::endl;
     }
    ChangeColorToFinal(current_scene.selected_shapes);
    current_scene.selected_shapes.clear();

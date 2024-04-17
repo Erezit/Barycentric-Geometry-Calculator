@@ -41,9 +41,9 @@ class Scene {
             return;
           }
         }
-        std::cout << "I've got an object!!" << std::endl;
+        //std::cout << "I've got an object!!" << std::endl;
         selected_shapes.push_back(new_shape);
-        std::cout << "Totally i've got " << selected_shapes.size() << std::endl;
+        //std::cout << "Totally i've got " << selected_shapes.size() << std::endl;
       }
     }
 
