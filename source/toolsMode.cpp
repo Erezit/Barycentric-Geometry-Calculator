@@ -491,3 +491,28 @@ void FindPerpendicularLine::active(Scene& current_scene) {
    current_scene.selected_shapes.clear();
   }
 }
+
+
+void FindParallelLine::active(Scene& current_scene) {
+  if(current_scene.selected_shapes.size() < 1) { 
+     current_scene.TryGetObject<Line>();
+   } else { 
+     current_scene.TryGetObject<Point>();
+   } 
+   ChangeColorToActive(current_scene.selected_shapes);
+   if (current_scene.event.type == sf::Event::MouseButtonReleased && current_scene.Checker(1, 1, 0)) { 
+   std::cout << "Try to make a new paralle Line" << std::endl;
+   Line* line = dynamic_cast<Line*>(current_scene.selected_shapes[0]);
+   Point* point = dynamic_cast<Point*>(current_scene.selected_shapes[1]);
+   if(line && point) { 
+     std::cout << "Generating a paralle Line" << std::endl;
+     ParallelLine* new_line = new ParallelLine(line, point);
+     current_scene.objects.push_back(new_line);
+   } else {
+     std::cout << "Wrong order!" << std::endl;
+     std::cout << "First you have to choose a straight line and then a point" << std::endl;
+   }
+   ChangeColorToFinal(current_scene.selected_shapes);
+   current_scene.selected_shapes.clear();
+   }
+}

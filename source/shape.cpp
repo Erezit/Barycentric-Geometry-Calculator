@@ -677,20 +677,52 @@ double PerpendicularLine::getDistance() {
     B_diff = B_c;
     C_diff = C_c;
   }
-/*
+
   ParallelLine::ParallelLine(Line* line, Point* point) : base_point_(point), base_line_(line) {
     make_actual();
+    a_point_ = line -> getPointA();
+    b_point_ = line -> getPointB();
     BarycentricCoordinates tmp_bar =  base_line_ -> getCoordinates();
     BarycentricCoordinates tmp_bar_point =  base_point_ -> getCoordinates();
     GiNaC::ex X0 = tmp_bar.getBCoordinate() - tmp_bar.getCCoordinate();
     GiNaC::ex Y0 = tmp_bar.getCCoordinate() - tmp_bar.getACoordinate();
     GiNaC::ex Z0 = tmp_bar.getACoordinate() - tmp_bar.getBCoordinate();
-    std::vector<GiNaC::ex> new_pos = FindCoordinate<GiNaC::ex>(X0, Y0, Z0, tmp_bar.getACoordinate(), tmp_bar.getBCoordinate(), tmp_bar.getCCoordinate());
+    std::vector<GiNaC::ex> new_pos = FindCoordinate<GiNaC::ex>(X0, Y0, Z0, tmp_bar_point.getACoordinate(), tmp_bar_point.getBCoordinate(), tmp_bar_point.getCCoordinate());
     barycentric_coordinates.setCoordinates(new_pos[0], new_pos[1], new_pos[2]); 
     barycentric_coordinates.simplify();
     choosenFinal();
   }
 
-  void ParallelLine::make_actual() {
+  std::vector<double>  ParallelLine::getCoefficients() {
+    std::vector<double> line_coordinate = base_line_ -> getCoefficients();
+    sf::Vector2f a_position = base_point_ ->getPosition();
+    line_coordinate[2] = -(line_coordinate[0] * a_position.x + line_coordinate[1] * a_position.y);
+    return line_coordinate;
   }
-  */
+  void  ParallelLine::make_actual() {
+   sf::Color tmp_color = getColor();
+    std::vector<double> line_coordinate = getCoefficients();
+    line[0] = sf::Vertex(sf::Vector2f(0, -line_coordinate[2] / line_coordinate[1]), tmp_color);
+    line[1] = sf::Vertex(sf::Vector2f(1400, (-line_coordinate[2] -line_coordinate[0] * 1400) / line_coordinate[1]), tmp_color);
+  }
+  
+  double ParallelLine::getDistance() {
+    sf::Vector2f cur_mouse_pos = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
+    std::vector<double> cofficients = getCoefficients();
+    double dist =  fabs(cofficients[0] * cur_mouse_pos.x + cofficients[1] * cur_mouse_pos.y + cofficients[2]) / sqrt(cofficients[0] * cofficients[0]+ cofficients[1] * cofficients[1]);
+    return dist;
+
+  }
+  void ParallelLine::draw() {
+    make_actual();
+    global::window.draw(line, 2, sf::Lines);
+  }
+
+  Point* ParallelLine::getPointA() {
+    return a_point_;
+  }
+
+  Point* ParallelLine::getPointB() {
+    return b_point_;
+  }
+

@@ -110,3 +110,7 @@ struct FindPerpendicularLine {
   static void active(Scene& cur_scene);
 };
 
+struct FindParallelLine {
+  FindParallelLine() = default;
+  static void active(Scene& cur_scene);
+};

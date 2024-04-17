@@ -88,6 +88,7 @@ public:
   virtual Point* getPointA();
   virtual Point* getPointB();
   friend class PerpendicularLine;
+  friend class ParallelLine;
 };
 
 class PointByTwoLines : public Point {
