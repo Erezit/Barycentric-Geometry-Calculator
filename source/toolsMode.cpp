@@ -201,7 +201,7 @@ T Det(const T& A1, const T& B1, const T& C1, const T& A2, const T& B2,
 void ProveIntersect::active(Scene& current_scene) {
   current_scene.TryGetObject<Line>();
   ChangeColorToActive(current_scene.selected_shapes);
-  if (current_scene.event.type == sf::Event::MouseButtonReleased &&
+  if ((current_scene.event.type == sf::Event::MouseButtonReleased || global::fake_click) &&
       current_scene.Checker(0, 3)) {
     BarycentricCoordinates line_a_coordinate =
         current_scene.selected_shapes[0]->getCoordinates();
@@ -220,10 +220,13 @@ void ProveIntersect::active(Scene& current_scene) {
        std::cout << "The problem is solved, the selected lines are intersect in one point" << std::endl;
        std::cout << "The final determinant:" << std::endl;
        std::cout << det << std::endl;
+       global::is_problem_correct = true; // for testing
+
     } else {
        std::cout << "The problem is incorrect" << std::endl;
        std::cout << "But the task can be true under the following conditions:" << std::endl;
        std::cout << factor(det.normal().numer()) << " = 0" << std::endl << std::endl;
+       global::is_problem_correct = false; // for testing
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();

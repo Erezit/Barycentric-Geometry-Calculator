@@ -40,6 +40,7 @@ public:
   virtual void choosenFinal();
   sf::Color getColor();
   virtual void make_actual();
+  virtual ~Shape() = default;
 };
 
 class Point : public Shape {
@@ -124,6 +125,8 @@ class Orthocenter : public Point {
 namespace global {
   extern sf::RenderWindow window;
   extern char next_name;
+  extern bool is_problem_correct; 
+  extern bool fake_click;
 }
 
 class IsogonalPoint : public Point {

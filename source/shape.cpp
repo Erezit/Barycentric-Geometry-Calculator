@@ -4,11 +4,13 @@
 #include <cmath>
 
 namespace global {
-sf::RenderWindow window(sf::VideoMode(1400, 900),
+  sf::RenderWindow window(sf::VideoMode(1400, 900),
                         "Barycentric Geometry Calculator",
                         sf::Style::Close | sf::Style::Titlebar, sf::ContextSettings(0,0,8));
-char next_name = 'A';
-bool isActiveMode = false;
+  char next_name = 'A';
+  bool isActiveMode = false;
+  bool is_problem_correct = false; // for testing
+  bool fake_click = false;
 }  // namespace global
 GiNaC::symbol a("a");
 GiNaC::symbol b("b");
