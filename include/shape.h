@@ -217,8 +217,8 @@ struct VectorDiff {
 
 struct RadicalAxis : public Line {
  private:   
-  Circle* circle1_;
-  Circle* circle2_;
+  Circle* circle1_ = nullptr;
+  Circle* circle2_ = nullptr;
  public:
   void make_actual() final;
   RadicalAxis(Circle* circle1, Circle* circle2);

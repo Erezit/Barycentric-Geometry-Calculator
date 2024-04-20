@@ -11,6 +11,7 @@ class Scene {
     std::vector<Shape*> selected_shapes;
     sf::RectangleShape panel_draw;
     sf::RectangleShape panel_prove;
+
     template <typename T = Shape>
     Shape* selectObject() {
       Shape* cur_select_object = nullptr;
@@ -25,7 +26,7 @@ class Scene {
         min_distance = shape_form->getDistance();
       }
     }
-    if(cur_select_object->getDistance() > 30) {
+    if(min_distance!=1000000 &&  cur_select_object->getDistance() > 30) {
         return nullptr;
     }
     return cur_select_object;

@@ -529,6 +529,7 @@ double Circle::getDistance() {
 }
 
 PointIntersectionByLineCircle::PointIntersectionByLineCircle(Circle* base_circle, Line* line, Point* point) :Point(), circle_(base_circle), line_(line), point_(point) {
+
   BarycentricCoordinates circle_coordinate = circle_ -> getCoordinates();
   BarycentricCoordinates line_coordinate = line_ -> getCoordinates();
   BarycentricCoordinates point_coordinate = point_ -> getCoordinates();
@@ -546,14 +547,11 @@ PointIntersectionByLineCircle::PointIntersectionByLineCircle(Circle* base_circle
   GiNaC::ex delta = (det_more + det_a + det_b + det_c) / det;
   barycentric_coordinates.setCoordinates(X0  + delta * Da, Y0  + delta * Db, Z0  + delta * Dc);
   barycentric_coordinates.simplify();
-
   make_actual();
   barycentric_coordinates.simplify();
 }
 
 void PointIntersectionByLineCircle::make_actual() {
-  sf::Vector2f a_position = line_ -> getPointA() -> getPosition();
-  sf::Vector2f b_position = line_ -> getPointB() -> getPosition();
   std::vector<double> line_coordinate = line_ -> getCoefficients();
   sf::Vector2f position = point_ -> getPosition();
   double sum = line_coordinate[0] * line_coordinate[0] + line_coordinate[1] * line_coordinate[1];
