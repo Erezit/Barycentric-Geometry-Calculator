@@ -29,9 +29,9 @@ void Shape::setCoordinates(GiNaC::ex poly1, GiNaC::ex poly2, GiNaC::ex poly3) {
   barycentric_coordinates.setCoordinates(poly1, poly2, poly3);
 }
 
-void Shape::choosenActive() { color = sf::Color{0, 0, 255, 255}; }
+void Shape::choosenActive() { color = sf::Color{255, 36, 0, 255}; }
 
-void Shape::choosenFinal() { color = sf::Color{255, 255, 255, 255}; }
+void Shape::choosenFinal() { color = sf::Color{65, 105, 255, 255}; }
 
 void Shape::make_actual() {}
 
@@ -727,4 +727,46 @@ double PerpendicularLine::getDistance() {
   Point* ParallelLine::getPointB() {
     return b_point_;
   }
+
+
+RadicalAxis::RadicalAxis(Circle* circle1, Circle* circle2): circle1_(circle1), circle2_(circle2) {
+  make_actual();
+  BarycentricCoordinates barycentric_coordinates_circle_1 = circle1_ -> getCoordinates();
+  BarycentricCoordinates barycentric_coordinates_circle_2 = circle2_ -> getCoordinates();
+  barycentric_coordinates.setCoordinates(barycentric_coordinates_circle_1.getACoordinate() - barycentric_coordinates_circle_2.getACoordinate(), barycentric_coordinates_circle_1.getBCoordinate() - barycentric_coordinates_circle_2.getBCoordinate(), barycentric_coordinates_circle_1.getCCoordinate() - barycentric_coordinates_circle_2.getCCoordinate());
+   barycentric_coordinates.simplify();
+   choosenFinal();
+}
+
+std::vector<double>  RadicalAxis::getCoefficients() {
+ double X1 = circle1_ -> center_x_;
+ double Y1 = circle1_ -> center_y_;
+ double X2 = circle2_ -> center_x_;
+ double Y2 = circle2_ -> center_y_;
+ double A = 2 * X1 - 2 * X2;
+ double B = 2 * Y1 - 2 * Y2;
+ double C = X2 * X2 + Y2 * Y2 - X1 * X1 - Y1 * Y1 - circle2_ -> radius_ *  circle2_ -> radius_ + circle1_ -> radius_ *  circle1_ -> radius_;
+ return std::vector<double>{A,B,C};
+}
+
+ void  RadicalAxis::make_actual() {
+  sf::Color tmp_color = getColor();
+  std::vector<double> line_coordinate = getCoefficients();
+  line[0] = sf::Vertex(sf::Vector2f(0, -line_coordinate[2] / line_coordinate[1]), tmp_color);
+  line[1] = sf::Vertex(sf::Vector2f(1400, (-line_coordinate[2] -line_coordinate[0] * 1400) / line_coordinate[1]), tmp_color);
+}
+
+
+void RadicalAxis::draw() {
+  make_actual();
+  global::window.draw(line, 2, sf::Lines);
+}
+
+
+double RadicalAxis::getDistance() {
+  sf::Vector2f cur_mouse_pos = global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
+  std::vector<double> cofficients = getCoefficients();
+  double dist =  fabs(cofficients[0] * cur_mouse_pos.x + cofficients[1] * cur_mouse_pos.y + cofficients[2]) / sqrt(cofficients[0] * cofficients[0]+ cofficients[1] * cofficients[1]);
+  return dist;
+}
 

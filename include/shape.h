@@ -75,7 +75,7 @@ public:
 };
 
 class Line : public Shape {
-private:
+protected:
   Point* a_point_ = nullptr;
   Point* b_point_ = nullptr;
   sf::Vertex line[2];
@@ -88,8 +88,6 @@ public:
   virtual std::vector<double> getCoefficients();
   virtual Point* getPointA();
   virtual Point* getPointB();
-  friend class PerpendicularLine;
-  friend class ParallelLine;
 };
 
 class PointByTwoLines : public Point {
@@ -215,4 +213,16 @@ struct VectorDiff {
   GiNaC::ex B();
   GiNaC::ex C();
   void setCoord(GiNaC::ex A_c, GiNaC::ex B_c, GiNaC::ex C_c);
+};
+
+struct RadicalAxis : public Line {
+ private:   
+  Circle* circle1_;
+  Circle* circle2_;
+ public:
+  void make_actual() final;
+  RadicalAxis(Circle* circle1, Circle* circle2);
+  std::vector<double> getCoefficients() override;  
+  void draw() final;
+  double getDistance() final;
 };

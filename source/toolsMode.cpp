@@ -236,7 +236,7 @@ void ProveIntersect::active(Scene& current_scene) {
 void ProveCollinearity::active(Scene& current_scene) {
   current_scene.TryGetObject<Point>();
   ChangeColorToActive(current_scene.selected_shapes);
-  if (current_scene.event.type == sf::Event::MouseButtonReleased &&
+  if ((current_scene.event.type == sf::Event::MouseButtonReleased || global::fake_click) &&
       current_scene.Checker(3)) {
     BarycentricCoordinates point_a_coordinate =
         current_scene.selected_shapes[0]->getCoordinates();
@@ -258,10 +258,12 @@ void ProveCollinearity::active(Scene& current_scene) {
       std::cout << "The problem is solved, the selected points are collinear" << std::endl;
       std::cout << "The final determinant:" << std::endl;
       std::cout << det << std::endl;
+      global::is_problem_correct = true; // for testing
     } else {
        std::cout << "The problem is incorrect" << std::endl;
        std::cout << "But the task can be true under the following conditions:" << std::endl;
        std::cout << factor(det.normal().numer()) << " = 0" << std::endl << std::endl;
+       global::is_problem_correct = false; // for testing
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
@@ -518,4 +520,20 @@ void FindParallelLine::active(Scene& current_scene) {
    ChangeColorToFinal(current_scene.selected_shapes);
    current_scene.selected_shapes.clear();
    }
+}
+
+void FindRadicalAxis::active(Scene& current_scene) {
+  current_scene.TryGetObject<Circle>();
+  ChangeColorToActive(current_scene.selected_shapes);
+  if (current_scene.event.type == sf::Event::MouseButtonReleased &&
+          current_scene.Checker(0, 0, 2)) {
+    std::cout << "Try to make a new radical axis" << std::endl;
+    Circle* circle1 = dynamic_cast<Circle*>(current_scene.selected_shapes[0]);
+    Circle* circle2 = dynamic_cast<Circle*>(current_scene.selected_shapes[1]);
+    std::cout << "Generating a radical axis" << std::endl;
+    RadicalAxis* radicalaxis = new RadicalAxis(circle1, circle2);
+    current_scene.objects.push_back(radicalaxis);
+    ChangeColorToFinal(current_scene.selected_shapes);
+    current_scene.selected_shapes.clear();
+  }
 }

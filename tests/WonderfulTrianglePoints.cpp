@@ -52,3 +52,31 @@ TEST(WonderfulTrianglePoints, Orthocenter) {
   EXPECT_EQ(global::is_problem_correct, true);
 }
 
+TEST(GeometricProblems, Classicc) {
+  global::fake_click = true;
+  global::is_problem_correct = false;
+  Scene scene;
+  Point* A = dynamic_cast<Point*>(scene.objects[0]);
+  Point* B = dynamic_cast<Point*>(scene.objects[1]);
+  Point* C = dynamic_cast<Point*>(scene.objects[2]);
+  Line* AB = new Line(A, B);
+  Line* AC = new Line(A, C);
+  Point* H = new Orthocenter(A, B, C);
+  Point* O = new IsogonalPoint(A, B, C, H);
+  Point* middle_ab = new MiddlePoint(A, B);
+  Point* middle_ac = new MiddlePoint(A, C);
+  Line* middle_perpendicular_ab = new Line(middle_ab, O);
+  Line* middle_perpendicular_ac = new Line(middle_ac, O);
+  Point* X = new PointByTwoLines(middle_perpendicular_ab, AC);
+  Point* Y = new PointByTwoLines(middle_perpendicular_ac, AB);
+  Line* BX = new Line(B, X);
+  Line* CY = new Line(C, Y);
+  Point* Z = new PointByTwoLines(BX, CY);
+  scene.selected_shapes.push_back(H);
+  scene.selected_shapes.push_back(O);
+  scene.selected_shapes.push_back(Z);
+  ProveCollinearity::active(scene);
+  EXPECT_EQ(global::is_problem_correct, true);
+  EXPECT_EQ(1,1);
+}
+

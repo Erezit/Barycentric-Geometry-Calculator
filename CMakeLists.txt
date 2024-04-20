@@ -27,9 +27,7 @@
 
  set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
  add_compile_options(-O2)
- set(CMAKE_CXX_FLAGS "-coverage") 
- 
-
+  
 
  add_custom_target(Copy
      COMMAND Python::Interpreter ${CMAKE_SOURCE_DIR}/copy.py ${CMAKE_SOURCE_DIR}/Textures ${CMAKE_BINARY_DIR}
@@ -47,7 +45,7 @@
  endif()
 
 
- add_executable(Test ${CMAKE_SOURCE_DIR}/tests/mainTest.cpp ${CMAKE_SOURCE_DIR}/tests/test.cpp)
+ add_executable(Test ${CMAKE_SOURCE_DIR}/tests/mainTest.cpp ${CMAKE_SOURCE_DIR}/tests/WonderfulTrianglePoints.cpp)
  add_executable(MyProject ${SOURCE})
  
  target_link_libraries(MyProject sfml-system sfml-window sfml-graphics sfml-network sfml-audio)

@@ -33,7 +33,7 @@ int main()
         main_scene.drawScene();
         button_manager.draw();
         global::window.display();
-        global::window.clear();
+        global::window.clear(sf::Color(255,255,255));
         
     }
 

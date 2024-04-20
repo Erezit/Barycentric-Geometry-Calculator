@@ -26,6 +26,8 @@ ButtonManager::ButtonManager() {
   all_textures[21].loadFromFile("Textures/CircleAndLine.png");
   all_textures[22].loadFromFile("Textures/Perpendicular.png");
   all_textures[23].loadFromFile("Textures/Parallel.png");
+  all_textures[24].loadFromFile("Textures/RadicalAxis.png");
+
   
   all_buttons.push_back(new Button(10, 130, MoveBasePoint::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 20, NoMode::active, all_textures[5]));
@@ -49,6 +51,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(1290, 240, ProvePendicular::active, all_textures[11]));
   all_buttons.push_back(new Button(1290, 350, ProofTangencyCircles::active, all_textures[0]));
   all_buttons.push_back(new Button(1290, 460, FindParallelLine::active, all_textures[23]));
+  all_buttons.push_back(new Button(1290, 570, FindRadicalAxis::active, all_textures[24]));
 }
 
 void ButtonManager::draw() {

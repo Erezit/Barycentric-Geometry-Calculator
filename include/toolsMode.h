@@ -114,3 +114,8 @@ struct FindParallelLine {
   FindParallelLine() = default;
   static void active(Scene& cur_scene);
 };
+
+struct FindRadicalAxis {
+  FindRadicalAxis() = default;
+  static void active(Scene& cur_scene);
+};

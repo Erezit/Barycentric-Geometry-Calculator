@@ -3,7 +3,7 @@
   void NameBox::setName(char sbl) {
     font.loadFromFile("Textures/LTSuperior-Medium.ttf");
     name.setFont(font);
-    name.setColor(sf::Color::Red);
+    name.setFillColor(sf::Color(65, 105, 255));
     name.setString(sbl);
     name.setCharacterSize(20);
     name.setStyle(sf::Text::Bold);
