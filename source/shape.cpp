@@ -3,6 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
+
+  void RenamebleShape::setName(std::string name) {
+    name_ = name;
+  }
+
+  std::string RenamebleShape::getName() {
+    return name_;
+  }
+
+
 namespace global {
   sf::RenderWindow window(sf::VideoMode(1400, 900),
                         "Barycentric Geometry Calculator",
@@ -596,17 +606,14 @@ PerpendicularLine::PerpendicularLine(Line* line, Point* point) : base_point_(poi
   choosenFinal();
 }
 
-void PerpendicularLine::make_actual() {
 
+void  PerpendicularLine::make_actual() {
   sf::Color tmp_color = getColor();
-  sf::Vector2f a_position = a_point_->getPosition();
-  sf::Vector2f b_position = b_point_->getPosition();
-  sf::Vector2f base_position = base_point_->getPosition();
-  std::vector<double> line_coord = base_line_ -> getCoefficients();
-  std::vector<double> new_position = FindCoordinate<double>(line_coord[0], line_coord[1],-line_coord[2], -line_coord[1], line_coord[0],-line_coord[1] * base_position.x + line_coord[0] * base_position.y);
-  line[0] = sf::Vertex(base_position, tmp_color);
-  line[1] = sf::Vertex(sf::Vector2f(-new_position[0]/ new_position[2], -new_position[1] / new_position[2]), tmp_color);
+  std::vector<double> line_coordinate = getCoefficients();
+  line[0] = sf::Vertex(sf::Vector2f(0, -line_coordinate[2] / line_coordinate[1]), tmp_color);
+  line[1] = sf::Vertex(sf::Vector2f(1400, (-line_coordinate[2] -line_coordinate[0] * 1400) / line_coordinate[1]), tmp_color);
 }
+
 
 Point* PerpendicularLine::getPointA() {
   return a_point_;

@@ -537,3 +537,58 @@ void FindRadicalAxis::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();
   }
 }
+
+
+void RenameShape::active(Scene& current_scene) {
+  current_scene.TryGetObject<Point>();
+  ChangeColorToActive(current_scene.selected_shapes);
+  if (current_scene.event.type == sf::Event::MouseButtonReleased &&
+           current_scene.Checker(1)) {
+    Point* point = dynamic_cast<Point*>(current_scene.selected_shapes[0]);
+    std::string name;
+    std::cout << "Last name: " << point -> getName() << " ";
+    std::cin >> name;
+    point -> setName(name);
+    std::cout << "New Name: " <<  point -> getName() << " ";
+    ChangeColorToFinal(current_scene.selected_shapes);
+    current_scene.selected_shapes.clear();
+  }
+}
+
+
+void FindPowerPoint::active(Scene& current_scene) {
+  if(current_scene.selected_shapes.size() < 1) { 
+    current_scene.TryGetObject<Circle>();
+  } else {
+    current_scene.TryGetObject<Point>();
+  }
+  ChangeColorToActive(current_scene.selected_shapes);
+  if (current_scene.event.type == sf::Event::MouseButtonReleased &&
+    current_scene.Checker(1, 0 , 1)) {
+    Circle* circle = dynamic_cast<Circle*>(current_scene.selected_shapes[0]); 
+    Point* point = dynamic_cast<Point*>(current_scene.selected_shapes[1]); 
+    
+    BarycentricCoordinates barycentric_oordinates_circle = circle -> getCoordinates();
+    
+    GiNaC::ex U = barycentric_oordinates_circle.getACoordinate();
+    GiNaC::ex V = barycentric_oordinates_circle.getBCoordinate();
+    GiNaC::ex W = barycentric_oordinates_circle.getCCoordinate();
+     
+    BarycentricCoordinates barycentric_oordinates = point -> getCoordinates();
+    GiNaC::ex sum = barycentric_oordinates.getACoordinate() + barycentric_oordinates.getBCoordinate() + barycentric_oordinates.getCCoordinate();
+    GiNaC::ex X = barycentric_oordinates.getACoordinate();
+    GiNaC::ex Y = barycentric_oordinates.getBCoordinate();
+    GiNaC::ex Z = barycentric_oordinates.getCCoordinate();
+    X = X / sum;
+    Y = Y / sum;
+    Z = Z / sum;
+    GiNaC::ex power = (-a * a * Y * Z - b * b * X * Z - c  * c * X * Y) + (X + Y + Z) * ( U * X + V * Y + W * Z);    
+    power = power.normal();
+    std::cout << std::endl << power << std::endl;  
+    std::cout << "Or in another form" << std::endl; 
+    std::cout << "(" << factor(power.numer().normal())<<")" << " / " << "(" << factor(power.denom().normal()) << ")" << std::endl << std::endl;
+    ChangeColorToFinal(current_scene.selected_shapes);
+    current_scene.selected_shapes.clear();
+  }
+
+}

@@ -28,6 +28,13 @@ struct Equation {
   }
 };
 
+class RenamebleShape {
+  std::string name_;
+ public:
+  void setName(std::string name);
+  std::string getName(); 
+};
+
 class Shape : public Object, public Invisibility {
 private:
 sf::Color color;
@@ -43,11 +50,10 @@ public:
   virtual ~Shape() = default;
 };
 
-class Point : public Shape {
+class Point : public Shape, public RenamebleShape {   
 public:
-  Point();
+  Point();                             
   Point(double x_pos, double y_pos);
-
   double getDistance() final;
   sf::Vector2f getPosition();
   void draw() override = 0;

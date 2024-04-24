@@ -119,3 +119,14 @@ struct FindRadicalAxis {
   FindRadicalAxis() = default;
   static void active(Scene& cur_scene);
 };
+
+struct RenameShape {
+  RenameShape() = default;
+  static void active(Scene& cur_scene);
+};
+
+
+struct FindPowerPoint {
+  FindPowerPoint() = default;
+  static void active(Scene& cur_scene);
+};
