@@ -2,7 +2,7 @@
 
 
 ButtonManager::ButtonManager() {
-  all_textures.resize(25);
+  all_textures.resize(30);
   all_textures[0].loadFromFile("Textures/Move.png");
   all_textures[2].loadFromFile("Textures/Midpoint.png");
   all_textures[3].loadFromFile("Textures/Line.png");
@@ -23,11 +23,12 @@ ButtonManager::ButtonManager() {
   all_textures[18].loadFromFile("Textures/Hide.png");
   all_textures[19].loadFromFile("Textures/IsogonalConjugation.png");
   all_textures[20].loadFromFile("Textures/dist.png");
-  all_textures[21].loadFromFile("Textures/CircleAndLine.png");
+  all_textures[21].loadFromFile("Textures/LineAndCircle.png");
   all_textures[22].loadFromFile("Textures/Perpendicular.png");
   all_textures[23].loadFromFile("Textures/Parallel.png");
   all_textures[24].loadFromFile("Textures/RadicalAxis.png");
-
+  all_textures[25].loadFromFile("Textures/RadicalAxes.png");
+  all_textures[26].loadFromFile("Textures/PointDegree1.png");
   
   all_buttons.push_back(new Button(10, 130, MoveBasePoint::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 20, NoMode::active, all_textures[5]));
@@ -51,9 +52,9 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(1290, 240, ProvePendicular::active, all_textures[11]));
   all_buttons.push_back(new Button(1290, 350, ProofTangencyCircles::active, all_textures[0]));
   all_buttons.push_back(new Button(1290, 460, FindParallelLine::active, all_textures[23]));
-  all_buttons.push_back(new Button(1290, 570, FindRadicalAxis::active, all_textures[24]));
+  all_buttons.push_back(new Button(1290, 570, FindRadicalAxis::active, all_textures[25]));
 //  all_buttons.push_back(new Button(1290, 680, RenameShape::active, all_textures[0]));
-  all_buttons.push_back(new Button(1290, 790, FindPowerPoint::active, all_textures[0]));
+  all_buttons.push_back(new Button(1290, 790, FindPowerPoint::active, all_textures[26]));
 }
 
 void ButtonManager::draw() {
