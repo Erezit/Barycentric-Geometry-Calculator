@@ -1,9 +1,32 @@
- cmake_minimum_required(VERSION 3.12)
+ cmake_minimum_required(VERSION 3.8)
  
  project(MyProject)
-  
- set(CMAKE_CXX_STANDARD 17)
- set(CMAKE_CXX_COMPILER clang++)
+ include(ExternalProject)
+
+ set(CMAKE_CXX_COMPILER g++)
+ SET(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage --coverage")
+ SET(CMAKE_C_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage --coverage")
+ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" ${CMAKE_SOURCE_DIR}/cmake)
+ set(EXTERNAL_INSTALL_LOCATION ${Testing_SOURCE_DIR}/3rdparty)
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+ find_package(Threads REQUIRED)
+ SET(CPR_USE_SYSTEM_GTEST ON)
+ 
+
+ include(FetchContent)
+   FetchContent_Declare(
+      googletest
+      GIT_REPOSITORY https://github.com/google/googletest.git
+      GIT_TAG main
+ )
+ FetchContent_Declare(
+          cpr_repo
+          GIT_REPOSITORY https://github.com/libcpr/cpr.git
+          GIT_TAG 11e5954
+      )
+
 
  find_package(Python COMPONENTS Interpreter REQUIRED)
  find_package(GTest)
@@ -24,10 +47,6 @@
             ${CMAKE_SOURCE_DIR}/source/BarycentricCoordinate.cpp)
  
  include_directories(${CMAKE_SOURCE_DIR})
-
- set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
- add_compile_options(-O2)
-  
 
  add_custom_target(Copy
      COMMAND Python::Interpreter ${CMAKE_SOURCE_DIR}/copy.py ${CMAKE_SOURCE_DIR}/Textures ${CMAKE_BINARY_DIR}
@@ -50,10 +69,17 @@
  
  target_link_libraries(MyProject sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
  target_link_libraries(MyProject ${GINAC_LIBRARIES})
- 
+
  target_link_libraries(Test ${GTEST_LIBRARIES} ${GINAC_LIBRARIES} sfml-system sfml-window sfml-graphics sfml-network sfml-audio lib)
  
-
+ include(CodeCoverage)
+ 
+ add_custom_target(coverage_report) 
+ 
+ setup_target_for_coverage(Test-cov . Test coverage)
+ 
+ add_dependencies(coverage_report Test-cov)
+ 
  add_dependencies(Test Copy)
  add_dependencies(MyProject Copy)
 
