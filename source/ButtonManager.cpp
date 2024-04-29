@@ -29,7 +29,8 @@ ButtonManager::ButtonManager() {
   all_textures[24].loadFromFile("Textures/RadicalAxis.png");
   all_textures[25].loadFromFile("Textures/RadicalAxes.png");
   all_textures[26].loadFromFile("Textures/PointDegree1.png");
-  
+  all_textures[27].loadFromFile("Textures/Point.png");
+
   all_buttons.push_back(new Button(10, 130, MoveBasePoint::active, all_textures[0]));
   all_buttons.push_back(new Button(10, 20, NoMode::active, all_textures[5]));
   all_buttons.push_back(new Button(10, 240, CreateMiddlePoint::active, all_textures[2]));
@@ -53,7 +54,7 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(1290, 350, ProofTangencyCircles::active, all_textures[0]));
   all_buttons.push_back(new Button(1290, 460, FindParallelLine::active, all_textures[23]));
   all_buttons.push_back(new Button(1290, 570, FindRadicalAxis::active, all_textures[25]));
-  all_buttons.push_back(new Button(1290, 680, MakeFreePoint::active, all_textures[0]));
+  all_buttons.push_back(new Button(1290, 680, MakeFreePoint::active, all_textures[27]));
   //  all_buttons.push_back(new Button(1290, 680, RenameShape::active, all_textures[0]));
   all_buttons.push_back(new Button(1290, 790, FindPowerPoint::active, all_textures[26]));
 }
