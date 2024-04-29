@@ -25,7 +25,9 @@ namespace global {
 GiNaC::symbol a("a");
 GiNaC::symbol b("b");
 GiNaC::symbol c("c");
-
+GiNaC::symbol x("x");
+GiNaC::symbol y("y");
+GiNaC::symbol z("z");
 
 void Invisibility::changeHidden() {
   isHidden = !isHidden;  
@@ -76,6 +78,19 @@ void BasePoint::draw() {
     global::window.draw(name.getName());
   }
 }
+
+FreePoint::FreePoint(double x_pos, double y_pos) : BasePoint(x_pos, y_pos) {}
+
+void FreePoint::draw() {
+  circle.setFillColor(getColor());
+  circle.setPosition(x_coord_, y_coord_);
+  global::window.draw(circle);
+  name.setPosition(x_coord_, y_coord_);
+  if(!getIsHidden()) {
+    global::window.draw(name.getName());
+  }
+}
+
 
 MiddlePoint::MiddlePoint(Point* a_point, Point* b_point)
     : Point(), a_point_(a_point), b_point_(b_point) {

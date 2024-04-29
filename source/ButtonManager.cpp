@@ -53,7 +53,8 @@ ButtonManager::ButtonManager() {
   all_buttons.push_back(new Button(1290, 350, ProofTangencyCircles::active, all_textures[0]));
   all_buttons.push_back(new Button(1290, 460, FindParallelLine::active, all_textures[23]));
   all_buttons.push_back(new Button(1290, 570, FindRadicalAxis::active, all_textures[25]));
-//  all_buttons.push_back(new Button(1290, 680, RenameShape::active, all_textures[0]));
+  all_buttons.push_back(new Button(1290, 680, MakeFreePoint::active, all_textures[0]));
+  //  all_buttons.push_back(new Button(1290, 680, RenameShape::active, all_textures[0]));
   all_buttons.push_back(new Button(1290, 790, FindPowerPoint::active, all_textures[26]));
 }
 

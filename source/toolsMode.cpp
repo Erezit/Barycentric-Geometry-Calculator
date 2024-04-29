@@ -54,7 +54,7 @@ void MoveBasePoint::active(Scene& cur_scene) {
       movable_point->circle.setPosition(global::window.mapPixelToCoords(
           sf::Mouse::getPosition(global::window)));
       movable_point->x_coord_ =
-          max(110, global::window
+          max(245, global::window
                        .mapPixelToCoords(sf::Mouse::getPosition(global::window))
                        .x);
       movable_point->y_coord_ =
@@ -300,6 +300,10 @@ void drawOrthocenter::active(Scene& current_scene) {
 extern GiNaC::symbol a;
 extern GiNaC::symbol b;
 extern GiNaC::symbol c;
+extern GiNaC::symbol x;
+extern GiNaC::symbol y;
+extern GiNaC::symbol z;
+
 
 void ProvePendicular::active(Scene& current_scene) {
   current_scene.TryGetObject<Line>();
@@ -591,4 +595,17 @@ void FindPowerPoint::active(Scene& current_scene) {
     current_scene.selected_shapes.clear();
   }
 
+}
+
+bool MakeFreePoint::flag = true;
+void MakeFreePoint::active(Scene& current_scene) {
+  if(current_scene.event.type != sf::Event::MouseButtonReleased) {
+    flag = true;
+  }
+  if (flag && current_scene.event.type == sf::Event::MouseButtonReleased && global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window)).x > 250) {
+    Point* point = new FreePoint(global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window)).x, global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window)).y);      
+    point -> setCoordinates(x,y,z);
+    current_scene.objects.push_back(point);
+    flag= false;
+  }
 }

@@ -130,3 +130,9 @@ struct FindPowerPoint {
   FindPowerPoint() = default;
   static void active(Scene& cur_scene);
 };
+
+struct MakeFreePoint {
+  MakeFreePoint() = default;
+  static void active(Scene& cur_scene);
+  static bool flag;
+};

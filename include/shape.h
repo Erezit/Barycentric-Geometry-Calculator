@@ -65,9 +65,16 @@ public:
 
 class BasePoint : public Point {
 public:
-  void draw() final;
+  void draw() override;
   BasePoint(double x_pos, double y_pos);
 };
+
+class FreePoint : public BasePoint {
+public:
+  void draw() final;
+  FreePoint(double x_pos, double y_pos);
+};
+
 
 class MiddlePoint : public Point {
 private:
