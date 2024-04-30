@@ -1,5 +1,6 @@
 #include "toolsMode.h"
-
+#include <fstream> 
+#include <iostream>
 #include <ginac/ginac.h>
 
 #include <cmath>
@@ -254,17 +255,30 @@ void ProveCollinearity::active(Scene& current_scene) {
                                    point_c_coordinate.getBCoordinate(),
                                    point_c_coordinate.getCCoordinate());
     std::cout << std::endl;
+    std::ofstream outfile ("Proof.tex");
+    outfile << "\\documentclass{article}" << '\n';
+    outfile << "\\title{Collinearity of points}" << '\n';
+    outfile << "\\begin{document}" << '\n';
+    outfile << "\\maketitle" << '\n'; 
     if (det.numer().normal() == 0) {
-      std::cout << "The problem is solved, the selected points are collinear" << std::endl;
-      std::cout << "The final determinant:" << std::endl;
-      std::cout << det << std::endl;
+      std::cout << "The problem is solved, please refer to the Proof.tex file for details. You can convert it to a pdf file for better readability" << std::endl;
+      outfile <<  "The problem is solved, the selected points are collinear\\\\" << '\n';
+      current_scene.selected_shapes[0] -> printProof(outfile);
+      current_scene.selected_shapes[1] -> printProof(outfile);
+      current_scene.selected_shapes[2] -> printProof(outfile);
+      outfile << "Points " << dynamic_cast<Point*>(current_scene.selected_shapes[0]) -> name.getName().getString().toAnsiString() << ", " << dynamic_cast<Point*>(current_scene.selected_shapes[1])  -> name.getName().getString().toAnsiString() << " and " << dynamic_cast<Point*>(current_scene.selected_shapes[2])  -> name.getName().getString().toAnsiString() << " lie on the same straight line\\\\" << '\n';
+      outfile << "The final determinant:\\\\" << '\n';
+      outfile << det << '\n';
       global::is_problem_correct = true; // for testing
     } else {
-       std::cout << "The problem is incorrect" << std::endl;
-       std::cout << "But the task can be true under the following conditions:" << std::endl;
-       std::cout << factor(det.normal().numer()) << " = 0" << std::endl << std::endl;
-       global::is_problem_correct = false; // for testing
+      std::cout << "The task is incorrect, please refer to the Proof.tex for details" << std::endl;
+      outfile << "The problem is incorrect\\\\" << '\n';
+      outfile << "But the task can be true under the following conditions:\\\\" << '\n';
+      outfile << "$" <<  factor(det.normal().numer()) << " = 0" << "$" << '\n';
+      global::is_problem_correct = false; // for testing
     }
+    outfile << "\\end{document}" << '\n';
+    outfile.close();
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }

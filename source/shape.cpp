@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
-
+#include <fstream>
 
   void RenamebleShape::setName(std::string name) {
     name_ = name;
@@ -69,6 +69,15 @@ Point::Point(double x_pos, double y_pos) : Point() {
 
 BasePoint::BasePoint(double x_pos, double y_pos) : Point(x_pos, y_pos) {}
 
+void BasePoint::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    out << name.getName().getString().toAnsiString() << " is one of the points of the triangle with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+  }
+}
+
+
 void BasePoint::draw() {
   circle.setFillColor(getColor());
   circle.setPosition(x_coord_, y_coord_);
@@ -89,6 +98,9 @@ void FreePoint::draw() {
   if(!getIsHidden()) {
     global::window.draw(name.getName());
   }
+}
+
+void FreePoint::printProof(std::ofstream& out) {
 }
 
 
@@ -122,6 +134,15 @@ void MiddlePoint::make_actual() {
   name.setPosition(x_coord_, y_coord_);
 }
 
+void MiddlePoint::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    a_point_-> printProof(out);
+    b_point_ -> printProof(out);
+    out << name.getName().getString().toAnsiString() << " is the middle between points " << a_point_->name.getName().getString().toAnsiString() << " and " << b_point_->name.getName().getString().toAnsiString() <<" with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+  }
+}
 void Line::make_actual() {
   sf::Color tmp_color = getColor();
   line[0] = sf::Vertex(a_point_->getPosition(), tmp_color);
@@ -204,6 +225,16 @@ Point* Line::getPointA() { return a_point_; }
 
 Point* Line::getPointB() { return b_point_; }
 
+void Line::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    a_point_ -> printProof(out);
+    b_point_ -> printProof(out);
+    out << "Straight line passing through a point " << a_point_ -> name.getName().getString().toAnsiString() << " and " << b_point_ -> name.getName().getString().toAnsiString() <<" and has the following equation:\\\\" << '\n';
+    out << "$(" <<  getCoordinates().getACoordinate() << ") * X + (" << getCoordinates().getBCoordinate() << ") * Y + (" << getCoordinates().getCCoordinate() << ") * Z $\\\\" << '\n';
+  }
+}
+
 std::vector<double> Line::getCoefficients() {
   sf::Vector2f a_to_global = global::window.mapPixelToCoords(
       sf::Vector2i(a_point_->x_coord_, a_point_->y_coord_));
@@ -242,6 +273,17 @@ PointByTwoLines::PointByTwoLines(Line* a_line, Line* b_line)
   barycentric_coordinates.simplify();
 }
 
+void PointByTwoLines::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    a_line_ -> printProof(out);
+    b_line_ -> printProof(out);
+    out << name.getName().getString().toAnsiString() <<  " is a points constructed as the intersection of two straight lines  with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+  }
+}
+
+
 void PointByTwoLines::draw() {
   make_actual();
   circle.setFillColor(getColor());
@@ -271,6 +313,9 @@ Incenter::Incenter(Point* a_point, Point* b_point, Point* c_point)
   make_actual();
   barycentric_coordinates.setCoordinates(a, b, c);
   choosenFinal();
+}
+
+void Incenter::printProof(std::ofstream& out) {
 }
 
 void Incenter::make_actual() {
@@ -346,6 +391,9 @@ void Orthocenter::make_actual() {
 
   circle.setPosition(x_coord_, y_coord_);
   name.setPosition(x_coord_, y_coord_);
+}
+
+void Orthocenter::printProof(std::ofstream& out) {
 }
 
 IsogonalPoint::IsogonalPoint(Point* a_point, Point* b_point, Point* c_point,
@@ -424,6 +472,9 @@ void IsogonalPoint::draw() {
   if(!getIsHidden()) {
     global::window.draw(name.getName());
   }
+}
+
+void IsogonalPoint::printProof(std::ofstream& out) {
 }
 
 template <typename T>
@@ -553,6 +604,9 @@ double Circle::getDistance() {
   return fabs(dist - radius_);
 }
 
+void Circle::printProof(std::ofstream& out) {
+}
+
 PointIntersectionByLineCircle::PointIntersectionByLineCircle(Circle* base_circle, Line* line, Point* point) :Point(), circle_(base_circle), line_(line), point_(point) {
 
   BarycentricCoordinates circle_coordinate = circle_ -> getCoordinates();
@@ -599,7 +653,8 @@ void PointIntersectionByLineCircle::draw() {
   }
 }
 
-
+void PointIntersectionByLineCircle::printProof(std::ofstream& out) {
+}
 PerpendicularLine::PerpendicularLine(Line* line, Point* point) : base_point_(point), base_line_(line) {
   a_point_ = line -> getPointA(); 
   b_point_ = line -> getPointB();

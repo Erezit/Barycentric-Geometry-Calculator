@@ -16,6 +16,12 @@ class Invisibility {
   void changeHidden();
 };
 
+class OutputSolution {
+ public:
+  bool isBelongToProof = true;
+  virtual void printProof(std::ofstream& out) = 0;
+};
+
 struct Equation {
   double A;
   double B;
@@ -35,7 +41,7 @@ class RenamebleShape {
   std::string getName(); 
 };
 
-class Shape : public Object, public Invisibility {
+class Shape : public Object, public Invisibility, public OutputSolution {
 private:
 sf::Color color;
 public:
@@ -67,12 +73,14 @@ class BasePoint : public Point {
 public:
   void draw() override;
   BasePoint(double x_pos, double y_pos);
+  void printProof(std::ofstream& out) override;
 };
 
 class FreePoint : public BasePoint {
 public:
   void draw() final;
   FreePoint(double x_pos, double y_pos);
+  void printProof(std::ofstream& out) override;
 };
 
 
@@ -83,7 +91,7 @@ private:
 public:
   void draw() final;
   void make_actual() final;
-
+  void printProof(std::ofstream& out) override;
   MiddlePoint(Point* a_point, Point* b_point);
 };
 
@@ -101,6 +109,7 @@ public:
   virtual std::vector<double> getCoefficients();
   virtual Point* getPointA();
   virtual Point* getPointB();
+  void printProof(std::ofstream& out) override;
 };
 
 class PointByTwoLines : public Point {
@@ -111,6 +120,7 @@ public:
   PointByTwoLines(Line* a_line, Line* b_line);
   void draw() final;
   void make_actual() final;
+  void printProof(std::ofstream& out) override;
 };
 
 class Incenter : public Point {
@@ -121,6 +131,7 @@ class Incenter : public Point {
   Point* b_point_ = nullptr;
   Point* c_point_ = nullptr;
   void make_actual() final;
+  void printProof(std::ofstream& out) override;
 };
 
 class Orthocenter : public Point {
@@ -131,6 +142,7 @@ class Orthocenter : public Point {
   Point* b_point_ = nullptr;
   Point* c_point_ = nullptr;
   void make_actual() final;
+  void printProof(std::ofstream& out) override;
 };
 
 namespace global {
@@ -149,6 +161,7 @@ class IsogonalPoint : public Point {
   void make_actual() final;
   void draw() final;
   IsogonalPoint(Point* a_point, Point* b_point,Point* c_point, Point* origin_point);
+  void printProof(std::ofstream& out) override;
 };
 
 class Circle : public Shape {
@@ -166,6 +179,7 @@ class Circle : public Shape {
    double getDistance() final;
    Circle(Point* a_point, Point* b_point,
           Point* c_point);
+   void printProof(std::ofstream& out) override;
 };
 
 
@@ -177,7 +191,7 @@ class PointIntersectionByLineCircle : public Point {
     void make_actual() final;
     void draw() final;
    PointIntersectionByLineCircle(Circle* circle, Line* line, Point* point);
-
+    void printProof(std::ofstream& out) override;
 };
 
 class PerpendicularLine : public Line {
