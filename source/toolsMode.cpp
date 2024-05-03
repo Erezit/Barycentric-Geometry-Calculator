@@ -279,6 +279,9 @@ void ProveCollinearity::active(Scene& current_scene) {
     }
     outfile << "\\end{document}" << '\n';
     outfile.close();
+    for(Shape* shape : current_scene.objects) {
+      shape -> isBelongToProof = true;
+    }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
   }

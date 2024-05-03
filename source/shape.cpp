@@ -67,6 +67,10 @@ Point::Point(double x_pos, double y_pos) : Point() {
   circle.move(x_pos, y_pos);
 }
 
+std::string Point::getInfoName() {
+  return name.getName().getString().toAnsiString();
+}
+
 BasePoint::BasePoint(double x_pos, double y_pos) : Point(x_pos, y_pos) {}
 
 void BasePoint::printProof(std::ofstream& out) {
@@ -101,6 +105,11 @@ void FreePoint::draw() {
 }
 
 void FreePoint::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    out <<"Mark a point " <<  name.getName().getString().toAnsiString() << " with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+   }
 }
 
 
@@ -139,7 +148,7 @@ void MiddlePoint::printProof(std::ofstream& out) {
     isBelongToProof = false;
     a_point_-> printProof(out);
     b_point_ -> printProof(out);
-    out << name.getName().getString().toAnsiString() << " is the middle between points " << a_point_->name.getName().getString().toAnsiString() << " and " << b_point_->name.getName().getString().toAnsiString() <<" with barycentric coordinates:\\\\" << '\n';
+    out << "Let's mark the middle "  <<  name.getName().getString().toAnsiString() << " between points " << a_point_->name.getName().getString().toAnsiString() << " and " << b_point_->name.getName().getString().toAnsiString() <<" with barycentric coordinates:\\\\" << '\n';
     out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
   }
 }
@@ -192,12 +201,9 @@ double Point::getDistance() {
       global::window.mapPixelToCoords(sf::Mouse::getPosition(global::window));
   sf::Vector2 to_global = global::window.mapPixelToCoords(
       sf::Vector2i(Point::x_coord_, Point::y_coord_));
-  //  std::cout << "cur" << cur_mouse_pos.x << "   " <<  to_global.x  <<
-  //  std::endl;
   double distance =
       sqrt((cur_mouse_pos.x - to_global.x) * (cur_mouse_pos.x - to_global.x) +
            (cur_mouse_pos.y - to_global.y) * (cur_mouse_pos.y - to_global.y));
-  //  std::cout << distance << std::endl;
   return distance;
 }
 
@@ -230,9 +236,13 @@ void Line::printProof(std::ofstream& out) {
     isBelongToProof = false;
     a_point_ -> printProof(out);
     b_point_ -> printProof(out);
-    out << "Straight line passing through a point " << a_point_ -> name.getName().getString().toAnsiString() << " and " << b_point_ -> name.getName().getString().toAnsiString() <<" and has the following equation:\\\\" << '\n';
+    out << "Draw line passing through a point " << a_point_ -> name.getName().getString().toAnsiString() << " and " << b_point_ -> name.getName().getString().toAnsiString() <<" with following equation:\\\\" << '\n';
     out << "$(" <<  getCoordinates().getACoordinate() << ") * X + (" << getCoordinates().getBCoordinate() << ") * Y + (" << getCoordinates().getCCoordinate() << ") * Z $\\\\" << '\n';
   }
+}
+
+std::string Line::getInfoName() {
+ return "line passing through a point " + a_point_ -> name.getName().getString().toAnsiString() + " and " + b_point_ -> name.getName().getString().toAnsiString(); 
 }
 
 std::vector<double> Line::getCoefficients() {
@@ -278,7 +288,7 @@ void PointByTwoLines::printProof(std::ofstream& out) {
     isBelongToProof = false;
     a_line_ -> printProof(out);
     b_line_ -> printProof(out);
-    out << name.getName().getString().toAnsiString() <<  " is a points constructed as the intersection of two straight lines  with barycentric coordinates:\\\\" << '\n';
+    out << "Note the intersection " <<  name.getName().getString().toAnsiString() <<  " between "  << a_line_ -> getInfoName() << " and " << b_line_ -> getInfoName() << " with barycentric coordinates:\\\\" << '\n';
     out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
   }
 }
@@ -316,6 +326,11 @@ Incenter::Incenter(Point* a_point, Point* b_point, Point* c_point)
 }
 
 void Incenter::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    out <<"Note the incenter " <<  name.getName().getString().toAnsiString() << " with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+   }
 }
 
 void Incenter::make_actual() {
@@ -394,7 +409,13 @@ void Orthocenter::make_actual() {
 }
 
 void Orthocenter::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    out <<"Note the orthocenter " <<  name.getName().getString().toAnsiString() << " with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+   }
 }
+
 
 IsogonalPoint::IsogonalPoint(Point* a_point, Point* b_point, Point* c_point,
                              Point* origin_point)
@@ -411,6 +432,17 @@ IsogonalPoint::IsogonalPoint(Point* a_point, Point* b_point, Point* c_point,
       c * c / barycentric_coordinates_origin.getCCoordinate());
   barycentric_coordinates.simplify();
 }
+
+void IsogonalPoint::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    origin_point_ -> printProof(out);
+    out <<"Let's make an isogonal conjugation with a point " << origin_point_ -> name.getName().getString().toAnsiString() <<". We will get a point " << name.getName().getString().toAnsiString() <<   " with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+   }
+}
+
+
 
 std::vector<double> FindreFlectionLine(std::vector<double> line1,
                                        std::vector<double> line2) {
@@ -474,8 +506,6 @@ void IsogonalPoint::draw() {
   }
 }
 
-void IsogonalPoint::printProof(std::ofstream& out) {
-}
 
 template <typename T>
 T FindСoefficientInCircle(const T& A, const T& B, const T& C) {
@@ -605,6 +635,16 @@ double Circle::getDistance() {
 }
 
 void Circle::printProof(std::ofstream& out) {
+   a_point_ -> printProof(out);
+   b_point_ -> printProof(out);
+   c_point_ -> printProof(out);
+   out << "Then draw " << getInfoName() <<  " with barycentric coordinates:\\\\";
+   out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+
+}
+
+std::string Circle::getInfoName() {
+  return "A circle through 3 points " + a_point_ -> name.getName().getString().toAnsiString() + ", " + b_point_ -> name.getName().getString().toAnsiString() + " and " + c_point_ -> name.getName().getString().toAnsiString();
 }
 
 PointIntersectionByLineCircle::PointIntersectionByLineCircle(Circle* base_circle, Line* line, Point* point) :Point(), circle_(base_circle), line_(line), point_(point) {
@@ -654,7 +694,16 @@ void PointIntersectionByLineCircle::draw() {
 }
 
 void PointIntersectionByLineCircle::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    circle_ -> printProof(out);
+    line_ -> printProof(out);
+    point_ -> printProof(out);
+    out <<"Note the point of intersection " << line_ -> getInfoName() << " and " << circle_ -> getInfoName() << "does not match the point " <<point_ -> name.getName().getString().toAnsiString() << " with barycentric coordinates:\\\\" << '\n';
+    out << "$" <<  getCoordinates().getACoordinate() << " : " << getCoordinates().getBCoordinate() << " : " << getCoordinates().getCCoordinate() << "$\\\\" << '\n';
+   }
 }
+
 PerpendicularLine::PerpendicularLine(Line* line, Point* point) : base_point_(point), base_line_(line) {
   a_point_ = line -> getPointA(); 
   b_point_ = line -> getPointB();
@@ -677,6 +726,8 @@ PerpendicularLine::PerpendicularLine(Line* line, Point* point) : base_point_(poi
 }
 
 
+
+
 void  PerpendicularLine::make_actual() {
   sf::Color tmp_color = getColor();
   std::vector<double> line_coordinate = getCoefficients();
@@ -697,6 +748,9 @@ Point* PerpendicularLine::getBasePoint() {
   return base_point_;
 }
 
+std::string PerpendicularLine::getInfoName() {
+  return "perpendicular line for " + base_line_ -> getInfoName();
+}
 
 std::vector<double> PerpendicularLine::getCoefficients() {
   sf::Vector2f base_position = base_point_->getPosition();
@@ -716,6 +770,19 @@ double PerpendicularLine::getDistance() {
    double dist =  fabs(cofficients[0] * cur_mouse_pos.x + cofficients[1] * cur_mouse_pos.y + cofficients[2]) / sqrt(cofficients[0] * cofficients[0]+ cofficients[1] * cofficients[1]);
    return dist;
 }
+
+void PerpendicularLine::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+    isBelongToProof = false;
+    base_point_ -> printProof(out);
+    base_line_ -> printProof(out);
+    out <<"Draw perpendicular line to " << base_line_ -> getInfoName() << " through point " << base_point_ -> name.getName().getString().toAnsiString() << " with barycentric coordinates:\\\\" << '\n';
+   out << "$(" <<  getCoordinates().getACoordinate() << ") * X + (" << getCoordinates().getBCoordinate() << ") * Y + (" << getCoordinates().getCCoordinate() << ") * Z $\\\\" << '\n'; 
+  }
+}
+
+
+
 
   void VectorDiff::simplify() {
     BarycentricCoordinates tmp;
@@ -770,6 +837,17 @@ double PerpendicularLine::getDistance() {
     choosenFinal();
   }
 
+void ParallelLine::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+  isBelongToProof = false;
+  base_point_ -> printProof(out);
+  base_line_ -> printProof(out);
+  out <<"Draw parallel line to " << base_line_ -> getInfoName() << " through point " << base_point_ -> name.getName().getString().toAnsiString() <<     " with barycentric coordinates:\\\\" << '\n';
+  out << "$(" <<  getCoordinates().getACoordinate() << ") * X + (" << getCoordinates().getBCoordinate() << ") * Y + (" << getCoordinates().getCCoordinate() << ") * Z $\\\\" << '\n';
+  }
+ }
+
+
   std::vector<double>  ParallelLine::getCoefficients() {
     std::vector<double> line_coordinate = base_line_ -> getCoefficients();
     sf::Vector2f a_position = base_point_ ->getPosition();
@@ -790,6 +868,11 @@ double PerpendicularLine::getDistance() {
     return dist;
 
   }
+
+  std::string ParallelLine::getInfoName() {
+    return "parallel line for " + base_line_ -> getInfoName(); 
+  }
+
   void ParallelLine::draw() {
     make_actual();
     global::window.draw(line, 2, sf::Lines);
@@ -843,5 +926,19 @@ double RadicalAxis::getDistance() {
   std::vector<double> cofficients = getCoefficients();
   double dist =  fabs(cofficients[0] * cur_mouse_pos.x + cofficients[1] * cur_mouse_pos.y + cofficients[2]) / sqrt(cofficients[0] * cofficients[0]+ cofficients[1] * cofficients[1]);
   return dist;
+}
+
+std::string RadicalAxis::getInfoName() {
+  return "The radical axis for circles " + circle1_ -> getInfoName() + " " + circle2_ -> getInfoName();
+}
+
+void RadicalAxis::printProof(std::ofstream& out) {
+  if(isBelongToProof) {
+  isBelongToProof = false;
+  circle1_ -> printProof(out);
+  circle2_ -> printProof(out);
+  out <<"Let's draw a radical axis relative to " << circle1_ -> getInfoName() << " and " << circle2_ -> getInfoName() <<  " with barycentric coordinates:\\\\" << '\n';
+  out << "$(" <<  getCoordinates().getACoordinate() << ") * X + (" << getCoordinates().getBCoordinate() << ") * Y + (" << getCoordinates().getCCoordinate() << ") * Z $\\\\" << '\n';
+   }
 }
 

@@ -53,6 +53,7 @@ public:
   virtual void choosenFinal();
   sf::Color getColor();
   virtual void make_actual();
+  virtual std::string getInfoName() = 0;
   virtual ~Shape() = default;
 };
 
@@ -67,6 +68,7 @@ public:
   double y_coord_;
   sf::CircleShape circle;
   NameBox name;
+  std::string getInfoName() final;
 };
 
 class BasePoint : public Point {
@@ -109,6 +111,7 @@ public:
   virtual std::vector<double> getCoefficients();
   virtual Point* getPointA();
   virtual Point* getPointB();
+  std::string getInfoName() override;
   void printProof(std::ofstream& out) override;
 };
 
@@ -180,6 +183,7 @@ class Circle : public Shape {
    Circle(Point* a_point, Point* b_point,
           Point* c_point);
    void printProof(std::ofstream& out) override;
+   std::string getInfoName() override;
 };
 
 
@@ -206,8 +210,11 @@ class PerpendicularLine : public Line {
   Point* getPointA() override;
   Point* getPointB() override;
   Point* getBasePoint();
+  std::string getInfoName() override;
   void draw() final;
   double getDistance() final;
+  void printProof(std::ofstream& out) override;
+
 };
 
 class ParallelLine : public Line {
@@ -223,7 +230,10 @@ class ParallelLine : public Line {
     Point* getPointB() override;
     Point* getBasePoint();
     void draw() final;
+    std::string getInfoName() override;
     double getDistance() final;
+    void printProof(std::ofstream& out) override;
+
 };
 
 
@@ -247,9 +257,12 @@ struct RadicalAxis : public Line {
   Circle* circle1_ = nullptr;
   Circle* circle2_ = nullptr;
  public:
+  std::string getInfoName() override;
   void make_actual() final;
   RadicalAxis(Circle* circle1, Circle* circle2);
   std::vector<double> getCoefficients() override;  
   void draw() final;
   double getDistance() final;
+  void printProof(std::ofstream& out) override;
+
 };
