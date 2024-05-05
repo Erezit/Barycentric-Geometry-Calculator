@@ -34,8 +34,8 @@
                   )
  
 
- find_package(SFML 2.5 COMPONENTS system window graphics network) 
- find_library(GINAC_LIBRARIES ginac)
+ find_package(SFML 2.5 COMPONENTS system window graphics network REQUIRED)
+ find_library(GINAC_LIBRARIES ginac REQUIRED)
   
  if(NOT GINAC_LIBRARIES)
      message(FATAL_ERROR "GiNac library not found")
