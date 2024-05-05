@@ -48,8 +48,10 @@ NoMode - nothing happens, in order to think about the next step
 <br>
 
 <br>
+<div>
 <img src="./Textures/Textures/dist.png" align="left" width="70" height="70">
-Outputs the square of the distance between the selected points The output is a polynomial from the sides of the original triangle<br />
+<p>Outputs the square of the distance between the selected points The output is a polynomial from the sides of the original triangle</p><br />
+</div>
 <br>
 
 <br>
