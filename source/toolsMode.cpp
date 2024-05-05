@@ -216,18 +216,40 @@ void ProveIntersect::active(Scene& current_scene) {
         line_b_coordinate.getBCoordinate(), line_b_coordinate.getCCoordinate(),
         line_c_coordinate.getACoordinate(), line_c_coordinate.getBCoordinate(),
         line_c_coordinate.getCCoordinate());
-    std::cout << std::endl;
+     std::cout << std::endl;
+     std::ofstream outfile ("Proof.tex");
+     outfile << "\\documentclass{article}" << '\n';
+     outfile << "\\title{Line intersect}" << '\n';
+     outfile << "\\begin{document}" << '\n';
+     outfile << "\\maketitle" << '\n'; 
     if (det.numer().normal() == 0) {
-       std::cout << "The problem is solved, the selected lines are intersect in one point" << std::endl;
-       std::cout << "The final determinant:" << std::endl;
-       std::cout << det << std::endl;
+       std::cout << "The problem is solved, please refer to the Proof.tex file for details. You can convert it to a pdf file for better readability" << std::endl;
+       outfile <<  "The problem is solved, the lines are intersect in one point or parallel\\\\" << '\n';
+      current_scene.selected_shapes[0] -> printProof(outfile);
+      current_scene.selected_shapes[1] -> printProof(outfile);
+      current_scene.selected_shapes[2] -> printProof(outfile);
+      outfile << "The " << dynamic_cast<Line*>(current_scene.selected_shapes[0]) -> getInfoName() << ", " << dynamic_cast<Line*>(current_scene.selected_shapes[1])  -> getInfoName() << " and " << dynamic_cast<Line*>(current_scene.selected_shapes[2])  -> getInfoName() << " intersect in one point or parallel\\\\" << '\n';
+      outfile << "The final determinant:\\\\" << '\n';
+      outfile << det << '\n';
+
        global::is_problem_correct = true; // for testing
 
     } else {
-       std::cout << "The problem is incorrect" << std::endl;
-       std::cout << "But the task can be true under the following conditions:" << std::endl;
-       std::cout << factor(det.normal().numer()) << " = 0" << std::endl << std::endl;
+      std::cout << "The task is incorrect, please refer to the Proof.tex for details" << std::endl;
+      current_scene.selected_shapes[0] -> printProof(outfile);
+      current_scene.selected_shapes[1] -> printProof(outfile);
+      current_scene.selected_shapes[2] -> printProof(outfile);
+      outfile << "The problem is incorrect\\\\" << '\n';
+      outfile << "The " << dynamic_cast<Line*>(current_scene.selected_shapes[0]) -> getInfoName() << ", " << dynamic_cast<Line*>(current_scene.selected_shapes[1])  -> getInfoName() << " and " << dynamic_cast<Line*>(current_scene.selected_shapes[2])  -> getInfoName() << " do not intersect in one point or parallel\\\\" << '\n';
+      outfile << "But the task can be true under the following conditions:\\\\" << '\n';
+      outfile << "$" <<  factor(det.normal().numer()) << " = 0" << "$" << '\n';
+
        global::is_problem_correct = false; // for testing
+    }
+    outfile << "\\end{document}" << '\n';
+    outfile.close();
+    for(Shape* shape : current_scene.objects) {
+      shape -> isBelongToProof = true;
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
@@ -272,6 +294,9 @@ void ProveCollinearity::active(Scene& current_scene) {
       global::is_problem_correct = true; // for testing
     } else {
       std::cout << "The task is incorrect, please refer to the Proof.tex for details" << std::endl;
+      current_scene.selected_shapes[0] -> printProof(outfile);
+      current_scene.selected_shapes[1] -> printProof(outfile);
+      current_scene.selected_shapes[2] -> printProof(outfile);
       outfile << "The problem is incorrect\\\\" << '\n';
       outfile << "But the task can be true under the following conditions:\\\\" << '\n';
       outfile << "$" <<  factor(det.normal().numer()) << " = 0" << "$" << '\n';
@@ -341,15 +366,35 @@ void ProvePendicular::active(Scene& current_scene) {
     GiNaC::ex C2 = tmp_b_bar_coord.getACoordinate() - tmp_b_bar_coord.getBCoordinate();
 
     GiNaC::ex diff = (c * c + b * b - a * a) * (B1 + C1) * (B2 + C2) + (c * c - b * b + a * a) * (A1 + C1) * (A2 + C2) + (-c * c + b * b + a * a) * (B1 + A1) * (B2 + A2);
-      std::cout << std::endl;
+     std::cout << std::endl;
+    std::ofstream outfile ("Proof.tex");
+    outfile << "\\documentclass{article}" << '\n';
+    outfile << "\\title{Pendicular lines}" << '\n';
+    outfile << "\\begin{document}" << '\n';
+    outfile << "\\maketitle" << '\n'; 
     if (diff.normal() == 0) {
-      std::cout << "The problem is solved, the selected lines are perpendicular" << std::endl;
-      std::cout << "The final determinant:" << std::endl;
-      std::cout << diff << std::endl << std::endl;
+      std::cout << "The problem is solved, please refer to the Proof.tex file for details. You can convert it to a pdf file for better readability" <<       std::endl;
+    outfile <<  "The problem is solved, the selected lines are pendicular\\\\" << '\n';
+      current_scene.selected_shapes[0] -> printProof(outfile);
+      current_scene.selected_shapes[1] -> printProof(outfile);
+      outfile << "The " << dynamic_cast<Line*>(current_scene.selected_shapes[0]) -> getInfoName() << " and " << dynamic_cast<Line*>(current_scene.selected_shapes[1])  -> getInfoName() << "are pendicular \\\\" << '\n';
+      outfile << "The final determinant:\\\\" << '\n';
+      outfile << diff << '\n';
     } else {
-      std::cout << "The problem is incorrect" << std::endl;
-      std::cout << "But the task can be true under the following conditions:" << std::endl;
-      std::cout << factor(diff.normal().numer()) << " = 0" << std::endl << std::endl;
+      std::cout << "The task is incorrect, please refer to the Proof.tex for details" << std::endl;
+      current_scene.selected_shapes[0] -> printProof(outfile);
+      current_scene.selected_shapes[1] -> printProof(outfile);
+      current_scene.selected_shapes[2] -> printProof(outfile);
+      outfile << "The problem is incorrect\\\\" << '\n';
+      outfile << "The " << dynamic_cast<Line*>(current_scene.selected_shapes[0]) -> getInfoName() << ", " << dynamic_cast<Line*>(current_scene.selected_shapes[1])  -> getInfoName() << " and " << dynamic_cast<Line*>(current_scene.selected_shapes[2])  -> getInfoName() << " do not intersect in one point or parallel\\\\" << '\n';
+      outfile << "But the task can be true under the following conditions:\\\\" << '\n';
+      outfile << "$" <<  factor(diff.normal().numer()) << " = 0" << "$" << '\n';
+       global::is_problem_correct = false; // for testing
+    }
+    outfile << "\\end{document}" << '\n';
+    outfile.close();
+    for(Shape* shape : current_scene.objects) {
+      shape -> isBelongToProof = true;
     }
     ChangeColorToFinal(current_scene.selected_shapes);
     current_scene.selected_shapes.clear();
@@ -384,6 +429,7 @@ void FindIsogonal::active(Scene& current_scene) {
   current_scene.TryGetObject<Point>();
   if (current_scene.event.type == sf::Event::MouseButtonReleased &&
       current_scene.Checker(1)) {
+      try {
     Point* isogonal_point = new IsogonalPoint(
         dynamic_cast<Point*>(current_scene.objects[0]),
         dynamic_cast<Point*>(current_scene.objects[1]),
@@ -391,6 +437,9 @@ void FindIsogonal::active(Scene& current_scene) {
         dynamic_cast<Point*>(current_scene.selected_shapes[0]));
     std::cout << "Generating a isogonal point by point "  << (isogonal_point -> name.getName()).getString().toAnsiString() << std::endl;
     current_scene.objects.push_back(isogonal_point);
+      } catch(...) {
+        std::cout << std::endl <<  "ERROR!!! Most likely you are trying to make an isogonal point with a point on the side of the triangle" << std::endl;
+      }
     current_scene.selected_shapes.clear();
   }
 }

@@ -39,7 +39,56 @@ void BarycentricCoordinates::simplify() {
  if(numer_gcd.normal() == 0) {
    numer_gcd = 1;
  }
-  BarycentricCoordinates::setCoordinates((a_poly * denum_gcd / numer_gcd).normal(), (b_poly * denum_gcd / numer_gcd).normal(), (c_poly * denum_gcd / numer_gcd).normal());
+  BarycentricCoordinates::setCoordinates((a_poly * denum_gcd / numer_gcd).normal(), (b_poly * denum_gcd / numer_gcd).normal(), (c_poly * denum_gcd / numer_gcd).normal()); 
+  
+  if(a_poly.numer().normal() == 0) {
+    denum_b = b_poly.denom();
+    denum_c = c_poly.denom();
+    b_poly = (b_poly * denum_b * denum_c).normal();
+    c_poly = (c_poly * denum_b * denum_c).normal();
+
+    numer_b = b_poly.numer();
+    numer_c = c_poly.numer();
+
+    numer_gcd =  gcd(numer_b , numer_c);
+    if(numer_gcd.normal() != 0) {
+      b_poly = (b_poly / numer_gcd).normal();
+      c_poly = (c_poly / numer_gcd).normal();
+    }
+  }
+  if(b_poly.numer().normal() == 0) {
+    denum_a = a_poly.denom();
+    denum_c = c_poly.denom();
+    
+    a_poly = (a_poly * denum_a * denum_c).normal();
+    c_poly = (c_poly * denum_a * denum_c).normal();
+    
+    numer_a = a_poly.numer();
+    numer_c = c_poly.numer();
+    
+    numer_gcd =  gcd(numer_a , numer_c);
+    if(numer_gcd.normal() != 0) {
+      a_poly = (a_poly / numer_gcd).normal();
+      c_poly = (c_poly / numer_gcd).normal();
+    }
+  } 
+  if(c_poly.numer().normal() == 0) {
+    denum_a = a_poly.denom();
+    denum_b = b_poly.denom();
+
+    a_poly = (a_poly * denum_a * denum_b).normal();
+    b_poly = (b_poly * denum_a * denum_b).normal();
+    
+    numer_a = a_poly.numer();
+    numer_b = b_poly.numer();
+    
+    numer_gcd =  gcd(numer_a , numer_b);
+    if(numer_gcd.normal() != 0) {
+      a_poly = (a_poly / numer_gcd).normal();
+      b_poly = (b_poly / numer_gcd).normal();
+    }
+  }
+
 }
 
 void BarycentricCoordinates::print() {

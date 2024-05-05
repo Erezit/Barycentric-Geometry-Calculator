@@ -10,7 +10,9 @@ class Scene {
      
     std::vector<Shape*> selected_shapes;
     sf::RectangleShape panel_draw;
-    sf::RectangleShape panel_prove;
+    sf::RectangleShape panel_prove_tools;
+    sf::RectangleShape panel_help_tool;
+    sf::RectangleShape panel_value_tools;
 
     template <typename T = Shape>
     Shape* selectObject() {
