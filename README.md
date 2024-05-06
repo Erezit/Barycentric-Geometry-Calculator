@@ -8,7 +8,7 @@ This is a project for calculating geometric problems in barycentric coordinates.
 
 **Important**: the construction must be deterministic with respect to points (for example, you cannot intersect any straight line with a circle, the two points obtained are equal with respect to coordinates).
 
-Your acceptable degree of freedom ( in this version ) mark one independent point. After the construction, use the proof tool. If the task is correct, information about it will be displayed in the console and a **Proof.tex file will be created**, which contains a step-by-step solution to the problem. Otherwise, the console will display information that the task is incorrect and you will also be able to see under what conditions on the sides of the triangle the task is correct.
+Your acceptable degree of freedom ( in this version ) mark one independent point. After the construction, use the proof tool. If the task is correct, information about it will be displayed in the console and a **build/Proof.tex file will be created**, which contains a step-by-step solution to the problem. Otherwise, the console will display information that the task is incorrect and you will also be able to see under what conditions on the sides of the triangle the task is correct.
 
 ## Installation
 
@@ -34,6 +34,12 @@ $ cmake ..
 $ make
 $ ./MyProject
 ``` 
+or
+
+```sh
+./run.sh
+```
+
 or you can just run it from any IDE.
 
 ## Features

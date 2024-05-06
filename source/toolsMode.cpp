@@ -384,9 +384,9 @@ void ProvePendicular::active(Scene& current_scene) {
       std::cout << "The task is incorrect, please refer to the Proof.tex for details" << std::endl;
       current_scene.selected_shapes[0] -> printProof(outfile);
       current_scene.selected_shapes[1] -> printProof(outfile);
-      current_scene.selected_shapes[2] -> printProof(outfile);
+      
       outfile << "The problem is incorrect\\\\" << '\n';
-      outfile << "The " << dynamic_cast<Line*>(current_scene.selected_shapes[0]) -> getInfoName() << ", " << dynamic_cast<Line*>(current_scene.selected_shapes[1])  -> getInfoName() << " and " << dynamic_cast<Line*>(current_scene.selected_shapes[2])  -> getInfoName() << " do not intersect in one point or parallel\\\\" << '\n';
+      outfile << "The " << dynamic_cast<Line*>(current_scene.selected_shapes[0]) -> getInfoName() << ", " << dynamic_cast<Line*>(current_scene.selected_shapes[1])  -> getInfoName() << " do not pendicular\\\\" << '\n';
       outfile << "But the task can be true under the following conditions:\\\\" << '\n';
       outfile << "$" <<  factor(diff.normal().numer()) << " = 0" << "$" << '\n';
        global::is_problem_correct = false; // for testing
