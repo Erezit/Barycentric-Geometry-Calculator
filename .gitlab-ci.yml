@@ -1,0 +1,33 @@
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+
+image: gcc
+
+default:
+  tags:
+    - common
+
+build-job:
+  stage: build
+  before_script:
+      - apt-get update
+      - apt-get install -y cmake git
+  script:
+    - mkdir build && cd build && cmake .. && make 
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - build
+
+unit-test-job: 
+  stage: test
+  script:
+    - ./build/Test --gtest_output="xml:report.xml"
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - report.xml
+    reports:
+      junit: report.xml
+
