@@ -380,6 +380,7 @@ void ProvePendicular::active(Scene& current_scene) {
       outfile << "The " << dynamic_cast<Line*>(current_scene.selected_shapes[0]) -> getInfoName() << " and " << dynamic_cast<Line*>(current_scene.selected_shapes[1])  -> getInfoName() << "are pendicular \\\\" << '\n';
       outfile << "The final determinant:\\\\" << '\n';
       outfile << diff << '\n';
+      global::is_problem_correct = true;
     } else {
       std::cout << "The task is incorrect, please refer to the Proof.tex for details" << std::endl;
       current_scene.selected_shapes[0] -> printProof(outfile);
