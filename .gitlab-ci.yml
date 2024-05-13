@@ -1,4 +1,4 @@
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
   - test
 
@@ -12,7 +12,7 @@ build-job:
   stage: build
   before_script:
       - apt-get update
-      - apt-get install -y cmake git
+      - apt-get install -y git python3 clang cmake libgtest-dev libsfml-dev libginac-dev
   script:
     - mkdir build && cd build && cmake .. && make 
   artifacts:
