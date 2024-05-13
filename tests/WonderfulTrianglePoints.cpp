@@ -77,6 +77,52 @@ TEST(GeometricProblems, Classicc) {
   scene.selected_shapes.push_back(Z);
   ProveCollinearity::active(scene);
   EXPECT_EQ(global::is_problem_correct, true);
-  EXPECT_EQ(1,1);
 }
 
+TEST(GeometricProblems, HalfWrittenCircle) {
+  global::fake_click = true;
+  global::is_problem_correct = false;
+  Scene scene;
+  Point* A = dynamic_cast<Point*>(scene.objects[0]);
+  Point* B = dynamic_cast<Point*>(scene.objects[1]);
+  Point* C = dynamic_cast<Point*>(scene.objects[2]);
+  Point* I = new Incenter(A, B, C);
+  Line* AI = new Line(A, I);
+  Circle* W = new Circle(A, B, C);
+  Line* AD = new PerpendicularLine(AI, A);
+  Point* D = new PointIntersectionByLineCircle(W, AD, A);
+  Line* BC = new Line(B, C);
+  Line* AX = new ParallelLine(BC, A);
+  Point* X = new PointIntersectionByLineCircle(W, AX, A);
+  Line* IZ = new PerpendicularLine(BC, I);
+  Point* Z = new PointByTwoLines(BC, IZ);
+  Line* a = new Line(D, I);
+  Line* b = new Line(X, Z);
+  Point* T = new PointByTwoLines(a, b);
+  Line* c = new PerpendicularLine(AI, I);
+  Line* AB = new Line(A, B);
+  Line* AC = new Line(A, C);
+  Point* P1 = new PointByTwoLines(c, AB);
+  Point* P2 = new PointByTwoLines(c, AC);
+  Circle* w = new Circle(T, P1, P2);
+  Line* l = new RadicalAxis(w, W);
+  Point* TT = new PointByTwoLines(l, BC);
+  Line* IT = new Line(I, T);
+  Point* PP = new PointByTwoLines(IT, BC);
+  Point* M = new MiddlePoint(PP, T);
+  Line* interesting_line = new Line(M, TT);
+  scene.selected_shapes.push_back(interesting_line);
+  scene.selected_shapes.push_back(IT);
+  ProvePendicular::active(scene);
+  EXPECT_EQ(global::is_problem_correct, false);
+  scene.drawScene();
+  MoveBasePoint::active(scene);
+  CreateMiddlePoint::active(scene);
+   CreateLine::active(scene);
+  FindLineIntersection::active(scene);
+  RollBack::active(scene);
+  ShowBarycentricCoordinate::active(scene);
+  DrawIncenter::active(scene);
+  drawOrthocenter::active(scene);
+   FindDistance::active(scene);
+}
