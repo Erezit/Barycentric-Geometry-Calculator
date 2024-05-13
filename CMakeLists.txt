@@ -4,14 +4,14 @@
  include(ExternalProject)
 
  set(CMAKE_CXX_COMPILER g++)
- # set(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage --coverage")
- #set(CMAKE_C_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage --coverage")
- #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
- #set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" ${CMAKE_SOURCE_DIR}/cmake)
- #set(EXTERNAL_INSTALL_LOCATION ${Testing_SOURCE_DIR}/3rdparty)
+ set(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage --coverage")
+ set(CMAKE_C_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage --coverage")
+ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" ${CMAKE_SOURCE_DIR}/cmake)
+ set(EXTERNAL_INSTALL_LOCATION ${Testing_SOURCE_DIR}/3rdparty)
 
  find_package(Python COMPONENTS Interpreter REQUIRED)
- #find_package(GTest)
+ find_package(GTest)
 
  include_directories(${CMAKE_SOURCE_DIR}/include)
 
@@ -44,22 +44,22 @@
  endif()
 
 
- #add_executable(Test ${CMAKE_SOURCE_DIR}/tests/mainTest.cpp ${CMAKE_SOURCE_DIR}/tests/WonderfulTrianglePoints.cpp)
+ add_executable(Test ${CMAKE_SOURCE_DIR}/tests/mainTest.cpp ${CMAKE_SOURCE_DIR}/tests/WonderfulTrianglePoints.cpp)
  add_executable(MyProject ${SOURCE})
  
  target_link_libraries(MyProject sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
  target_link_libraries(MyProject ${GINAC_LIBRARIES})
 
- #target_link_libraries(Test ${GTEST_LIBRARIES} ${GINAC_LIBRARIES} sfml-system sfml-window sfml-graphics sfml-network sfml-audio lib)
+ target_link_libraries(Test ${GTEST_LIBRARIES} ${GINAC_LIBRARIES} sfml-system sfml-window sfml-graphics sfml-network sfml-audio lib)
  
- #include(CodeCoverage)
+ include(CodeCoverage)
  
- #add_custom_target(coverage_report) 
+ add_custom_target(coverage_report) 
  
- #setup_target_for_coverage(Test-cov . Test coverage)
+ setup_target_for_coverage(Test-cov . Test coverage)
  
- #add_dependencies(coverage_report Test-cov)
+ add_dependencies(coverage_report Test-cov)
  
- #add_dependencies(Test Copy)
+ add_dependencies(Test Copy)
  add_dependencies(MyProject Copy)
 
