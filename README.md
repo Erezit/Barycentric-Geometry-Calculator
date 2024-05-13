@@ -42,6 +42,23 @@ or
 
 or you can just run it from any IDE.
 
+## Running Docker Images
+
+To run Docker image of the project you should do the following:
+
+1) Install xhost. It can be done by
+
+```sh
+$ sudo apt-get install xorg-xhost
+```
+2) Run
+
+```sh
+$ xhost +local:
+$ docker build .
+$ docker run -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix <image name> 2> /dev/null
+```
+
 ## Features
 Using the buttons, make a construction to study a geometric picture or prove a fact
 
