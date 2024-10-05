@@ -109,10 +109,5 @@ The rest of the buttons should be clear from their picture.
 
 ### Have a good research
 
-
-## UML photo
-
-![UML](./uml_photo/lastUML.svg)
-
 ## Project team
 Project was done by Postnov Ivan and Lopatin Egor, 2023-2027 MIPT students, Б05-327 group. 
