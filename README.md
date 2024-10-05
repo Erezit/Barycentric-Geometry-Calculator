@@ -21,7 +21,7 @@ $ sudo apt-get install -y ginac-tools
 After that you have to clone repository using
 
 ```sh
-$ git clone https://gitlab.akhcheck.ru/ivan.postnov/baricentric-geometry-project.git
+$ git clone https://github.com/Erezit/Barycentric-Geometry-Calculator.git
 ```
 
 ## Using
